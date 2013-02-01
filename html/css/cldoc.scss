@@ -1,0 +1,284 @@
+$font: 'ubuntu', 'lucida grande';
+$link_color: #0876c8;
+$sidebar_bg_color: #eee;
+$sidebar_width: 260px;
+$header_color: #333;
+
+$keyword_color: #633;
+$identifier_color: $link_color;
+$in_group_row_spacing: 40px;
+
+@mixin table-base {
+  border-collapse: collapse;
+
+  td {
+    padding-right: 30px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    vertical-align: top;
+  }
+
+  td:last-child {
+    padding-right: 0px;
+  }
+
+  tr:last-child td {
+    padding-bottom: 0px;
+  }
+}
+
+@mixin table-items {
+  @include table-base;
+
+  margin-left: 30px;
+  margin-bottom: $in_group_row_spacing;
+
+  td.identifier {
+    font-weight: normal;
+  }
+}
+
+@mixin table-alt {
+  tr:nth-child(even) {
+    background-color: #f3f3f3;
+  }
+
+  tr.selected {
+      background-color: #ffffab;
+  }
+}
+
+@mixin inline-doc {
+  div.brief, div.doc, div.fulldoc {
+    background: transparent;
+    margin: 0px;
+    padding: 0px;
+  }
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: $font;
+}
+
+#sidebar {
+  width: $sidebar_width;
+  background-color: $sidebar_bg_color;
+  border-right: 1px solid darken($sidebar_bg_color, 30%);
+  padding: 5px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  overflow: auto;
+}
+
+#sidebar .subtitle {
+  font-size: 1.1em;
+  text-align: center;
+  margin-top: 15px;
+
+  text-shadow: 1px 1px #eee;
+  color: #333;
+}
+
+#sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  padding-left: 10px;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+#sidebar * {
+    text-overflow: ellipsis;
+}
+
+#sidebar li {
+  padding-bottom: 2px;
+  padding-top: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+}
+
+#sidebar span.counter {
+  padding: 2px 4px 2px 4px;
+  margin-left: 2px;
+  font-size: 0.6em;
+  vertical-align: super;
+  background-color: #4298d8;
+  display: none;
+  border-radius: 10px;
+}
+
+#sidebar .brief {
+  text-shadow: none;
+  font-size: 0.9em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 2px;
+  margin: 0px;
+  margin-bottom: 3px;
+  color: #999;
+}
+
+a {
+  cursor: hand;
+  text-decoration: underline;
+  color: #0876c8;
+}
+
+#sidebar a {
+  text-decoration: none;
+}
+
+#page_title * {
+  vertical-align: middle;
+}
+
+#content {
+  margin-left: $sidebar_width + 20px;
+  padding: 10px;
+  padding-left: 20px;
+}
+
+.index_item {
+  padding-left: 15px;
+}
+
+.section_title {
+  font-size: 1.4em;
+  color: #666;
+  border-bottom: 1px solid #666;
+  margin-bottom: 10px;
+}
+
+.index_item .summary {
+  font-style: italic;
+  font-size: 0.9em;
+  color: #888;
+  margin-top: 2px;
+}
+
+.index_item {
+  margin-top: 10px;
+}
+
+div.brief p:first-child, div.doc p:first-child {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+div.brief p:last-child, div.doc p:last-child {
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+#content {
+  div.fulldoc div.brief {
+    margin: 0px;
+    margin-bottom: 10px;
+    padding: 0px;
+  }
+
+  div.fulldoc div.doc {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  div.brief, div.doc, div.fulldoc {
+    margin-left: 10px;
+    color: #666;
+    padding: 5px;
+    margin-top: 2px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    background-color: #eee;
+  }
+
+  div.structs, div.classes {
+    div.item {
+      margin-bottom: 30px;
+    }
+  }
+
+  div.typedefs {
+    table {
+      @include table-base;
+    }
+  }
+
+  div.structs, div.classes {
+    table {
+      @include table-items;
+      @include inline-doc;
+      @include table-alt;
+
+      border-left: 1px solid #999;
+
+      td {
+        padding-left: 10px;
+      }
+    }
+  }
+
+  div.enums {
+    table {
+      @include table-items;
+      @include inline-doc;
+      @include table-alt;
+
+      td.value {
+        text-align: right;
+      }
+    }
+  }
+
+  table.namespace {
+    @include table-items;
+    @include inline-doc;
+    @include table-alt;
+  }
+
+  a.know_more {
+    padding-left: 15px;
+    font-size: 0.9em;
+  }
+}
+
+.selected {
+  background-color: #ffffab;
+}
+
+.keyword {
+  color: $keyword_color;
+  font-weight: bold;
+}
+
+.identifier {
+  color: $identifier_color;
+  font-weight: bold;
+}
+
+h1, h2, h3, h4, h5 {
+  color: $header_color;
+  padding-bottom: 3px;
+  border-bottom: 1px solid lighten($header_color, 50%);
+}
+
+h1 {
+  margin-top: 60px;
+}
+
+h1:first-of-type {
+  margin-top: 0px;
+}
+
+/* vi:ts=2:et */
