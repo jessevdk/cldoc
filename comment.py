@@ -44,18 +44,27 @@ class Comment(object):
 
         self.__dict__[name] = val
 
-    def resolve_refs_for_doc(self, doc, resolver):
+    def resolve_refs_for_doc(self, doc, resolver, root):
         components = re.split(Comment.redocref, str(doc))
 
         for i in range(1, len(components), 2):
-            resolved = resolver(components[i])
+            name = components[i]
+            names = name.split('::')
 
-            if not resolved is None:
-                components[i] = resolved
+            node = root
+
+            for j in range(len(names)):
+                node = resolver(node, names[j], j == 0)
+
+                if node is None:
+                    break
+
+            if not node is None:
+                components[i] = node
 
         doc.components = components
 
-    def resolve_refs(self, resolver):
+    def resolve_refs(self, resolver, root):
         for name in self.docstrings:
             doc = getattr(self, name)
 
@@ -66,9 +75,9 @@ class Comment(object):
                 for key in doc:
                     if not isinstance(doc[key], Comment.String):
                         doc[key] = Comment.String(str(doc[key]))
-                    self.resolve_refs_for_doc(doc[key], resolver)
+                    self.resolve_refs_for_doc(doc[key], resolver, root)
             else:
-                self.resolve_refs_for_doc(doc, resolver)
+                self.resolve_refs_for_doc(doc, resolver, root)
 
 cldoc_instrre = re.compile('^cldoc:([a-zA-Z_-]+)(\(([^\)]*)\))?')
 

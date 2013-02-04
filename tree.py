@@ -219,7 +219,7 @@ class Tree:
         # Resolve cross-references in documentation
         self.cross_ref(self.root)
 
-    def find_ref(self, node, name):
+    def find_ref(self, node, name, goup):
         if node is None:
             return None
 
@@ -227,14 +227,14 @@ class Tree:
             if child.name == name:
                 return child
 
-        return self.find_ref(node.parent, name)
+        if goup:
+            return self.find_ref(node.parent, name, True)
+        else:
+            return None
 
     def cross_ref(self, node):
         if node.comment:
-            def resolver(name):
-                return self.find_ref(node, name)
-
-            node.comment.resolve_refs(resolver)
+            node.comment.resolve_refs(self.find_ref, node)
 
         for child in node.children:
             self.cross_ref(child)
