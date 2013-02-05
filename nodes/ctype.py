@@ -109,10 +109,7 @@ class Type(Node):
 
     @property
     def decl(self):
-        if self.is_array:
-            return self._decl
-        else:
-            return self._decl
+        return self._decl
 
     @property
     def qualifier(self):
