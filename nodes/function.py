@@ -43,6 +43,11 @@ class Function(Node):
 
             self._arguments.append(Argument(self, child))
 
+    @property
+    def resolve_nodes(self):
+        for arg in self._arguments:
+            yield arg
+
     def parse_comment(self):
         m = Function.recomment.match(self.comment.text)
         self.comment.params = {}
