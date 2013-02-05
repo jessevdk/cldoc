@@ -4,15 +4,21 @@ class Variable extends Node
     constructor: (@node) ->
         super(@node)
 
+    @render_container: ->
+        $('<table class="variables"/>')
+
     render: (container) ->
-        div = $('<div class="item"/>')
-        container.append(div)
+        row = $('<tr/>')
 
-        a = Page.make_link(@ref, @name)
-        a.attr('id', @id)
+        row.attr('id', @node.attr('id'))
 
-        div.append(a)
-        div.append(new Doc(@brief).render())
+        row.append($('<td class="variable_name identifier"/>').text(@node.attr('name')))
+        row.append($('<td class="variable_type"/>').append(new Type(@node.children('type')).render()))
+
+        doctd = $('<td class="doc"/>').appendTo(row)
+        doctd.append(Doc.either(@node))
+
+        container.append(row)
 
 Node.types.variable = Variable
 
