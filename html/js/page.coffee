@@ -91,15 +91,47 @@ class Page
         r = ref.split('#')
         @load(r[0], r[1], true)
 
+    @make_header: (item) ->
+        id = item.attr('id')
+
+        if id
+            ret = $('<span/>')
+
+            type = @node_type(item)
+
+            if type
+                $('<span class="keyword"/>').text(type.name).appendTo(ret)
+
+            $('<span/>').text(id).appendTo(ret)
+
+            return ret
+        else
+            return null
+
     @load_description: (page, content) ->
         doc = new Doc(page.children('doc')).render()
 
+        id = page.attr('id')
+
+        if id
+            h1 = $('<h1/>').appendTo(content)
+            h1.attr('id', id)
+
+            h1.append(@make_header(page))
+
         if doc
-            content.append($('<h1>Description</h1>'))
             desc = $('<div class="description"/>')
 
             desc.append(doc)
             content.append(desc)
+
+    @node_type: (item) ->
+        typename = item.tag()[0]
+
+        if !(typename of Node.types)
+            return null
+
+        return Node.types[typename]
 
     @load_items: (page, content) ->
         all = page.children()
@@ -110,15 +142,13 @@ class Page
             if items.length == 0
                 continue
 
-            typename = items.tag()[0]
+            type = @node_type(items)
 
-            if !(typename of Node.types)
+            if !type
                 continue
 
-            type = Node.types[typename]
-
-            h1 = $('<h1/>').text(type.title)
-            h1.appendTo(content)
+            h2 = $('<h2/>').text(type.title)
+            h2.appendTo(content)
 
             container = type.render_container()
 
