@@ -3,11 +3,32 @@ class Sidebar
         items = $('#sidebar_items')
         items.empty()
 
-        bases = page.children('base[access="public"]')
+        head = Page.make_header(page)
 
-        @load_group(page, bases, 'Bases', (elem) ->
-            elem.children('type').attr('name')
-        )
+        if head
+            div = $('<div class="back"/>')
+            name = $('<div class="name"/>')
+
+            name.append(head)
+            div.append(name)
+            items.append(div)
+
+            id = page.attr('id')
+            parts = id.split('::')
+
+            l = parts.slice(0, parts.length - 1).join('::')
+
+            a = Page.make_link(l)
+            a.addClass('back')
+
+            a.html('<span class="arrow">&crarr;</span>')
+
+            if parts.length == 1
+                a.append($('<span>Index</span>'))
+            else
+                a.append($('<span/>').text(parts[parts.length - 2]))
+
+            div.append(a)
 
         # Take everything that's not a reference (i.e. everything on this page)
         onpage = page.children().filter(':not([access]), [access=protected], [access=public]')
