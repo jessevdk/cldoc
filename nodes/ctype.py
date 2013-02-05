@@ -40,6 +40,7 @@ class Type(Node):
 
         self._qualifier = []
         self._declared = None
+        self._builtin = False
 
         self.extract(tp)
 
@@ -84,8 +85,13 @@ class Type(Node):
             self._typename = self._full_typename(self._decl)
         elif tp.kind in namemap:
             self._typename = namemap[tp.kind]
+            self._builtin = True
         else:
             self._typename = ''
+
+    @property
+    def builtin(self):
+        return self._builtin
 
     @property
     def typename(self):
