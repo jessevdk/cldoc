@@ -43,7 +43,7 @@ class Sidebar
                 # in the sidebar and a counter indicates how many items have
                 # the same name
                 if prev && prev.name == item.name
-                    cnt = prev.li.children('.counter')
+                    cnt = prev.li.find('.counter')
                     cnti = cnt.text()
 
                     if !cnti
