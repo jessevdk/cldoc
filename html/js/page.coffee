@@ -96,7 +96,10 @@ class Page
 
         if doc
             content.append($('<h1>Description</h1>'))
-            content.append(doc)
+            desc = $('<div class="description"/>')
+
+            desc.append(doc)
+            content.append(desc)
 
     @load_items: (page, content) ->
         all = page.children()

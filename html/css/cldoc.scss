@@ -281,4 +281,9 @@ h1:first-of-type {
   margin-top: 0px;
 }
 
+#content div.description {
+  @include inline-doc;
+}
+
+
 /* vi:ts=2:et */
