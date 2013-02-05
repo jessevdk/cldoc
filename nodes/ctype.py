@@ -107,6 +107,15 @@ class Type(Node):
         else:
             return self._typename
 
+    def typename_for(self, node):
+        if self.is_array:
+            return self._element_type.typename_for(node)
+
+        if not node or not '::' in self._typename:
+            return self._typename
+
+        return node.qid_from(self._typename)
+
     @property
     def decl(self):
         return self._decl
