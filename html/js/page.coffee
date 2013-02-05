@@ -4,8 +4,11 @@ class Page
     @first = true
 
     @load: (page, scrollto, updatenav) ->
-        if !page
+        if page == null || page == 'undefined'
             page = @current_page
+
+        if !page
+            page = 'index'
 
         if updatenav
             @push_nav(page, scrollto)
@@ -66,7 +69,7 @@ class Page
 
         document.title = title
 
-        @scroll(page, scrollto)
+        @scroll(page, scrollto, true)
 
     @make_external_ref: (page, id) ->
         if page[0] == '#'
@@ -81,6 +84,9 @@ class Page
         # External refs (like those in the xml) use the <page>#<part> syntax.
         # However, on the page we use the #<page>/<part> syntax so we can
         # easily manipulate history and keep urls on one single entry point
+
+        if !page
+            return '/'
 
         if !id
             return '#' + page.replace('#', '/')
@@ -198,36 +204,57 @@ class Page
                 @load(page, scrollto)
         )
 
-    @select: (scrollto) ->
+    @select: (scrollto, doanimate) ->
+        scrollto = $(scrollto)
+
+        if !scrollto && !@selected_element
+            return
+
+        if scrollto && @selected_element && scrollto.attr('id') == @selected_element.attr('id')
+            return
+
+        if doanimate
+            inopts = {'duration': 2000, 'easing': 'easeInOutExpo'}
+            outopts = {'duration': 100, 'easing': 'easeInOutExpo'}
+        else
+            inopts = {'duration': 0}
+            outopts = {'duration': 0}
+
         if @selected_element
-            @selected_element.removeClass('selected')
+            @selected_element.removeClass('selected', outopts)
             @selected_element = null
 
-        e = document.getElementById(scrollto)
+        if scrollto
+            @selected_element = $(scrollto)
+            @selected_element.addClass('selected', inopts)
 
-        if e
-            @selected_element = $(e)
-            @selected_element.addClass('selected')
-
-    @scroll: (page, scrollto) ->
+    @scroll: (page, scrollto, newpage) ->
         if !scrollto
             return
 
         if page == null
             page = @current_page
 
-        @select(scrollto)
         e = document.getElementById(scrollto)
 
         if e
-            top = $(e).offset().top - 10
+            e = $(e)
+            top = e.offset().top - 10
 
-            if @first
+            istopandnew = (newpage && e.is('h1'))
+
+            if @first || istopandnew
+                if !istopandnew
+                    @select(e)
+                else
+                    @select()
+
                 $('html, body').scrollTop(top)
             else
+                @select(e, true)
                 $('html, body').animate({scrollTop: top}, 1000, 'easeInOutExpo')
         else
-            @selected_element = null
+            @select(null, true)
 
         @first = false
 
