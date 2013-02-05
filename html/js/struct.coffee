@@ -31,22 +31,11 @@ class Struct extends Node
         if variables.length == 0
             return
 
-        fc = $('<table/>')
-        item.append(fc)
+        container = Variable.render_container()
+        item.append(container)
 
         for variable in variables
-            variable = $(variable)
-            row = $('<tr/>')
-
-            row.attr('id', variable.attr('id'))
-
-            row.append($('<td class="variable_name identifier"/>').text(variable.attr('name')))
-            row.append($('<td class="variable_type"/>').append(new Type(variable.children('type')).render()))
-
-            doctd = $('<td class="doc"/>').appendTo(row)
-            doctd.append(Doc.either(variable))
-
-            fc.append(row)
+            new Variable($(variable)).render(container)
 
     render_fields: (item) ->
         # Add fields
@@ -55,22 +44,11 @@ class Struct extends Node
         if fields.length == 0
             return
 
-        fc = $('<table/>')
-        item.append(fc)
+        container = Field.render_container()
+        item.append(container)
 
         for field in fields
-            field = $(field)
-            row = $('<tr/>')
-
-            row.attr('id', field.attr('id'))
-
-            row.append($('<td class="field_name identifier"/>').text(field.attr('name')))
-            row.append($('<td class="field_type"/>').append(new Type(field.children('type')).render()))
-
-            doctd = $('<td class="doc"/>').appendTo(row)
-            doctd.append(Doc.either(field))
-
-            fc.append(row)
+            new Field($(field)).render(container)
 
 Node.types.struct = Struct
 
