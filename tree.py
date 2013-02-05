@@ -27,10 +27,16 @@ class Tree:
 
         self.root = nodes.Root()
 
+        self.all_nodes = []
         self.cursor_to_node = Defdict()
         self.usr_to_node = Defdict()
         self.qid_to_node = Defdict()
-        self.comments = Defdict()
+
+        # Map from category name to the nodes.Category for that category
+        self.category_to_node = Defdict()
+
+        # Map from filename to comment.CommentsDatabase
+        self.commentsdbs = Defdict()
 
         self.qid_to_node[None] = self.root
         self.usr_to_node[None] = self.root
@@ -106,27 +112,33 @@ class Tree:
                 key = parts[1]
 
             if not self.qid_to_node[qid]:
-                sys.stderr.write('Could not find node for id `{0}\'\n'.format(parts[0]))
+                sys.stderr.write('Could not find node for id `{0}\' (at {1})\n'.format(parts[0], filename))
                 sys.exit(1)
 
             node = self.qid_to_node[qid]
 
             if key == 'doc':
-                node.merge_comment(comment.Comment(categories[category]), override=True)
+                node.merge_comment(comment.Comment(categories[category], None), override=True)
+                node.comment.resolve_refs(self.find_ref, node)
             else:
                 sys.stderr.write('Unknown type `{0}\' for id `{1}\'\n'.format(key, parts[0]))
                 sys.exit(1)
 
-    def add_categories(self, categories, categoriesmap):
-        secmap = {}
-
+    def add_categories(self, categories):
         for category in categories:
             parts = category.split('::')
 
             root = self.root
+            fullname = ''
 
-            for part in parts:
+            for i in range(len(parts)):
+                part = parts[i]
                 found = False
+
+                if i != 0:
+                    fullname += '::'
+
+                fullname += part
 
                 for child in root.children:
                     if isinstance(child, nodes.Category) and child.name == part:
@@ -136,14 +148,12 @@ class Tree:
 
                 if not found:
                     s = nodes.Category(part)
-                    root.append(s)
 
+                    root.append(s)
                     root = s
 
-            secmap[category] = root
-
-        for cursor in categoriesmap:
-            categoriesmap[cursor] = secmap[categoriesmap[cursor]]
+                    self.category_to_node[fullname] = s
+                    self.all_nodes.append(s)
 
     def process(self):
         """
@@ -152,7 +162,6 @@ class Tree:
         """
 
         index = cindex.Index.create()
-        categoriesmap = {}
 
         for f in self.files:
             if f in self.processed:
@@ -185,11 +194,10 @@ class Tree:
                 extractfiles.append(filename)
 
             for e in extractfiles:
-                comments, categories, secmap = comment.extract(e, tu)
-                self.add_categories(categories, secmap)
+                db = comment.CommentsDatabase(e, tu)
 
-                categoriesmap.update(secmap)
-                self.comments.update(comments)
+                self.add_categories(db.category_names)
+                self.commentsdbs[e] = db
 
             self.visit(tu.cursor.get_children())
 
@@ -199,21 +207,38 @@ class Tree:
             self.processing = {}
 
         # Construct hierarchy of nodes.
-        nds = sets.Set(self.cursor_to_node.values())
-
-        for node in nds:
+        for node in self.all_nodes:
             q = node.qid
 
             if node.parent is None:
                 par = self.find_parent(node)
 
-                if (par is None or par == self.root) and node.cursor in categoriesmap:
-                    par = categoriesmap[node.cursor]
+                # Lookup categories for things in the root
+                if (par is None or par == self.root) and not node.cursor is None:
+                    location = node.cursor.extent.start
+                    db = self.commentsdbs[location.file.name]
 
-                if not par is None:
-                    par.append(node)
+                    if db:
+                        par = self.category_to_node[db.lookup_category(location)]
 
-        for node in self.root.descendants():
+                if par is None:
+                    par = self.root
+
+                par.append(node)
+
+            # Resolve comment
+            if node.cursor:
+                location = node.cursor.extent.start
+                db = self.commentsdbs[location.file.name]
+
+                if db:
+                    cm = db.lookup(location)
+
+                    if cm:
+                        node.merge_comment(cm)
+
+        # Map final qid to node
+        for node in self.all_nodes:
             self.qid_to_node[node.qid] = node
 
         # Resolve cross-references in documentation
@@ -280,6 +305,8 @@ class Tree:
         return self.root
 
     def register_node(self, node, parent=None):
+        self.all_nodes.append(node)
+
         self.usr_to_node[node.cursor.get_usr()] = node
         self.cursor_to_node[node.cursor] = node
 
@@ -339,7 +366,7 @@ class Tree:
                 node = self.usr_to_node[item.get_usr()]
 
                 if not node:
-                    node = cls(item, self.comments[item])
+                    node = cls(item, None)
                     self.register_node(node, parent)
                 elif isinstance(parent, nodes.Typedef):
                     # Typedefs are handled a bit specially because what happens
@@ -349,7 +376,6 @@ class Tree:
                     # bit reversed as to how we normally process things.
                     self.register_anon_typedef(node, parent)
                 else:
-                    node.merge_comment(self.comments[item])
                     self.cursor_to_node[item] = node
 
                 if node.process_children:

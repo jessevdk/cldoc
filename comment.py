@@ -1,7 +1,73 @@
 from clang import cindex
 from defdict import Defdict
 
-import os, re, sys
+import os, re, sys, bisect
+
+class Struct(object):
+    def __init__(self, **kwargs):
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
+
+    @staticmethod
+    def define(name, **kwargs):
+        defaults = kwargs
+
+        class subclass(Struct):
+            def __init__(self, **kwargs):
+                defs = defaults.copy()
+
+                for key in kwargs:
+                    if not key in defs:
+                        raise AttributeError("'{0}' has no attribute '{1}'".format(name, key))
+                    else:
+                        defs[key] = kwargs[key]
+
+                super(subclass, self).__init__(**defs)
+
+        subclass.__name__ = name
+        return subclass
+
+class Sorted(list):
+    def __init__(self, key=None):
+        if key is None:
+            key = lambda x: x
+
+        self.keys = []
+        self.key = key
+
+    def insert_bisect(self, item, bi):
+        k = self.key(item)
+        idx = bi(self.keys, k)
+
+        self.keys.insert(idx, k)
+        return super(Sorted, self).insert(idx, item)
+
+    def insert(self, item):
+        return self.insert_bisect(item, bisect.bisect_left)
+
+    insert_left = insert
+
+    def insert_right(self, item):
+        return self.insert_bisect(item, bisect.bisect_right)
+
+    def bisect(self, item, bi):
+        k = self.key(item)
+
+        return bi(self.keys, k)
+
+    def bisect_left(self, item):
+        return self.bisect(item, bisect.bisect_left)
+
+    def bisect_right(self, item):
+        return self.bisect(item, bisect.bisect_right)
+
+    def find(self, key):
+        i = bisect.bisect_left(self.keys, key)
+
+        if i != len(self.keys) and self.keys[i] == key:
+            return self[i]
+        else:
+            return None
 
 class Comment(object):
     redocref = re.compile('<(operator>>|[^>]+)>')
@@ -24,9 +90,11 @@ class Comment(object):
     reparams = '(?P<params>(?:' + reparam + ')*)'
     rereturn = '(@return\s(?P<return>[^.]*.))?'
 
-    def __init__(self, text):
+    def __init__(self, text, location):
         self.__dict__['docstrings'] = []
         self.__dict__['text'] = text
+
+        self.__dict__['location'] = location
 
         self.doc = text
         self.brief = ''
@@ -79,152 +147,184 @@ class Comment(object):
             else:
                 self.resolve_refs_for_doc(doc, resolver, root)
 
-cldoc_instrre = re.compile('^cldoc:([a-zA-Z_-]+)(\(([^\)]*)\))?')
+class RangeMap(Sorted):
+    Item = Struct.define('Item', obj=None, start=0, end=0)
 
-def parse_cldoc_instruction(s):
-    m = cldoc_instrre.match(s)
+    def __init__(self):
+        super(RangeMap, self).__init__(key=lambda x: x.start)
 
-    if not m:
+        self.stack = []
+
+    def push(self, obj, start):
+        self.stack.append(RangeMap.Item(obj=obj, start=start, end=start))
+
+    def pop(self, end):
+        item = self.stack.pop()
+        item.end = end
+
+        self.insert(item)
+
+    def insert(self, item, start=None, end=None):
+        if not isinstance(item, RangeMap.Item):
+            item = RangeMap.Item(obj=item, start=start, end=end)
+
+        self.insert_right(item)
+
+    def find(self, i):
+        # Finds object for which i falls in the range of that object
+        idx = bisect.bisect_right(self.keys, i)
+
+        # Go back up until falls within end
+        while idx > 0:
+            idx -= 1
+
+            o = self[idx]
+
+            if i <= o.end:
+                return o.obj
+
         return None
 
-    func = m.group(1)
-    args = m.group(3)
+class CommentsDatabase(object):
+    cldoc_instrre = re.compile('^cldoc:([a-zA-Z_-]+)(\(([^\)]*)\))?')
 
-    if args:
-        args = [x.strip() for x in args.split(",")]
-    else:
-        args = []
+    def __init__(self, filename, tu):
+        self.filename = filename
 
-    return [func, args]
+        self.categories = RangeMap()
+        self.comments = Sorted(key=lambda x: x.location.offset)
 
-def extract(filename, tu):
-    """
-    extract extracts comments from a translation unit for a given file by
-    iterating over all the tokens in the TU, locating the COMMENT tokens and
-    finding out to which cursors the comments semantically belong.
-    """
-    it = tu.get_tokens(extent=tu.get_extent(filename, (0, os.stat(filename).st_size)))
+        self.extract(filename, tu)
 
-    itptr = 0
-    tokens = list(it)
+    def parse_cldoc_instruction(self, token, s):
+        m = CommentsDatabase.cldoc_instrre.match(s)
 
-    prev = None
-    ret = Defdict()
+        if not m:
+            return False
 
-    categoriestack = []
-    categories = []
-    categoriesmap = {}
+        func = m.group(1)
+        args = m.group(3)
 
-    while itptr < len(tokens):
-        token = tokens[itptr]
-        itptr += 1
+        if args:
+            args = [x.strip() for x in args.split(",")]
+        else:
+            args = []
 
-        comments = []
-        firsttok = None
+        name = 'cldoc_instruction_{0}'.format(func.replace('-', '_'))
 
-        if len(categoriestack) > 0:
-            categoriesmap[token.cursor] = categoriestack[-1]
+        if hasattr(self, name):
+            getattr(self, name)(token, args)
+        else:
+            sys.stderr.write('Invalid cldoc instruction: {0}\n'.format(func))
+            sys.exit(1)
 
-        # Concatenate individual comments
-        while (not token is None) and token.kind == cindex.TokenKind.COMMENT:
-            if firsttok is None:
-                firsttok = token
+        return True
 
-            comments.append(clean(token))
+    @property
+    def category_names(self):
+        for item in self.categories:
+            yield item.obj
 
-            if itptr < len(tokens):
-                token = tokens[itptr]
+    def location_to_str(self, loc):
+        return '{0}:{1}:{2}'.format(loc.file.name, loc.line, loc.column)
 
-                if len(categoriestack) > 0:
-                    categoriesmap[token.cursor] = categoriestack[-1]
-            else:
-                token = None
+    def cldoc_instruction_begin_category(self, token, args):
+        if len(args) != 1:
+            sys.stderr.write('No category name specified (at {0})\n'.format(self.location_to_str(token.location)))
 
-            itptr += 1
+            sys.exit(1)
 
-        instr = parse_cldoc_instruction(" ".join(comments).strip())
+        category = args[0]
+        self.categories.push(category, token.location.offset)
 
-        if instr:
-            if instr[0] == 'begin-category' and len(instr[1]) == 1:
-                category = instr[1][0]
-                categoriestack.append(category)
+    def cldoc_instruction_end_category(self, token, args):
+        if len(self.categories.stack) == 0:
+            sys.stderr.write('Failed to end cldoc category: no category to end (at {0})\n'.format(self.location_to_str(token.location)))
 
-                if not category in categories:
-                    categories.append(category)
+            sys.exit(1)
 
-            elif instr[0] == 'end-category':
-                if len(categoriestack) == 0:
-                    sys.stderr.write('Failed to end cldoc category: no category to end\n')
-                    sys.exit(1)
+        last = self.categories.stack[-1]
 
-                if len(instr[1]) == 1 and categoriestack[-1] != instr[1][0]:
-                    sys.stderr.write('Failed to end cldoc category: current category is `{0}\', not `{1}\'\n'.format(categoriestack[-1], instr[1][0]))
-                    sys.exit(1)
+        if len(args) == 1 and last.obj != args[0]:
+            sys.stderr.write('Failed to end cldoc category: current category is `{0}\', not `{1}\' (at {2})\n'.format(last.obj, args[0], self.location_to_str(token.location)))
 
-                categoriestack.pop()
+            sys.exit(1)
 
-            continue
+        self.categories.pop(token.extent.end.offset)
 
-        if not firsttok is None:
-            # Check if first comment token was on the same line as the
-            # previous token
-            if prev and prev.extent.end.line == firsttok.extent.start.line:
-                ret[prev.cursor] = Comment("\n".join(comments))
-            elif token:
-                token = skip_nontoks(token, tokens, itptr)
-
-                if token:
-                    ret[token.cursor] = Comment("\n".join(comments))
-
-        if token and token.cursor.kind != cindex.CursorKind.INVALID_FILE:
-            prev = token
-
-    return ret, categories, categoriesmap
-
-def skip_nontoks(token, tokens, itptr):
-    if not token:
-        return None
-
-    start = token.extent.start
-
-    skips = [cindex.CursorKind.INVALID_FILE,
-             cindex.CursorKind.NAMESPACE_REF,
-             cindex.CursorKind.TYPE_REF]
-
-    while True:
-        if (not token.cursor.kind in skips) and token.cursor.extent.start == start:
-            return token
-
-        if itptr >= len(tokens):
+    def lookup_category(self, location):
+        if location.file.name != self.filename:
             return None
 
-        token = tokens[itptr]
-        itptr += 1
+        return self.categories.find(location.offset)
 
-def clean(token):
-    prelen = token.extent.start.column - 1
-    comment = token.spelling.strip()
+    def lookup(self, location):
+        if location.file.name != self.filename:
+            return None
 
-    if comment.startswith('//'):
-        return comment[2:].strip()
-    elif comment.startswith('/*') and comment.endswith('*/'):
-        lines = comment[2:-2].splitlines()
-        retl = []
+        return self.comments.find(location.offset)
 
-        for line in lines:
-            if prelen == 0 or line[0:prelen].isspace():
-                line = line[prelen:].rstrip()
+    def extract(self, filename, tu):
+        """
+        extract extracts comments from a translation unit for a given file by
+        iterating over all the tokens in the TU, locating the COMMENT tokens and
+        finding out to which cursors the comments semantically belong.
+        """
+        it = tu.get_tokens(extent=tu.get_extent(filename, (0, os.stat(filename).st_size)))
 
-                if line.startswith(' *') or line.startswith('  '):
-                    line = line[3:]
+        while True:
+            try:
+                self.extract_loop(it)
+            except StopIteration:
+                break
 
-                    if len(line) > 0 and line[0] == ' ':
-                        line = line[1:]
+    def extract_loop(self, iter):
+        token = iter.next()
 
-            retl.append(line)
+        # Skip until comment found
+        while token.kind != cindex.TokenKind.COMMENT:
+            token = iter.next()
 
-        return "\n".join(retl)
-    else:
-        return comment
+        comments = []
+
+        # Concatenate individual comments together
+        while token.kind == cindex.TokenKind.COMMENT:
+            comments.append(self.clean(token))
+            token = iter.next()
+
+        s = "\n".join(comments)
+
+        # Parse special cldoc:<instruction>() comments for instructions
+        if self.parse_cldoc_instruction(token, s.strip()):
+            return
+
+        comment = Comment(s, token.location)
+        self.comments.insert(comment)
+
+    def clean(self, token):
+        prelen = token.extent.start.column - 1
+        comment = token.spelling.strip()
+
+        if comment.startswith('//'):
+            return comment[2:].strip()
+        elif comment.startswith('/*') and comment.endswith('*/'):
+            lines = comment[2:-2].splitlines()
+            retl = []
+
+            for line in lines:
+                if prelen == 0 or line[0:prelen].isspace():
+                    line = line[prelen:].rstrip()
+
+                    if line.startswith(' *') or line.startswith('  '):
+                        line = line[3:]
+
+                        if len(line) > 0 and line[0] == ' ':
+                            line = line[1:]
+
+                retl.append(line)
+
+            return "\n".join(retl)
+        else:
+            return comment
 
 # vi:ts=4:et
