@@ -20,6 +20,12 @@ class Class(Node):
         self.current_access = cindex.CXXAccessSpecifier.PRIVATE
         self.bases = []
 
+    @property
+    def methods(self):
+        for child in self.children:
+            if isinstance(child, Method):
+                yield child
+
     def visit(self, cursor, citer):
         if cursor.kind == cindex.CursorKind.CXX_ACCESS_SPEC_DECL:
             self.current_access = cursor.access_specifier
