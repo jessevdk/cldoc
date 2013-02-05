@@ -6,8 +6,10 @@ from comment import Comment
 import re
 
 class Argument:
-    def __init__(self, cursor):
+    def __init__(self, func, cursor):
         self.cursor = cursor
+        self.parent = func
+
         self._type = Type(self.cursor.type)
 
     @property
@@ -17,6 +19,10 @@ class Argument:
     @property
     def type(self):
         return self._type
+
+    @property
+    def qid(self):
+        return self.parent.qid + '::' + self.name
 
 class Function(Node):
     kind = cindex.CursorKind.FUNCTION_DECL
@@ -35,7 +41,7 @@ class Function(Node):
             if child.kind != cindex.CursorKind.PARM_DECL:
                 continue
 
-            self._arguments.append(Argument(child))
+            self._arguments.append(Argument(self, child))
 
     def parse_comment(self):
         m = Function.recomment.match(self.comment.text)
