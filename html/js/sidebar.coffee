@@ -51,8 +51,9 @@ class Sidebar
                     else
                         cnt.text(parseInt(cnti) + 1)
 
-                    return
                     cnt.css('display', 'inline-block')
+
+                    continue
 
                 a = $('<a/>', {href: Page.make_internal_ref(Page.current_page, item.id)}).text(item.name)
                 li = $('<li/>')
