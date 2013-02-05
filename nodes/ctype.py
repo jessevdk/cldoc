@@ -58,13 +58,20 @@ class Type(Node):
 
     def _full_typename(self, decl):
         parent = decl.semantic_parent
-        meid = decl.spelling
+        meid = decl.displayname
 
-        if not parent or (parent.kind != cindex.CursorKind.NAMESPACE and
-                          parent.kind != cindex.CursorKind.CLASS_DECL):
+        if not parent:
             return meid
 
-        return self._full_typename(parent) + '::' + meid
+        if not meid:
+            return self._full_typename(parent)
+
+        parval = self._full_typename(parent)
+
+        if parval:
+            return parval + '::' + meid
+        else:
+            return meid
 
     def extract(self, tp):
         if tp.is_const_qualified():
