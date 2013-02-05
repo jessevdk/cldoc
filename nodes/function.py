@@ -27,7 +27,7 @@ class Argument:
 class Function(Node):
     kind = cindex.CursorKind.FUNCTION_DECL
 
-    recomment = re.compile('^' + Comment.rebrief + '\s*' + Comment.reparams + '\s*' + Comment.redoc + '\s*' + Comment.rereturn, re.S)
+    recomment = re.compile('^' + Comment.rebrief + '\s*' + Comment.reparams + '\s*' + Comment.redoc + '\s*' + Comment.rereturn + '\s*$', re.S)
     reparam = re.compile(Comment.reparam)
 
     def __init__(self, cursor, comment):
