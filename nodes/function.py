@@ -51,7 +51,10 @@ class Function(Node):
             self.comment.brief = m.group('brief').strip()
             self.comment.doc = m.group('doc').strip()
 
-            self.comment.returns = m.group('return')
+            ret = m.group('return')
+
+            if ret:
+                self.comment.returns = ret
 
             for p in Function.reparam.finditer(m.group('params')):
                 self.comment.params[p.group('paramname')] = p.group('paramdoc').strip()
