@@ -12,7 +12,7 @@ namemap = {
     cindex.TypeKind.CHAR_U: 'char',
     cindex.TypeKind.UCHAR: 'unsigned char',
     cindex.TypeKind.CHAR16: 'char16_t',
-    cindex.TypeKind.CHAR32: 'char32_T',
+    cindex.TypeKind.CHAR32: 'char32_t',
     cindex.TypeKind.USHORT: 'unsigned short',
     cindex.TypeKind.UINT: 'unsigned int',
     cindex.TypeKind.ULONG: 'unsigned long',
