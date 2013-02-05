@@ -50,6 +50,22 @@ class Page
         Sidebar.load(root)
         @load_contents(root)
 
+        title = root.attr('name')
+
+        if !title
+            brief = root.children('brief')
+
+            if brief.length > 0
+                title = brief.text()
+
+                if title[title.length - 1] == '.'
+                    title = title.substring(0, title.length - 1)
+
+            if !title
+                title = 'Documentation'
+
+        document.title = title
+
         @scroll(page, scrollto)
 
     @make_external_ref: (page, id) ->
