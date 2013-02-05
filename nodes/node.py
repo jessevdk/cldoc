@@ -61,6 +61,17 @@ class Node(object):
         return ret
 
     @property
+    def resolve_nodes(self):
+        from enum import Enum
+
+        for child in self.children:
+            yield child
+
+            if isinstance(child, Enum):
+                for ev in child.children:
+                    yield ev
+
+    @property
     def name(self):
         if self.cursor is None:
             return ''
