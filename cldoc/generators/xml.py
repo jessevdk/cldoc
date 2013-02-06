@@ -223,6 +223,17 @@ class Xml(Generator):
                 child.append(self.doc_to_xml(base.node, base.node.comment.brief, 'brief'))
 
             elem.append(child)
+
+        for subcls in node.subclasses:
+            child = ElementTree.Element('subclass')
+
+            self.set_access_attribute(subcls, child)
+            self.add_ref_node_id(subcls, child)
+            child.set('name', subcls.qid_to(node.qid))
+
+            if subcls.comment and subcls.comment.brief:
+                child.append(self.doc_to_xml(subcls, subcls.comment.brief, 'brief'))
+
             elem.append(child)
 
         hasabstract = False
