@@ -170,6 +170,18 @@ class Xml(Generator):
             ret.append(self.type_to_xml(arg.type, node.parent))
             elem.append(ret)
 
+    def method_to_xml(self, node, elem):
+        self.function_to_xml(node, elem)
+
+        if node.virtual:
+            elem.set('virtual', 'yes')
+
+        if node.static:
+            elem.set('static', 'yes')
+
+        if node.abstract:
+            elem.set('abstract', 'yes')
+
     def typedef_to_xml(self, node, elem):
         elem.append(self.type_to_xml(node.type, node))
 
