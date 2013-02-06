@@ -1,5 +1,5 @@
 class Function extends Node
-    @title = 'Functions'
+    @title = ['Function', 'Functions']
 
     constructor: (@node) ->
         super(@node)

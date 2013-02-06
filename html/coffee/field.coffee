@@ -1,5 +1,5 @@
 class Field extends Node
-    @title = 'Fields'
+    @title = ['Field', 'Fields']
 
     constructor: (@node) ->
         super(@node)

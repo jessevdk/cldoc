@@ -219,7 +219,7 @@ div.brief p:last-child, div.doc p:last-child {
     background-color: #eee;
   }
 
-  div.structs, div.classes {
+  div.structures, div.classes {
     div.item {
       margin-bottom: 30px;
     }
@@ -231,7 +231,7 @@ div.brief p:last-child, div.doc p:last-child {
     }
   }
 
-  div.structs, div.classes, div.enums {
+  div.structures, div.classes, div.enumerations {
     table {
       @include table-items;
       @include inline-doc;
@@ -245,7 +245,7 @@ div.brief p:last-child, div.doc p:last-child {
     @include table-alt;
   }
 
-  div.structs, div.classes {
+  div.structures, div.classes {
     table {
       border-left: 1px solid #999;
 
@@ -255,7 +255,7 @@ div.brief p:last-child, div.doc p:last-child {
     }
   }
 
-  div.enums {
+  div.enumerations {
     table {
       td.value {
         text-align: right;

@@ -1,5 +1,5 @@
 class Variable extends Node
-    @title = 'Variables'
+    @title = ['Variable', 'Variables']
 
     constructor: (@node) ->
         super(@node)

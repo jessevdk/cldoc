@@ -1,5 +1,5 @@
 class Struct extends Node
-    @title = 'Structures'
+    @title = ['Struct', 'Structures']
 
     constructor: (@node) ->
         super(@node)

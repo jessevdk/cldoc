@@ -33,7 +33,7 @@ class Node
         @doc = node.children('doc').first()
 
     @render_container: ->
-        $('<div/>', {'class': @name.toLowerCase() + 's'})
+        $('<div/>', {'class': @title[1].toLowerCase()})
 
     render: (container) ->
         null

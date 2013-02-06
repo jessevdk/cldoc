@@ -1,5 +1,5 @@
 class Enum extends Node
-    @title = 'Enumerations'
+    @title = ['Enum', 'Enumerations']
 
     constructor: (@node) ->
         super(@node)

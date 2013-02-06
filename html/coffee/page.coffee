@@ -106,7 +106,7 @@ class Page
             type = @node_type(item)
 
             if type
-                $('<span class="keyword"/>').text(type.name).appendTo(ret)
+                $('<span class="keyword"/>').text(type.title[0]).appendTo(ret)
 
             $('<span/>').text(id).appendTo(ret)
 
@@ -153,7 +153,7 @@ class Page
             if !type
                 continue
 
-            h2 = $('<h2/>').text(type.title)
+            h2 = $('<h2/>').text(type.title[1])
             h2.appendTo(content)
 
             container = type.render_container()

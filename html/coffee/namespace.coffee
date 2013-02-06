@@ -1,5 +1,5 @@
 class Namespace extends Node
-    @title = 'Namespaces'
+    @title = ['Namespace', 'Namespaces']
 
     constructor: (@node) ->
         super(@node)

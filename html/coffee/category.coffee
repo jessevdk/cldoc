@@ -1,5 +1,5 @@
 class Category extends Node
-    @title = 'Categories'
+    @title = ['Category', 'Categories']
 
     constructor: (@node) ->
         super(@node)

@@ -1,5 +1,5 @@
 class Typedef extends Node
-    @title = 'Typedefs'
+    @title = ['Typedef', 'Typedefs']
 
     constructor: (@node) ->
         super(@node)

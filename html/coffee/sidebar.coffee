@@ -50,7 +50,7 @@ class Sidebar
             type = Node.types[typename]
 
             # Add subtitle header for this group
-            $('<div class="subtitle"/>').text(type.title).appendTo(container)
+            $('<div class="subtitle"/>').text(type.title[1]).appendTo(container)
 
             ul = $('<ul/>')
             prev = null
