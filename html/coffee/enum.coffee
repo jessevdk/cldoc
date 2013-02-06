@@ -6,7 +6,17 @@ class Enum extends Node
 
     render: (container) ->
         id = $('<span class="identifier"/>').text(@name)
-        name = $('<div><span class="keyword">enum</span> </div>')
+
+        isprot = @node.attr('access') == 'protected'
+
+        if isprot
+            n = 'protected enum'
+        else
+            n = 'enum'
+
+        sp = $('<span class="keyword"/>').text(n)
+        name = $('<div/>').append(sp).append(' ')
+
         name.attr('id', @id)
 
         name.append(id)

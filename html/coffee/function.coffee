@@ -10,12 +10,20 @@ class Function extends Node
         decldiv = $('<div class="declaration"/>').appendTo(div)
         decldiv.attr('id', @id)
 
-        if @node.attr('virtual')
-            specs = $('<ul class="specifiers"/>').appendTo(decldiv)
-            specs.append($('<li>virtual</li>'))
+        isvirt = @node.attr('virtual')
+        isprot = @node.attr('access') == 'protected'
 
-            if @node.attr('abstract')
-                specs.append($('<li>abstract</li>'))
+        if isvirt || isprot
+            specs = $('<ul class="specifiers"/>').appendTo(decldiv)
+
+            if isprot
+                specs.append($('<li>protected</li>'))
+
+            if isvirt
+                specs.append($('<li>virtual</li>'))
+
+                if @node.attr('abstract')
+                    specs.append($('<li>abstract</li>'))
 
         # Return type
         ret = @node.children('return')

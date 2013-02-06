@@ -11,6 +11,12 @@ class Struct extends Node
 
         id = $('<span class="identifier"/>').text(@name)
         k = $('<span class="keyword"/>')
+
+        isprot = @node.attr('access') == 'protected'
+
+        if isprot
+            k.append('protected ')
+
         k.append(@keyword)
 
         name = $('<div/>').append(k).append(' ')
