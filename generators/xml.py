@@ -30,10 +30,10 @@ class Xml(Generator):
 
         if cm:
             if cm.brief:
-                self.index.append(self.doc_to_xml(cm.brief, 'brief'))
+                self.index.append(self.doc_to_xml(self.tree.root, cm.brief, 'brief'))
 
             if cm.doc:
-                self.index.append(self.doc_to_xml(cm.doc))
+                self.index.append(self.doc_to_xml(self.tree.root, cm.doc))
 
         Generator.generate(self, outdir)
 
@@ -122,14 +122,14 @@ class Xml(Generator):
 
         self.add_ref_node_id(node, elem)
 
-    def type_to_xml(self, tp):
+    def type_to_xml(self, tp, parent=None):
         elem = ElementTree.Element('type')
 
         if tp.is_array:
             elem.set('size', str(tp.array_size))
-            elem.append(self.type_to_xml(tp.element_type))
+            elem.append(self.type_to_xml(tp.element_type, parent))
         else:
-            elem.set('name', tp.typename)
+            elem.set('name', tp.typename_for(parent))
 
         if len(tp.qualifier) > 0:
             elem.set('qualifier', " ".join(tp.qualifier))
@@ -156,19 +156,19 @@ class Xml(Generator):
             ret.set('name', arg.name)
 
             if node.comment and arg.name in node.comment.params:
-                ret.append(self.doc_to_xml(node.comment.params[arg.name]))
+                ret.append(self.doc_to_xml(node, node.comment.params[arg.name]))
 
-            ret.append(self.type_to_xml(arg.type))
+            ret.append(self.type_to_xml(arg.type, node.parent))
             elem.append(ret)
 
     def typedef_to_xml(self, node, elem):
-        elem.append(self.type_to_xml(node.type))
+        elem.append(self.type_to_xml(node.type, node))
 
     def typedef_to_xml_ref(self, node, elem):
-        elem.append(self.type_to_xml(node.type))
+        elem.append(self.type_to_xml(node.type, node))
 
     def variable_to_xml(self, node, elem):
-        elem.append(self.type_to_xml(node.type))
+        elem.append(self.type_to_xml(node.type, node.parent))
 
     def set_access_attribute(self, node, elem):
         if node.access == cindex.CXXAccessSpecifier.PROTECTED:
@@ -184,13 +184,13 @@ class Xml(Generator):
 
             self.set_access_attribute(base, child)
 
-            child.append(self.type_to_xml(base.type))
+            child.append(self.type_to_xml(base.type, node))
             elem.append(child)
 
     def field_to_xml(self, node, elem):
-        elem.append(self.type_to_xml(node.type))
+        elem.append(self.type_to_xml(node.type, node.parent))
 
-    def doc_to_xml(self, doc, tagname='doc'):
+    def doc_to_xml(self, parent, doc, tagname='doc'):
         doce = ElementTree.Element(tagname)
 
         s = ''
@@ -208,7 +208,7 @@ class Xml(Generator):
                 s = ''
 
                 last = ElementTree.Element('ref')
-                last.text = component.name
+                last.text = parent.qid_from(component.qid)
 
                 self.add_ref_node_id(component, last)
 
@@ -242,10 +242,10 @@ class Xml(Generator):
                 elem.set(prop, props[prop])
 
         if node.comment and node.comment.brief:
-            elem.append(self.doc_to_xml(node.comment.brief, 'brief'))
+            elem.append(self.doc_to_xml(node, node.comment.brief, 'brief'))
 
         if node.comment and node.comment.doc:
-            elem.append(self.doc_to_xml(node.comment.doc))
+            elem.append(self.doc_to_xml(node, node.comment.doc))
 
         self.call_type_specific(node, elem, 'to_xml')
 
@@ -254,11 +254,11 @@ class Xml(Generator):
                 continue
 
             if self.is_page(child):
-                child = self.node_to_xml_ref(child)
+                chelem = self.node_to_xml_ref(child)
             else:
-                child = self.node_to_xml(child)
+                chelem = self.node_to_xml(child)
 
-            elem.append(child)
+            elem.append(chelem)
 
         return elem
 
@@ -277,7 +277,7 @@ class Xml(Generator):
             elem.set('name', props['name'])
 
         if node.comment and node.comment.brief:
-            elem.append(self.doc_to_xml(node.comment.brief, 'brief'))
+            elem.append(self.doc_to_xml(node, node.comment.brief, 'brief'))
 
         self.call_type_specific(node, elem, 'to_xml_ref')
 
