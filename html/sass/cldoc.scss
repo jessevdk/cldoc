@@ -319,6 +319,20 @@ div.brief p:last-child, div.doc p:last-child {
       }
     }
 
+    div.overrides {
+      margin-top: 10px;
+      font-size: 0.8em;
+
+      span.title {
+        color: $keyword_color;
+        padding-right: 10px;
+      }
+
+      a {
+        color: lighten($link_color, 10%);
+      }
+    }
+
     table.arguments {
       td {
         font-size: 0.9em;
