@@ -29,6 +29,8 @@ class Type extends Node
     render: ->
         ret = $('<span class="type"/>')
 
+        if @node.attr('builtin')
+            ret.addClass('builtin')
 
         for item in @typeparts
             ret.append(item)
