@@ -208,6 +208,21 @@ class Xml(Generator):
             child.append(self.type_to_xml(base.type, node))
             elem.append(child)
 
+        hasabstract = False
+        allabstract = True
+
+        for method in node.methods:
+            if method.abstract:
+                hasabstract = True
+            else:
+                allabstract = False
+
+        if hasabstract:
+            if allabstract:
+                elem.set('interface', 'true')
+            else:
+                elem.set('abstract', 'true')
+
     def field_to_xml(self, node, elem):
         elem.append(self.type_to_xml(node.type, node.parent))
 
