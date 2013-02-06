@@ -2,6 +2,7 @@ class Node
     @types = {}
 
     @groups = [
+        'coverage',
         'category',
         'namespace',
         'base',
