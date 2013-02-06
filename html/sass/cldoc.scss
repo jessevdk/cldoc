@@ -254,7 +254,7 @@ div.brief p:last-child, div.doc p:last-child {
     }
   }
 
-  table.namespace, table.fields, table.variables, table.arguments {
+  table.namespace, table.fields, table.variables, table.arguments, table.bases, table.subclasses {
     @include table-items;
     @include inline-doc;
     @include table-alt;
