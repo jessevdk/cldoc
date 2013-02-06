@@ -1,11 +1,88 @@
 from __future__ import absolute_import
 
-import sys, os
+import sys, os, argparse, shlex
 
-from . import tree
-from . import generators
+def generate(opts):
+    from . import tree
+    from . import generators
 
-import argparse
+    flags = shlex.split(os.getenv('CXXFLAGS'))
+    t = tree.Tree(opts.files, flags)
+
+    t.process()
+
+    if opts.merge:
+        t.merge(opts.merge)
+
+    if opts.type == 'html' or opts.type == 'xml':
+        generator = generators.Xml(t)
+
+        if opts.type == 'html':
+            generator.generate(os.path.join(opts.output, 'xml'))
+            generators.Html().generate(opts.output)
+
+def serve(opts):
+    import subprocess, SimpleHTTPServer, SocketServer, threading, time
+
+    if not opts.output:
+        sys.stderr.write("Please specify the output directory to serve\n")
+        sys.exit(1)
+
+    url = 'http://localhost:6060/'
+
+    class Server(SocketServer.TCPServer):
+        allow_reuse_address = True
+
+    class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+        def translate_path(self, path):
+            while path.startswith('/'):
+                path = path[1:]
+
+            path = os.path.join(opts.output, path)
+            return SimpleHTTPServer.SimpleHTTPRequestHandler.translate_path(self, path)
+
+        def log_message(self, format, *args):
+            pass
+
+    class SocketThread(threading.Thread):
+        def __init__(self):
+            threading.Thread.__init__(self)
+
+            self.httpd = Server(("", 6060), Handler)
+
+        def shutdown(self):
+            self.httpd.shutdown()
+            self.httpd.server_close()
+
+        def run(self):
+            self.httpd.serve_forever()
+
+    t = SocketThread()
+    t.start()
+
+    dn = open(os.devnull)
+
+    if sys.platform.startswith('darwin'):
+        subprocess.call(('open', url), stdout=dn, stderr=dn)
+    elif os.name == 'posix':
+        subprocess.call(('xdg-open', url), stdout=dn, stderr=dn)
+
+    while True:
+        try:
+            time.sleep(3600)
+        except KeyboardInterrupt:
+            t.shutdown()
+            t.join()
+            break
+
+def inspect(opts):
+    from . import tree
+    from . import inspecttree
+
+    flags = shlex.split(os.getenv('CXXFLAGS'))
+
+    t = tree.Tree(opts.files, flags)
+    inspecttree.inspect(t)
 
 def run():
     parser = argparse.ArgumentParser(description='clang based documentation generator.')
@@ -14,62 +91,27 @@ def run():
                         action='store_const', const=True, help='inspect the AST')
 
     parser.add_argument('--serve', default=False,
-                        action='store_const', const=True, help='serve generated xml')
+                        action='store_const', const=True, help='serve generated documentation')
 
     parser.add_argument('--output', default=None, metavar='DIR',
                         help='specify the output directory')
+
+    parser.add_argument('--type', default='html', metavar='TYPE',
+                        help='specify the type of output (html or xml)')
 
     parser.add_argument('--merge', default=None, metavar='FILES',
                         help='specify additional description files to merge into the documentation')
 
     parser.add_argument('files', nargs='+', help='files to parse')
 
-    opts, flags = parser.parse_known_args()
-    files = opts.files
-
-    t = tree.Tree(files, flags)
+    opts = parser.parse_args()
 
     if opts.inspect:
-        import inspecttree
-
-        inspecttree.inspect(t)
+        inspect(opts)
     elif opts.serve:
-        import subprocess, SimpleHTTPServer, SocketServer
-
-        if opts.output:
-            filepath = os.path.join(opts.output, '..')
-        else:
-            sys.stderr.write("Please specify the output xml directory to serve\n")
-            sys.exit(1)
-
-        curwd = os.getcwd()
-        os.chdir(filepath)
-
-        url = 'http://localhost:6060/'
-
-        if sys.platform.startswith('darwin'):
-            subprocess.Popen(('open', url))
-        elif os.name == 'posix':
-            subprocess.Popen(('xdg-open', url))
-
-        try:
-            handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-
-            httpd = SocketServer.TCPServer(("", 6060), handler)
-            httpd.allow_reuse_address = True
-
-            httpd.serve_forever()
-        finally:
-            os.chdir(curwd)
-
+        serve(opts)
     else:
-        t.process()
-
-        if opts.merge:
-            t.merge(opts.merge)
-
-        generator = generators.Xml(t)
-        generator.generate(opts.output)
+        generate(opts)
 
 if __name__ == '__main__':
     run()
