@@ -3,17 +3,23 @@ class Doc extends Node
         super(@node)
 
     @either: (node) ->
-        doc = new Doc(node.children('doc')).render()
+        doc = @doc(node)
 
         if doc
             return doc
 
-        brief = new Doc(node.children('brief')).render()
+        brief = @brief(node)
 
         if brief
             return brief
 
         return $()
+
+    @brief: (node) ->
+        return new Doc(node.children('brief')).render()
+
+    @doc: (node) ->
+        return new Doc(node.children('doc')).render()
 
     escape: (text) ->
         r = /([*_\\`{}#+-.!\[\]])/
