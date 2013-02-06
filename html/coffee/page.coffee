@@ -173,7 +173,7 @@ class Page
         content.empty()
 
         @load_description(page, content)
-        @load_items(page, content, 'Type definitions', 'typedef:not([access])')
+        @load_items(page, content)
 
     @push_nav: (page, scrollto) ->
         history.pushState({page: page, scrollto: scrollto}, page, @make_internal_ref(page, scrollto))
