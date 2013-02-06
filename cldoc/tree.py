@@ -350,6 +350,9 @@ class Tree:
 
     def register_anon_typedef(self, node, parent):
         node.typedef = parent
+        node.add_comment_location(parent.cursor.extent.start)
+
+        self.all_nodes.remove(parent)
 
         # Map references to the typedef directly to the node
         self.usr_to_node[parent.cursor.get_usr()] = node
