@@ -1,5 +1,3 @@
 *.pyc
-html/cldoc.css
-html/cldoc.js
-html/xml
-.sass-cache
+html/styles/cldoc.css
+html/javascript/cldoc.js

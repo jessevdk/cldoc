@@ -1,5 +1,5 @@
-from clang import cindex
-from comment import Comment
+from cldoc.clang import cindex
+from cldoc.comment import Comment
 import re
 
 class Node(object):

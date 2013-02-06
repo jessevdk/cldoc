@@ -1,8 +1,8 @@
 from node import Node
-from clang import cindex
+from cldoc.clang import cindex
 import importlib
 
-cls = importlib.import_module('.class', 'nodes')
+cls = importlib.import_module('.class', 'cldoc.nodes')
 
 class ClassTemplate(cls.Class):
     kind = cindex.CursorKind.CLASS_TEMPLATE

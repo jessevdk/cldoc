@@ -1,5 +1,5 @@
 from method import Method
-from clang import cindex
+from cldoc.clang import cindex
 
 class Destructor(Method):
     kind = cindex.CursorKind.DESTRUCTOR

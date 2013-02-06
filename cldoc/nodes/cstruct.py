@@ -1,7 +1,7 @@
 import importlib
-from clang import cindex
+from cldoc.clang import cindex
 
-cls = importlib.import_module('.class', 'nodes')
+cls = importlib.import_module('.class', 'cldoc.nodes')
 
 class Struct(cls.Class):
     kind = cindex.CursorKind.STRUCT_DECL

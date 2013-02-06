@@ -1,8 +1,8 @@
 from __future__ import absolute_import
-from clang import cindex
+from cldoc.clang import cindex
 
 from .generator import Generator
-import nodes
+from cldoc import nodes
 
 from xml.etree import ElementTree
 import sys, os

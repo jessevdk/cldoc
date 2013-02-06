@@ -1,9 +1,9 @@
 from node import Node
 from ctype import Type
-from clang import cindex
+from cldoc.clang import cindex
 
-class Variable(Node):
-    kind = cindex.CursorKind.VAR_DECL
+class Field(Node):
+    kind = cindex.CursorKind.FIELD_DECL
 
     def __init__(self, cursor, comment):
         Node.__init__(self, cursor, comment)

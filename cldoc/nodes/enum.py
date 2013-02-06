@@ -1,5 +1,5 @@
 from node import Node
-from clang import cindex
+from cldoc.clang import cindex
 
 class Enum(Node):
     kind = cindex.CursorKind.ENUM_DECL

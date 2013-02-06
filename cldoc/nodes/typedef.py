@@ -1,5 +1,5 @@
 from node import Node
-from clang import cindex
+from cldoc.clang import cindex
 from ctype import Type
 
 class Typedef(Node):

@@ -1,5 +1,5 @@
 from function import Function
-from clang import cindex
+from cldoc.clang import cindex
 
 class Method(Function):
     kind = cindex.CursorKind.CXX_METHOD

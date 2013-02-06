@@ -12,7 +12,7 @@ for py in glob.glob(os.path.join(d, '*.py')):
         continue
 
     modname = base[:-3]
-    mod = importlib.import_module('.' + modname, 'generators')
+    mod = importlib.import_module('.' + modname, 'cldoc.generators')
 
     for a in dir(mod):
         aa = getattr(mod, a)

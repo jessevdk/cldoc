@@ -1,7 +1,7 @@
 from node import Node
-from clang import cindex
+from cldoc.clang import cindex
 from ctype import Type
-from comment import Comment
+from cldoc.comment import Comment
 
 import re
 

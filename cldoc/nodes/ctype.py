@@ -1,4 +1,4 @@
-from clang import cindex
+from cldoc.clang import cindex
 from node import Node
 
 kindmap = {

@@ -1,8 +1,8 @@
 from method import Method
-from clang import cindex
+from cldoc.clang import cindex
 
-class ConversionFunction(Method):
-    kind = cindex.CursorKind.CONVERSION_FUNCTION
+class Constructor(Method):
+    kind = cindex.CursorKind.CONSTRUCTOR
 
     def __init__(self, cursor, comment):
         Method.__init__(self, cursor, comment)
