@@ -279,7 +279,8 @@ class Tree:
         return None
 
     def node_on_c_struct(self, node):
-        if not isinstance(node, nodes.Function):
+        if isinstance(node, nodes.Method) or \
+           not isinstance(node, nodes.Function):
             return None
 
         decl = self.decl_on_c_struct(node, node.return_type)
