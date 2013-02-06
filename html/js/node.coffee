@@ -5,8 +5,12 @@ class Node
         'category',
         'namespace',
         'typedef',
-        'struct, class',
+        'class, classtemplate',
+        'struct',
         'enum',
+        'field',
+        'variable',
+        'constructor',
         'method, function',
     ]
 
