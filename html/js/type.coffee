@@ -28,16 +28,10 @@ class Type extends Node
 
     render: ->
         ret = $('<span class="type"/>')
-        cnt = ret
 
-        if @ref
-            a = Page.make_link(@ref)
-
-            ret.append(a)
-            cnt = a
 
         for item in @typeparts
-            cnt.append(item)
+            ret.append(item)
 
         return ret
 
