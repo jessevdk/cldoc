@@ -22,6 +22,9 @@ class Tree:
         self.processing = {}
         self.kindmap = {}
 
+        # Things to skip
+        self.kindmap[cindex.CursorKind.USING_DIRECTIVE] = None
+
         # Create a map from CursorKind to classes representing those cursor
         # kinds.
         for cls in nodes.Node.subclasses():
@@ -364,6 +367,10 @@ class Tree:
 
             if item.kind in self.kindmap:
                 cls = self.kindmap[item.kind]
+
+                if not cls:
+                    # Skip
+                    continue
 
                 # see if we already have a node for this thing
                 node = self.usr_to_node[item.get_usr()]
