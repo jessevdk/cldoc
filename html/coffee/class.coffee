@@ -4,6 +4,8 @@ class Class extends Struct
     constructor: (@node) ->
         super(@node)
 
+        @keyword = 'class'
+
 Node.types['class'] = Class
 Node.types.classtemplate = Class
 

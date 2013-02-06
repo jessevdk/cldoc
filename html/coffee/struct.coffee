@@ -4,11 +4,16 @@ class Struct extends Node
     constructor: (@node) ->
         super(@node)
 
+        @keyword = 'struct'
+
     render: (container) ->
         item = $('<div class="item"/>')
 
         id = $('<span class="identifier"/>').text(@name)
-        name = $('<div><span class="keyword">struct</span> </div>')
+        k = $('<span class="keyword"/>')
+        k.append(@keyword)
+
+        name = $('<div/>').append(k).append(' ')
         name.attr('id', @id)
 
         name.append(id)
