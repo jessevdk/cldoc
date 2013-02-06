@@ -72,6 +72,7 @@ class Comment(object):
         self.__dict__['text'] = text
 
         self.__dict__['location'] = location
+        self.__dict__['_resolved'] = False
 
         self.doc = text
         self.brief = ''
@@ -110,6 +111,11 @@ class Comment(object):
         doc.components = components
 
     def resolve_refs(self, resolver, root):
+        if self.__dict__['_resolved']:
+            return
+
+        self.__dict__['_resolved'] = True
+
         for name in self.docstrings:
             doc = getattr(self, name)
 
