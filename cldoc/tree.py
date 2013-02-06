@@ -283,7 +283,9 @@ class Tree:
     def decl_on_c_struct(self, node, tp):
         n = self.cursor_to_node[tp.decl]
 
-        if isinstance(n, nodes.Struct) or isinstance(n, nodes.Typedef):
+        if isinstance(n, nodes.Struct) or \
+           isinstance(n, nodes.Typedef) or \
+           isinstance(n, nodes.Enum):
             return n
 
         return None
