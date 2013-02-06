@@ -134,6 +134,20 @@ body, html {
   text-align: center;
 }
 
+#sidebar {
+  span.virtual, span.protected {
+    font-size: 0.6em;
+    min-width: 1.6em;
+    display: inline-block;
+    vertical-align: super;
+    text-align: center;
+    background-color: $keyword_color;
+    color: #fff;
+    margin-right: 5px;
+    padding-bottom: 2px;
+  }
+}
+
 #sidebar .brief {
   text-shadow: none;
   font-size: 0.9em;
