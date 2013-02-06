@@ -174,6 +174,17 @@ class Xml(Generator):
     def method_to_xml(self, node, elem):
         self.function_to_xml(node, elem)
 
+        if len(node.override) > 0:
+            elem.set('override', 'yes')
+
+        for ov in node.override:
+            ovelem = ElementTree.Element('override')
+
+            ovelem.set('name', ov.qid_to(node.qid))
+            self.add_ref_node_id(ov, ovelem)
+
+            elem.append(ovelem)
+
         if node.virtual:
             elem.set('virtual', 'yes')
 
