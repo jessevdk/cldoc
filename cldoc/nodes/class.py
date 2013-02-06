@@ -12,6 +12,7 @@ class Class(Node):
             self.cursor = cursor
             self.access = access
             self.type = Type(cursor.type)
+            self.node = None
 
     def __init__(self, cursor, comment):
         Node.__init__(self, cursor, comment)
@@ -19,6 +20,22 @@ class Class(Node):
         self.process_children = True
         self.current_access = cindex.CXXAccessSpecifier.PRIVATE
         self.bases = []
+        self.subclasses = []
+        self.name_to_method = {}
+
+    def resolve_bases(self, mapping):
+        for b in self.bases:
+            tpname = b.type.typename
+
+            if tpname in mapping:
+                b.node = mapping[tpname]
+                b.node.subclasses.append(self)
+
+    def append(self, child):
+        Node.append(self, child)
+
+        if isinstance(child, Method):
+            self.name_to_method[child.name] = child
 
     @property
     def methods(self):

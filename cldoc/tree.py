@@ -253,9 +253,20 @@ class Tree:
             if cm:
                 node.merge_comment(cm)
 
+        # Keep track of classes to resolve bases and subclasses
+        classes = {}
+
         # Map final qid to node
         for node in self.all_nodes:
-            self.qid_to_node[node.qid] = node
+            q = node.qid
+            self.qid_to_node[q] = node
+
+            if isinstance(node, nodes.Class):
+                classes[q] = node
+
+        # Resolve bases and subclasses
+        for qid in classes:
+            classes[qid].resolve_bases(classes)
 
         # Resolve cross-references in documentation
         self.cross_ref(self.root)
