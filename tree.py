@@ -387,6 +387,7 @@ class Tree:
                     self.register_anon_typedef(node, parent)
                 else:
                     self.cursor_to_node[item] = node
+                    node.add_ref(item)
 
                 if node.process_children:
                     self.visit(item.get_children(), node)
