@@ -16,9 +16,13 @@ class Page
         if @current_page != page
             # Load <page>.xml from the xml/ dir
             if !(page in @pages)
+                if page == '(report)'
+                    url = 'report.xml'
+                else
+                    url = 'xml/' + page + '.xml'
 
                 $.ajax({
-                    url: 'xml/' + page + '.xml',
+                    url: url,
                     cache: false,
                     success: (data) =>
                         @pages[page] = $(data)
