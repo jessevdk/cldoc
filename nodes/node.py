@@ -43,6 +43,27 @@ class Node(object):
         if self._comment:
             self.parse_comment()
 
+    def qid_from_to(self, nq, mq):
+        # Find the minimal required typename from the perspective of <node>
+        # to reach our type
+        lnq = nq.split('::')
+        lmq = mq.split('::')
+
+        if nq == mq:
+            return lmq[-1]
+
+        for i in range(min(len(lnq), len(lmq))):
+            if lnq[i] != lmq[i]:
+                return "::".join(lmq[i:])
+
+        return "::".join(lmq[len(lnq):])
+
+    def qid_from(self, qid):
+        return self.qid_from_to(self.qid, qid)
+
+    def qid_to(self, qid):
+        return self.qid_from_to(qid, self.qid)
+
     def add_ref(self, cursor):
         self._refs.append(cursor)
         self.add_comment_location(cursor.extent.start)
