@@ -218,6 +218,11 @@ class Xml(Generator):
             self.set_access_attribute(base, child)
 
             child.append(self.type_to_xml(base.type, node))
+
+            if base.node and base.node.comment and base.node.comment.brief:
+                child.append(self.doc_to_xml(base.node, base.node.comment.brief, 'brief'))
+
+            elem.append(child)
             elem.append(child)
 
         hasabstract = False
