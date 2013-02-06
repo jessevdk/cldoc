@@ -21,7 +21,10 @@ coffee_files = [
     'variable.coffee',
     'function.coffee',
     'field.coffee',
-    'constructor.coffee'
+    'constructor.coffee',
+    'base.coffee',
+    'subclass.coffee',
+    'coverage.coffee'
 ]
 
 class cldoc_build(build):
