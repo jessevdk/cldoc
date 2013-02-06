@@ -49,20 +49,20 @@ class Function(Node):
             yield arg
 
     def parse_comment(self):
-        m = Function.recomment.match(self.comment.text)
-        self.comment.params = {}
+        m = Function.recomment.match(self._comment.text)
+        self._comment.params = {}
 
         if m:
-            self.comment.brief = m.group('brief').strip()
-            self.comment.doc = m.group('doc').strip()
+            self._comment.brief = m.group('brief').strip()
+            self._comment.doc = m.group('doc').strip()
 
             ret = m.group('return')
 
             if ret:
-                self.comment.returns = ret
+                self._comment.returns = ret
 
             for p in Function.reparam.finditer(m.group('params')):
-                self.comment.params[p.group('paramname')] = p.group('paramdoc').strip()
+                self._comment.params[p.group('paramname')] = p.group('paramdoc').strip()
 
     @property
     def return_type(self):
