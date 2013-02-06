@@ -16,6 +16,9 @@ class Tree:
         self.files = [os.path.realpath(f) for f in files]
         self.flags = flags
 
+        # Sort files on sources, then headers
+        self.files.sort(lambda a, b: cmp(self.is_header(a), self.is_header(b)))
+
         self.processing = {}
         self.kindmap = {}
 
