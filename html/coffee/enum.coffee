@@ -14,6 +14,9 @@ class Enum extends Node
         else
             n = 'enum'
 
+        if @node.attr('typedef')
+            n = 'typedef ' + n
+
         sp = $('<span class="keyword"/>').text(n)
         name = $('<div/>').append(sp).append(' ')
 

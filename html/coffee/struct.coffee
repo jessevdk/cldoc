@@ -4,7 +4,10 @@ class Struct extends Node
     constructor: (@node) ->
         super(@node)
 
-        @keyword = 'struct'
+        if @node.attr('typedef')
+            @keyword = 'typedef struct'
+        else
+            @keyword = 'struct'
 
     render: (container) ->
         item = $('<div class="item"/>')
