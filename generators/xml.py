@@ -67,14 +67,16 @@ class Xml(Generator):
         f.close()
 
     def is_page(self, node):
-        if isinstance(node, nodes.Struct):
+        if isinstance(node, nodes.Class):
             for child in node.children:
-                if isinstance(child, nodes.Function):
+                if not (isinstance(child, nodes.Field) or \
+                        isinstance(child, nodes.Variable) or \
+                        isinstance(child, nodes.TemplateTypeParameter)):
                     return True
 
             return False
 
-        pagecls = [nodes.Class, nodes.Namespace, nodes.Category]
+        pagecls = [nodes.Namespace, nodes.Category, nodes.Root]
 
         for cls in pagecls:
             if isinstance(node, cls):
