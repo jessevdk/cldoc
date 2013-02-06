@@ -162,6 +162,7 @@ class Xml(Generator):
         for arg in node.arguments:
             ret = ElementTree.Element('argument')
             ret.set('name', arg.name)
+            ret.set('id', arg.qid)
 
             if node.comment and arg.name in node.comment.params:
                 ret.append(self.doc_to_xml(node, node.comment.params[arg.name]))
