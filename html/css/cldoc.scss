@@ -39,6 +39,10 @@ $in_group_row_spacing: 40px;
   td.identifier {
     font-weight: normal;
   }
+
+  tr:last-child td {
+    padding-bottom: 5px;
+  }
 }
 
 @mixin table-alt {
@@ -47,7 +51,7 @@ $in_group_row_spacing: 40px;
   }
 
   tr.selected {
-      background-color: #ffffab;
+      background-color: $selection_color;
   }
 }
 
@@ -77,6 +81,12 @@ body, html {
   bottom: 0;
 
   overflow: auto;
+
+  a.back {
+    .arrow {
+      padding-right: 5px;
+    }
+  }
 }
 
 #sidebar .subtitle {
@@ -112,12 +122,15 @@ body, html {
 
 #sidebar span.counter {
   padding: 2px 4px 2px 4px;
-  margin-left: 2px;
+  margin-left: 5px;
   font-size: 0.6em;
   vertical-align: super;
   background-color: #4298d8;
+  color: #fff;
   display: none;
   border-radius: 10px;
+  min-width: 10px;
+  text-align: center;
 }
 
 #sidebar .brief {
@@ -218,12 +231,22 @@ div.brief p:last-child, div.doc p:last-child {
     }
   }
 
-  div.structs, div.classes {
+  div.structs, div.classes, div.enums {
     table {
       @include table-items;
       @include inline-doc;
       @include table-alt;
+    }
+  }
 
+  table.namespace, table.fields, table.variables, table.arguments {
+    @include table-items;
+    @include inline-doc;
+    @include table-alt;
+  }
+
+  div.structs, div.classes {
+    table {
       border-left: 1px solid #999;
 
       td {
@@ -234,20 +257,100 @@ div.brief p:last-child, div.doc p:last-child {
 
   div.enums {
     table {
-      @include table-items;
-      @include inline-doc;
-      @include table-alt;
-
       td.value {
         text-align: right;
       }
     }
   }
 
-  table.namespace {
-    @include table-items;
-    @include inline-doc;
-    @include table-alt;
+  div.function {
+    margin-bottom: 50px;
+
+    div.declaration {
+        background-color: lighten(#729fcf, 35%);
+        border: 1px solid lighten(#729fcf, 20%);
+        padding: 5px;
+    }
+
+    div.declaration.selected {
+      background-color: $selection_color;
+      border: 1px solid darken($selection_color, 40%);
+    }
+
+    table.declaration {
+      @include table-base;
+
+      td {
+        padding: 0px;
+        padding-right: 5px;
+      }
+
+      td.identifier {
+        padding-right: 30px;
+      }
+
+      td.close_paren {
+        padding: 0px;
+      }
+
+      td.open_paren {
+        padding-right: 1px;
+      }
+
+      td.argument_name {
+        text-align: left;
+        padding-right: 1px;
+        padding-left: 20px;
+      }
+    }
+
+    table.arguments {
+      td {
+        font-size: 0.9em;
+      }
+
+      div.doc, div.brief, div.fulldoc {
+        font-size: 1em;
+      }
+
+      tr.return {
+        background: transparent;
+
+        td {
+          padding-top: 15px;
+        }
+      }
+
+      margin-bottom: 10px;
+    }
+
+    div.doc, div.fulldoc, div.brief {
+      background: transparent;
+      margin-bottom: 0px;
+    }
+
+    div.return_type {
+      padding-bottom: 5px;
+    }
+
+    ul.specifiers {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      float: left;
+      padding-top: 0.05em;
+
+      li {
+        display: inline;
+        padding-right: 5px;
+        color: $keyword_color;
+        font-size: 0.9em;
+      }
+
+      li:last-child {
+        padding-right: 10px;
+      }
+    }
   }
 
   a.know_more {
@@ -257,7 +360,11 @@ div.brief p:last-child, div.doc p:last-child {
 }
 
 .selected {
-  background-color: #ffffab;
+  background-color: $selection_color;
+}
+
+.builtin {
+  color: $builtin_color;
 }
 
 .keyword {
@@ -277,11 +384,33 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
+  border: 0;
+  margin-top: 0px;
+  text-shadow: 1px 1px lighten($header_color, 60%);
+
+  span.keyword {
+    padding-right: 20px;
+  }
+}
+
+h2 {
   margin-top: 60px;
 }
 
-h1:first-of-type {
-  margin-top: 0px;
+div.back {
+  div.name {
+    padding-bottom: 5px;
+
+    span.keyword {
+      padding-right: 5px;
+      font-weight: normal;
+    }
+  }
+
+  a.back {
+    display: block;
+    margin-left: 10px;
+  }
 }
 
 #content div.description {
