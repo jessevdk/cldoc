@@ -44,6 +44,11 @@ class cldoc_build(build):
     def run_coffee(self):
         print('running {0}'.format(self.coffee))
 
+        try:
+            os.makedirs('html/javascript')
+        except:
+            pass
+
         args = [self.coffee, '--bare', '--join', 'html/javascript/cldoc.js', '--compile']
         files = ['html/coffee/' + x for x in coffee_files]
 
@@ -51,6 +56,11 @@ class cldoc_build(build):
 
     def run_sass(self):
         print('running {0}'.format(self.sass))
+
+        try:
+            os.makedirs('html/styles')
+        except:
+            pass
 
         args = [self.sass, '--scss', '--line-numbers', '--no-cache', '--style', 'compressed']
         files = ['html/sass/cldoc.scss', 'html/styles/cldoc.css']
