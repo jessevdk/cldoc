@@ -23,6 +23,8 @@ class Node(object):
         self.children = []
         self.parent = None
         self.access = cindex.CXXAccessSpecifier.PUBLIC
+        self._comment_locations = []
+        self._refs = []
 
         self.sortid = 0
         cls = self.__class__
@@ -40,6 +42,21 @@ class Node(object):
 
         if self._comment:
             self.parse_comment()
+
+    def add_ref(self, cursor):
+        self._refs.append(cursor)
+        self.add_comment_location(cursor.extent.start)
+
+    def add_comment_location(self, location):
+        self._comment_locations.append(location)
+
+    @property
+    def comment_locations(self):
+        if self.cursor:
+            yield self.cursor.extent.start
+
+        for loc in self._comment_locations:
+            yield loc
 
     def parse_comment(self):
         # Just extract brief and doc
