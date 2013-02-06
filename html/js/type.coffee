@@ -21,7 +21,7 @@ class Type extends Node
                 @typeparts.push($('<span class="name"/>').text(@name))
 
         if @qualifier
-            @typeparts.push($('<span class="qualifier"/>').text(@qualifier))
+            @typeparts.push($('<span class="qualifier"/>').text(' ' + @qualifier + ' '))
 
         if @size
             @typeparts.push($('<span class="array_size"/>').text('[' + @size + ']'))
