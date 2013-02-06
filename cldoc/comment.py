@@ -1,31 +1,8 @@
 from clang import cindex
 from defdict import Defdict
+from cldoc.struct import Struct
 
 import os, re, sys, bisect
-
-class Struct(object):
-    def __init__(self, **kwargs):
-        for key in kwargs:
-            setattr(self, key, kwargs[key])
-
-    @staticmethod
-    def define(name, **kwargs):
-        defaults = kwargs
-
-        class subclass(Struct):
-            def __init__(self, **kwargs):
-                defs = defaults.copy()
-
-                for key in kwargs:
-                    if not key in defs:
-                        raise AttributeError("'{0}' has no attribute '{1}'".format(name, key))
-                    else:
-                        defs[key] = kwargs[key]
-
-                super(subclass, self).__init__(**defs)
-
-        subclass.__name__ = name
-        return subclass
 
 class Sorted(list):
     def __init__(self, key=None):
