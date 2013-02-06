@@ -147,15 +147,17 @@ class Xml(Generator):
         elem.set('value', str(node.value))
 
     def function_to_xml(self, node, elem):
-        ret = ElementTree.Element('return')
+        if not (isinstance(node, nodes.Constructor) or
+                isinstance(node, nodes.Destructor)):
+            ret = ElementTree.Element('return')
 
-        if node.comment and hasattr(node.comment, 'returns') and node.comment.returns:
-            ret.append(self.doc_to_xml(node.comment.returns))
+            if node.comment and hasattr(node.comment, 'returns') and node.comment.returns:
+                ret.append(self.doc_to_xml(node, node.comment.returns))
 
-        tp = self.type_to_xml(node.return_type)
+            tp = self.type_to_xml(node.return_type, node.parent)
 
-        ret.append(tp)
-        elem.append(ret)
+            ret.append(tp)
+            elem.append(ret)
 
         for arg in node.arguments:
             ret = ElementTree.Element('argument')
