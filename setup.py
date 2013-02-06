@@ -17,7 +17,11 @@ coffee_files = [
     'struct.coffee',
     'class.coffee',
     'namespace.coffee',
-    'typedef.coffee'
+    'typedef.coffee',
+    'variable.coffee',
+    'function.coffee',
+    'field.coffee',
+    'constructor.coffee'
 ]
 
 class cldoc_build(build):
