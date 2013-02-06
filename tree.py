@@ -47,6 +47,9 @@ class Tree:
         self.qid_to_node[None] = self.root
         self.usr_to_node[None] = self.root
 
+    def is_header(self, filename):
+        return filename.endswith('.hh') or filename.endswith('.hpp') or filename.endswith('.h')
+
     def merge(self, *files):
         for f in files:
             if os.path.isdir(f):
