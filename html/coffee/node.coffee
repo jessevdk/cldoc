@@ -4,6 +4,8 @@ class Node
     @groups = [
         'category',
         'namespace',
+        'base',
+        'subclass',
         'typedef',
         'class, classtemplate',
         'struct',

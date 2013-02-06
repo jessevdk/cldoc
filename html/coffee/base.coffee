@@ -1,0 +1,28 @@
+class Base extends Node
+    @title = ['Base', 'Bases']
+
+    constructor: (@node) ->
+        super(@node)
+
+        @type = @node.children('type')
+        @access = @node.attr('access')
+
+        @name = @type.attr('name')
+        @id = @type.attr('ref')
+
+    @render_container: ->
+        $('<table class="bases"/>')
+
+    render: (container) ->
+        type = new Type(@type)
+
+        row = $('<tr/>').appendTo(container)
+        row.attr('id', @id)
+
+        $('<td class="keyword"/>').text(@access).appendTo(row)
+        $('<td/>').html(type.render()).appendTo(row)
+        $('<td/>').html(Doc.brief(@node)).appendTo(row)
+
+Node.types.base = Base
+
+# vi:ts=4:et
