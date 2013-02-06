@@ -21,6 +21,10 @@ def generate(opts):
             generator.generate(os.path.join(opts.output, 'xml'))
             generators.Html().generate(opts.output)
 
+    if opts.report:
+        generator = generators.Report(t)
+        generator.generate(opts.output)
+
 def serve(opts):
     import subprocess, SimpleHTTPServer, SocketServer, threading, time
 
@@ -89,6 +93,9 @@ def run():
 
     parser.add_argument('--inspect', default=False,
                         action='store_const', const=True, help='inspect the AST')
+
+    parser.add_argument('--report', default=False,
+                        action='store_const', const=True, help='report documentation coverage and errors')
 
     parser.add_argument('--serve', default=False,
                         action='store_const', const=True, help='serve generated documentation')
