@@ -382,6 +382,11 @@ div.brief p:last-child, div.doc p:last-child {
     }
   }
 
+  table.undocumented {
+    @include table-base;
+    font-size: 0.6em;
+  }
+
   a.know_more {
     padding-left: 15px;
     font-size: 0.9em;
