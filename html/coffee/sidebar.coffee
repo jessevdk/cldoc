@@ -92,6 +92,17 @@ class Sidebar
                 }
 
                 a.append($('<span class="counter"/>'))
+
+                isvirt = item.node.attr('virtual')
+                isprot = item.node.attr('access') == 'protected'
+
+                if isprot && isvirt
+                    li.append($('<span class="protected virtual">p&nbsp;v</span>'))
+                else if isprot
+                    li.append($('<span class="protected">p</span>'))
+                else if isvirt
+                    li.append($('<span class="virtual">v</span>'))
+
                 li.append(a)
 
                 brief = new Doc(item.brief).render()
