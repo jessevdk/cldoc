@@ -137,6 +137,9 @@ class Xml(Generator):
         if len(tp.qualifier) > 0:
             elem.set('qualifier', " ".join(tp.qualifier))
 
+        if tp.builtin:
+            elem.set('builtin', 'yes')
+
         self.add_ref_id(tp.decl, elem)
         return elem
 
