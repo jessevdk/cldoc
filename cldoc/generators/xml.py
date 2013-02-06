@@ -36,8 +36,9 @@ class Xml(Generator):
                 self.index.append(self.doc_to_xml(self.tree.root, cm.doc))
 
         Generator.generate(self, outdir)
-
         self.write_xml(self.index, 'index.xml')
+
+        print('Generated `{0}\''.format(outdir))
 
     def indent(self, elem, level=0):
         i = "\n" + "  " * level
