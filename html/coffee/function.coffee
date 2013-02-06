@@ -17,13 +17,18 @@ class Function extends Node
             specs = $('<ul class="specifiers"/>').appendTo(decldiv)
 
             if isprot
-                specs.append($('<li>protected</li>'))
+                specs.append($('<li class="protected">protected</li>'))
 
             if isvirt
-                specs.append($('<li>virtual</li>'))
+                isover = @node.attr('override')
+
+                if isover
+                    specs.append($('<li class="override">override</li>'))
+                else
+                    specs.append($('<li class="virtual">virtual</li>'))
 
                 if @node.attr('abstract')
-                    specs.append($('<li>abstract</li>'))
+                    specs.append($('<li class="abstract">abstract</li>'))
 
         # Return type
         ret = @node.children('return')
@@ -83,6 +88,23 @@ class Function extends Node
             tr = $('<tr class="return"/>').appendTo(argtable)
             $('<td class="keyword">return</td>').appendTo(tr)
             $('<td/>').append(retdoc).appendTo(tr)
+
+        override = @node.children('override')
+
+        if override.length > 0
+            overrides = $('<div class="overrides"/>').append($('<span class="title">Overrides: </span>'))
+            div.append(overrides)
+
+            for i in [0..override.length-1]
+                ov = $(override[i])
+
+                if i != 0
+                    if i == override.length - 1
+                        overrides.append(' and ')
+                    else
+                        overrides.append(', ')
+
+                overrides.append(Page.make_link(ov.attr('ref'), ov.attr('name')))
 
 Node.types.function = Function
 Node.types.method = Function
