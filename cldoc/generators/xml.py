@@ -147,6 +147,14 @@ class Xml(Generator):
     def enumvalue_to_xml(self, node, elem):
         elem.set('value', str(node.value))
 
+    def enum_to_xml(self, node, elem):
+        if not node.typedef is None:
+            elem.set('typedef', 'yes')
+
+    def struct_to_xml(self, node, elem):
+        if not node.typedef is None:
+            elem.set('typedef', 'yes')
+
     def function_to_xml(self, node, elem):
         if not (isinstance(node, nodes.Constructor) or
                 isinstance(node, nodes.Destructor)):
