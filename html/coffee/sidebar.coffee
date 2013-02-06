@@ -58,6 +58,10 @@ class Sidebar
             for item in items
                 item = new type($(item))
 
+                if 'render_sidebar' of item
+                    item.render_sidebar(ul)
+                    continue
+
                 # Check if we have multiple times the same name for an item.
                 # This happens for example for C++ methods with the same name
                 # but with different arguments. Those methods are grouped
