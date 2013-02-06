@@ -26,7 +26,7 @@ class EnumValue(Node):
         if self.parent and isinstance(self.parent, Enum) and not self.parent.typedef:
             pname = self.parent.name
 
-            if pname:
+            if not pname:
                 return self.parent.parent.qid + '::' + self.name
 
         return Node.qid.fget(self)
