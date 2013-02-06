@@ -254,7 +254,7 @@ class Tree:
         if node is None:
             return None
 
-        for child in node.children:
+        for child in node.resolve_nodes:
             if child.name == name:
                 return child
 
