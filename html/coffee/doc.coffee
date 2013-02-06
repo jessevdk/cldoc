@@ -15,6 +15,11 @@ class Doc extends Node
 
         return $()
 
+    escape: (text) ->
+        r = /([*_\\`{}#+-.!\[\]])/
+
+        return text.replace(r, (m) -> "\\" + m)
+
     render: ->
         if !@node
             return null
@@ -28,7 +33,7 @@ class Doc extends Node
                 c = $(c)
 
                 iref = Page.make_internal_ref(c.attr('ref'))
-                ret += '[' + c.text() + '](' + iref + ')'
+                ret += '[' + @escape(c.text()) + '](' + iref + ')'
             else
                 ret += $(c).text()
 
