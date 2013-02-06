@@ -207,7 +207,7 @@ class Tree:
             extractfiles = [f]
 
             for inc in tu.get_includes():
-                filename = str(inc.source)
+                filename = str(inc.include)
 
                 if filename in self.processed or (not filename in self.files) or filename in extractfiles:
                     continue
