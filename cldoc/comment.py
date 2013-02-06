@@ -54,7 +54,7 @@ class Comment(object):
             self.components = [s]
 
         def __str__(self):
-           return "".join(self.components)
+            return "".join(self.components)
 
         def __nonzero__(self):
             l = len(self.components)
