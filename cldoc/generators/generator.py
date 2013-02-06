@@ -1,5 +1,5 @@
 class Generator(object):
-    def __init__(self, tree):
+    def __init__(self, tree=None):
         self.tree = tree
 
     def generate(self, outdir):
