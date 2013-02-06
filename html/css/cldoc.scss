@@ -1,11 +1,14 @@
 $font: 'ubuntu', 'lucida grande';
-$link_color: #0876c8;
+$link_color: #268BD2;
 $sidebar_bg_color: #eee;
 $sidebar_width: 260px;
 $header_color: #333;
+$selection_color: #ffffab;
 
-$keyword_color: #633;
+$builtin_color: #B58900;
+$keyword_color: #DC322F;
 $identifier_color: $link_color;
+
 $in_group_row_spacing: 40px;
 
 @mixin table-base {
