@@ -6,6 +6,8 @@ from .generator import Generator
 from cldoc.struct import Struct
 from cldoc.clang import cindex
 
+from cldoc import nodes
+
 from xml.etree import ElementTree
 
 class Report(Generator):
@@ -31,6 +33,71 @@ class Report(Generator):
         else:
             if level and (not elem.tail or not elem.tail.strip()):
                 elem.tail = i
+
+    def arguments(self, root):
+        elem = ElementTree.Element('arguments')
+        root.append(elem)
+
+        for node in self.tree.all_nodes:
+            if not isinstance(node, nodes.Function):
+                continue
+
+            if node.access == cindex.CXXAccessSpecifier.PRIVATE:
+                continue
+
+            if not node.comment:
+                continue
+
+            # Check documented arguments
+            notdocumented = []
+            misspelled = []
+
+            cm = node.comment
+            argnames = {}
+
+            for name in node.argument_names:
+                argnames[name] = False
+
+            for k in cm.params:
+                if k in argnames:
+                    argnames[k] = True
+                else:
+                    misspelled.append(k)
+
+            for k in argnames:
+                if not argnames[k]:
+                    notdocumented.append(k)
+
+            if node.return_type.typename != 'void' and not hasattr(cm, 'returns'):
+                missingret = True
+            else:
+                missingret = False
+
+            if len(notdocumented) > 0 or len(misspelled) > 0 or missingret:
+                e = ElementTree.Element('function')
+                e.set('id', node.qid)
+                e.set('name', node.name)
+
+                loc = node.cursor.extent.start
+                e.set('file', os.path.relpath(str(loc.file)))
+                e.set('line', str(loc.line))
+                e.set('column', str(loc.column))
+
+                if missingret:
+                    ee = ElementTree.Element('undocumented-return')
+                    e.append(ee)
+
+                for ndoc in notdocumented:
+                    ee = ElementTree.Element('undocumented')
+                    ee.set('name', ndoc)
+                    e.append(ee)
+
+                for mis in misspelled:
+                    ee = ElementTree.Element('misspelled')
+                    ee.set('name', mis)
+                    e.append(ee)
+
+                elem.append(e)
 
     def coverage(self, root):
         pertype = {}
@@ -66,7 +133,7 @@ class Report(Generator):
                 e.set('name', undoc.name)
 
                 loc = undoc.cursor.extent.start
-                e.set('file', str(loc.file))
+                e.set('file', os.path.relpath(str(loc.file)))
                 e.set('line', str(loc.line))
                 e.set('column', str(loc.column))
 
@@ -76,7 +143,9 @@ class Report(Generator):
 
     def generate(self, output):
         root = ElementTree.Element('report')
+
         self.coverage(root)
+        self.arguments(root)
 
         tree = ElementTree.ElementTree(root)
         self.indent(tree.getroot())

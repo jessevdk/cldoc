@@ -3,6 +3,7 @@ class Node
 
     @groups = [
         'coverage',
+        'arguments',
         'category',
         'namespace',
         'base',

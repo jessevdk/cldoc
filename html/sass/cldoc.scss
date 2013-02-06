@@ -384,7 +384,31 @@ div.brief p:last-child, div.doc p:last-child {
 
   table.undocumented {
     @include table-base;
-    font-size: 0.6em;
+    font-size: 0.8em;
+  }
+
+  div.arguments {
+    table.function {
+      @include table-base;
+      font-size: 0.8em;
+
+      tr.title td {
+        padding-top: 30px;
+      }
+
+      tr.undocumented td:first-child, tr.misspelled td:first-child {
+        font-weight: bold;
+        color: lighten(#333, 10%);
+      }
+
+      span.undocumented, span.misspelled {
+        padding-left: 5px;
+      }
+
+      span.undocumented:first-of-type, span.misspelled:first-of-type {
+        padding-left: 0px;
+      }
+    }
   }
 
   a.know_more {
