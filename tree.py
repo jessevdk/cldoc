@@ -161,6 +161,18 @@ class Tree:
                     self.category_to_node[fullname] = s
                     self.all_nodes.append(s)
 
+    def find_node_comment(self, node):
+        for location in node.comment_locations:
+            db = self.commentsdbs[location.file.name]
+
+            if db:
+                cm = db.lookup(location)
+
+                if cm:
+                    return cm
+
+        return None
+
     def process(self):
         """
         process processes all the files with clang and extracts all relevant
@@ -220,7 +232,7 @@ class Tree:
                 par = self.find_parent(node)
 
                 # Lookup categories for things in the root
-                if (par is None or par == self.root) and not node.cursor is None:
+                if (par is None or par == self.root) and (not node.cursor is None):
                     location = node.cursor.extent.start
                     db = self.commentsdbs[location.file.name]
 
@@ -233,15 +245,10 @@ class Tree:
                 par.append(node)
 
             # Resolve comment
-            if node.cursor:
-                location = node.cursor.extent.start
-                db = self.commentsdbs[location.file.name]
+            cm = self.find_node_comment(node)
 
-                if db:
-                    cm = db.lookup(location)
-
-                    if cm:
-                        node.merge_comment(cm)
+            if cm:
+                node.merge_comment(cm)
 
         # Map final qid to node
         for node in self.all_nodes:
