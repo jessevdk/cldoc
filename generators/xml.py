@@ -109,7 +109,8 @@ class Xml(Generator):
         while not self.is_page(node):
             node = node.parent
 
-        elem.set('ref', node.qid + '#' + meid)
+        if not node is None:
+            elem.set('ref', node.qid + '#' + meid)
 
     def add_ref_id(self, cursor, elem):
         if not cursor:
