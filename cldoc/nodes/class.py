@@ -1,6 +1,5 @@
 from node import Node
 from method import Method
-from root import Root
 from ctype import Type
 from cldoc.clang import cindex
 
