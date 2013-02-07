@@ -107,6 +107,5 @@ class Function extends Node
                 overrides.append(Page.make_link(ov.attr('ref'), ov.attr('name')))
 
 Node.types.function = Function
-Node.types.method = Function
 
 # vi:ts=4:et
