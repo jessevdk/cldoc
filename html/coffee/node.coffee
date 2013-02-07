@@ -16,6 +16,7 @@ class Node
         'field',
         'variable',
         'constructor',
+        'destructor',
         'method',
         'function',
         'report'
