@@ -31,6 +31,18 @@ class Class(Node):
                 b.node = mapping[tpname]
                 b.node.subclasses.append(self)
 
+    @property
+    def resolve_nodes(self):
+        for child in Node.resolve_nodes.fget(self):
+            yield child
+
+        for base in self.bases:
+            if base.node and base.access != cindex.CXXAccessSpecifier.PRIVATE:
+                yield base.node
+
+                for child in base.node.resolve_nodes:
+                    yield child
+
     def append(self, child):
         Node.append(self, child)
 
