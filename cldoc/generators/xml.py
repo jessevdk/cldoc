@@ -304,12 +304,22 @@ class Xml(Generator):
 
                 s = ''
 
-                last = ElementTree.Element('ref')
-                last.text = parent.qid_from(component.qid)
+                # Make multiple refs
+                for ci in range(len(component)):
+                    cc = component[ci]
 
-                self.add_ref_node_id(component, last)
+                    last = ElementTree.Element('ref')
+                    last.text = parent.qid_from(cc.qid)
 
-                doce.append(last)
+                    self.add_ref_node_id(cc, last)
+
+                    if ci != len(component) - 1:
+                        if ci == len(component) - 2:
+                            last.tail = ' and '
+                        else:
+                            last.tail = ', '
+
+                    doce.append(last)
 
         if last is None:
             doce.text = s

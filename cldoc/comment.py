@@ -47,8 +47,6 @@ class Sorted(list):
             return None
 
 class Comment(object):
-    redocref = re.compile('<(operator>>|[^>]+)>')
-
     class String(object):
         def __init__(self, s):
             self.components = [s]
@@ -60,6 +58,11 @@ class Comment(object):
             l = len(self.components)
 
             return l > 0 and (l > 1 or len(self.components[0]) > 0)
+
+    class UnresolvedReference(str):
+        pass
+
+    redocref = re.compile('(?P<isregex>[$]?)<(?P<ref>operator(?:>>|>|>=)|[^> ]+)>')
 
     rebrief = '(?P<brief>[^.]*(\.|$))'
     redoc = '(?P<doc>.*?)'
@@ -90,23 +93,55 @@ class Comment(object):
 
         self.__dict__[name] = val
 
+    def redoc_split(self, doc):
+        ret = []
+        lastpos = 0
+
+        for m in Comment.redocref.finditer(doc):
+            span = m.span(0)
+
+            prefix = doc[lastpos:span[0]]
+            lastpos = span[1]
+
+            ret.append(prefix)
+            ref = m.group('ref')
+
+            if len(m.group('isregex')) > 0:
+                ret.append(re.compile(ref))
+            else:
+                ret.append(ref)
+
+        ret.append(doc[lastpos:])
+        return ret
+
     def resolve_refs_for_doc(self, doc, resolver, root):
-        components = re.split(Comment.redocref, str(doc))
+        components = self.redoc_split(str(doc))
 
         for i in range(1, len(components), 2):
             name = components[i]
-            names = name.split('::')
 
-            node = root
+            if isinstance(name, basestring):
+                names = name.split('::')
+            else:
+                names = [name]
+
+            nds = [root]
 
             for j in range(len(names)):
-                node = resolver(node, names[j], j == 0)
+                newnds = []
 
-                if node is None:
+                for n in nds:
+                    newnds += resolver(n, names[j], j == 0)
+
+                if len(newnds) == 0:
                     break
 
-            if not node is None:
-                components[i] = node
+                nds = newnds
+
+            if len(newnds) > 0:
+                components[i] = newnds
+            else:
+                components[i] = Comment.UnresolvedReference(components[i])
 
         doc.components = components
 
@@ -126,6 +161,7 @@ class Comment(object):
                 for key in doc:
                     if not isinstance(doc[key], Comment.String):
                         doc[key] = Comment.String(str(doc[key]))
+
                     self.resolve_refs_for_doc(doc[key], resolver, root)
             else:
                 self.resolve_refs_for_doc(doc, resolver, root)

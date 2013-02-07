@@ -271,18 +271,26 @@ class Tree:
         # Resolve cross-references in documentation
         self.cross_ref(self.root)
 
+    def match_ref(self, child, name):
+        if isinstance(name, basestring):
+            return name == child.name
+        else:
+            return name.match(child.name)
+
     def find_ref(self, node, name, goup):
         if node is None:
-            return None
+            return []
+
+        ret = []
 
         for child in node.resolve_nodes:
-            if child.name == name:
-                return child
+            if self.match_ref(child, name):
+                ret.append(child)
 
-        if goup:
+        if goup and len(ret) == 0:
             return self.find_ref(node.parent, name, True)
         else:
-            return None
+            return ret
 
     def cross_ref(self, node):
         if node.comment:
