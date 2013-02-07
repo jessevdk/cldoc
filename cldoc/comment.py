@@ -335,7 +335,7 @@ class CommentsDatabase(object):
                     line = line[prelen:].rstrip()
 
                     if line.startswith(' *') or line.startswith('  '):
-                        line = line[3:]
+                        line = line[2:]
 
                         if len(line) > 0 and line[0] == ' ':
                             line = line[1:]
