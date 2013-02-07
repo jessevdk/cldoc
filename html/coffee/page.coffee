@@ -159,7 +159,7 @@ class Page
 
             type = @node_type(items)
 
-            if !type
+            if !type || type == Node.types.report
                 continue
 
             h2 = $('<h2/>').text(type.title[1])
