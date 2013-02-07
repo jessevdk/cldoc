@@ -183,6 +183,7 @@ class Tree:
         """
 
         index = cindex.Index.create()
+        self.headers = {}
 
         for f in self.files:
             if f in self.processed:
@@ -208,6 +209,7 @@ class Tree:
 
             for inc in tu.get_includes():
                 filename = str(inc.include)
+                self.headers[filename] = True
 
                 if filename in self.processed or (not filename in self.files) or filename in extractfiles:
                     continue
@@ -366,6 +368,11 @@ class Tree:
         self.usr_to_node[parent.cursor.get_usr()] = node
         self.cursor_to_node[parent.cursor] = node
 
+    def cursor_is_exposed(self, cursor):
+        # Only cursors which are in headers are exposed.
+        filename = str(cursor.location.file)
+        return filename in self.headers
+
     def visit(self, citer, parent=None):
         """
         visit iterates over the provided cursor iterator and creates nodes
@@ -411,8 +418,11 @@ class Tree:
                 node = self.usr_to_node[item.get_usr()]
 
                 if not node:
-                    node = cls(item, None)
-                    self.register_node(node, parent)
+                    # Only register new nodes if they are exposed.
+                    if self.cursor_is_exposed(item):
+                        node = cls(item, None)
+                        self.register_node(node, parent)
+
                 elif isinstance(parent, nodes.Typedef):
                     # Typedefs are handled a bit specially because what happens
                     # is that clang first exposes an unnamed struct/enum, and
@@ -424,7 +434,7 @@ class Tree:
                     self.cursor_to_node[item] = node
                     node.add_ref(item)
 
-                if node.process_children:
+                if node and node.process_children:
                     self.visit(item.get_children(), node)
             else:
                 par = self.cursor_to_node[item.semantic_parent]
