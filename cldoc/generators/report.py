@@ -197,8 +197,18 @@ class Report:
         root.set('id', filename)
         root.set('title', 'Documention generator')
 
+        doc = ElementTree.Element('doc')
+        doc.text = """
+This page provides a documentation coverage report. Any undocumented symbols
+are reported here together with the location of where you should document them.
 
+This report contains the following sections:
 
+1. [Coverage](#{0}/coverage): The documented symbols coverage.
+2. [Arguments](#{0}/arguments): Errors about undocumented, misspelled function arguments and
+return values.
+3. [References](#{0}/references): Unresolved cross references.
+""".format(filename)
 
         root.append(doc)
 
