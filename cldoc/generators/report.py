@@ -33,6 +33,15 @@ class Report:
             if level and (not elem.tail or not elem.tail.strip()):
                 elem.tail = i
 
+    def make_location(self, loc):
+        elem = ElementTree.Element('location')
+
+        elem.set('file', os.path.relpath(str(loc.file)))
+        elem.set('line', str(loc.line))
+        elem.set('column', str(loc.column))
+
+        return elem
+
     def arguments(self, root):
         elem = ElementTree.Element('arguments')
         root.append(elem)
@@ -77,10 +86,8 @@ class Report:
                 e.set('id', node.qid)
                 e.set('name', node.name)
 
-                loc = node.cursor.extent.start
-                e.set('file', os.path.relpath(str(loc.file)))
-                e.set('line', str(loc.line))
-                e.set('column', str(loc.column))
+                for loc in node.comment_locations:
+                    e.append(self.make_location(loc))
 
                 if missingret:
                     ee = ElementTree.Element('undocumented-return')
@@ -131,10 +138,8 @@ class Report:
                 e.set('id', undoc.qid)
                 e.set('name', undoc.name)
 
-                loc = undoc.cursor.extent.start
-                e.set('file', os.path.relpath(str(loc.file)))
-                e.set('line', str(loc.line))
-                e.set('column', str(loc.column))
+                for loc in undoc.comment_locations:
+                    e.append(self.make_location(loc))
 
                 elem.append(e)
 
