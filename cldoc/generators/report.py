@@ -4,6 +4,7 @@ import inspect, os, shutil
 
 from cldoc.struct import Struct
 from cldoc.clang import cindex
+from cldoc.comment import Comment
 
 from cldoc import nodes
 
@@ -145,17 +146,65 @@ class Report:
 
             cov.append(elem)
 
+    def references(self, root):
+        elem = ElementTree.Element('references')
+        root.append(elem)
+
+        for node in self.tree.all_nodes:
+            if not node.comment:
+                continue
+
+            ee = None
+
+            for name in node.comment.docstrings:
+                cm = getattr(node.comment, name)
+
+                if not isinstance(cm, dict):
+                    cm = {None: cm}
+
+                for k in cm:
+                    en = None
+
+                    for component in cm[k].components:
+                        if isinstance(component, Comment.UnresolvedReference):
+                            if ee is None:
+                                ee = ElementTree.Element(node.classname)
+
+                                ee.set('name', node.name)
+                                ee.set('id', node.qid)
+
+                                for loc in node.comment_locations:
+                                    ee.append(self.make_location(loc))
+
+                                elem.append(ee)
+
+                            if en is None:
+                                en = ElementTree.Element('doctype')
+
+                                en.set('name', name)
+
+                                if not k is None:
+                                    en.set('component', k)
+
+                                ee.append(en)
+
+                            er = ElementTree.Element('ref')
+                            er.set('name', component)
+                            en.append(er)
+
     def generate(self, filename):
         root = ElementTree.Element('report')
         root.set('id', filename)
         root.set('title', 'Documention generator')
 
-        self.coverage(root)
-        self.arguments(root)
 
 
 
         root.append(doc)
+
+        self.coverage(root)
+        self.arguments(root)
+        self.references(root)
 
         return root
 
