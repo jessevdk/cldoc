@@ -11,7 +11,7 @@ class Xml(Generator):
     def __init__(self, tree):
         Generator.__init__(self, tree)
 
-    def generate(self, outdir):
+    def generate(self, outdir, report=False):
         if not outdir:
             outdir = 'xml'
 
@@ -21,6 +21,7 @@ class Xml(Generator):
             pass
 
         self.index = ElementTree.Element('index')
+        self.written = {}
 
         self.indexmap = {
             self.tree.root: self.index
@@ -36,9 +37,31 @@ class Xml(Generator):
                 self.index.append(self.doc_to_xml(self.tree.root, cm.doc))
 
         Generator.generate(self, outdir)
+
+        if report:
+            self.add_report()
+
         self.write_xml(self.index, 'index.xml')
 
         print('Generated `{0}\''.format(outdir))
+
+    def add_report(self):
+        from .report import Report
+
+        reportname = 'report'
+
+        while reportname + '.xml' in self.written:
+            reportname = '_' + reportname
+
+        page = Report(self.tree).generate(reportname)
+
+        elem = ElementTree.Element('report')
+        elem.set('name', 'Documentation generator')
+        elem.set('ref', reportname)
+
+        self.index.append(elem)
+
+        self.write_xml(page, reportname + '.xml')
 
     def indent(self, elem, level=0):
         i = "\n" + "  " * level
@@ -59,6 +82,8 @@ class Xml(Generator):
                 elem.tail = i
 
     def write_xml(self, elem, fname):
+        self.written[fname] = True
+
         tree = ElementTree.ElementTree(elem)
 
         self.indent(tree.getroot())

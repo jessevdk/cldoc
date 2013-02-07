@@ -16,14 +16,10 @@ def generate(opts):
 
     if opts.type == 'html' or opts.type == 'xml':
         generator = generators.Xml(t)
+        generator.generate(os.path.join(opts.output, 'xml'), report=opts.report)
 
         if opts.type == 'html':
-            generator.generate(os.path.join(opts.output, 'xml'))
             generators.Html().generate(opts.output)
-
-    if opts.report:
-        generator = generators.Report(t)
-        generator.generate(opts.output)
 
 def serve(opts):
     import subprocess, SimpleHTTPServer, SocketServer, threading, time

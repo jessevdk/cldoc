@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 import inspect, os, shutil
 
-from .generator import Generator
 from cldoc.struct import Struct
 from cldoc.clang import cindex
 
@@ -10,11 +9,11 @@ from cldoc import nodes
 
 from xml.etree import ElementTree
 
-class Report(Generator):
+class Report:
     Coverage = Struct.define('Coverage', name='', documented=[], undocumented=[])
 
-    def __init__(self, t):
-        Generator.__init__(self, t)
+    def __init__(self, tree):
+        self.tree = tree
 
     def indent(self, elem, level=0):
         i = "\n" + "  " * level
@@ -141,21 +140,18 @@ class Report(Generator):
 
             cov.append(elem)
 
-    def generate(self, output):
+    def generate(self, filename):
         root = ElementTree.Element('report')
+        root.set('id', filename)
+        root.set('title', 'Documention generator')
 
         self.coverage(root)
         self.arguments(root)
 
-        tree = ElementTree.ElementTree(root)
-        self.indent(tree.getroot())
 
-        outfile = os.path.join(output, 'report.xml')
 
-        f = open(outfile, 'w')
-        tree.write(f, encoding='utf-8', xml_declaration=True)
-        f.close()
+        root.append(doc)
 
-        print('Generated `{0}\''.format(outfile))
+        return root
 
 # vi:ts=4:et
