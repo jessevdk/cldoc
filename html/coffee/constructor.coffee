@@ -1,4 +1,4 @@
-class Constructor extends Function
+class Constructor extends Method
     @title = ['Constructor', 'Constructors']
 
     constructor: (@node) ->
