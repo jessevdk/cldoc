@@ -4,19 +4,36 @@ class Coverage extends Node
     constructor: (@node) ->
         super(@node)
 
+    get_coverage: (type) ->
+        ret = {
+            documented: parseInt(type.attr('documented')),
+            undocumented: parseInt(type.attr('undocumented')),
+        }
+
+        ret.total = ret.documented + ret.undocumented
+        ret.percentage = Math.round(100 * ret.documented / ret.total)
+
+        return ret
+
     render_sidebar_type: (type, container) ->
         typename = type.attr('name')
 
-        documented = parseInt(type.attr('documented'))
-        undocumented = parseInt(type.attr('undocumented'))
+        cov = @get_coverage(type)
 
-        if documented == 0 && undocumented == 0
+        if cov.documented == 0 && cov.undocumented == 0
             return
 
-        cov = Math.round(100 * (documented / (documented + undocumented)))
+        tt = cov.documented + ' out of ' + cov.total + ' (' + cov.percentage + '%)'
 
-        t = typename + ' (' + cov + '%)'
-        $('<li/>').text(t).appendTo(container)
+        a = Page.make_link(Page.current_page + '#' + typename, typename)
+        li = $('<li/>').appendTo(container)
+
+        if cov.undocumented == 0
+            li.append($('<span class="bullet complete"/>').html('&#x2713;'))
+        else
+            li.append($('<span class="bullet incomplete"/>').html('&#10007;'))
+
+        li.append(a).append($('<div class="brief"/>').text(tt))
 
     render_sidebar: (container) ->
         types = @node.children('type')
@@ -26,20 +43,18 @@ class Coverage extends Node
 
     render_type: (type, container) ->
         typename = type.attr('name')
+        cov = @get_coverage(type)
 
-        documented = parseInt(type.attr('documented'))
-        undocumented = parseInt(type.attr('undocumented'))
-
-        if documented == 0 && undocumented == 0
+        if cov.documented == 0 && cov.undocumented == 0
             return
 
-        cov = Math.round(100 * (documented / (documented + undocumented)))
+        h3 = $('<h3/>').text(typename).append(' (' + cov.percentage + '%)').appendTo(container)
+        h3.attr('id', typename)
 
-        $('<h3/>').text(typename).append(' (' + cov + '%)').appendTo(container)
         t = $('<table class="coverage"/>').appendTo(container)
 
-        $('<tr/>').append($('<td>Documented:</td>')).append($('<td/>').text(documented)).appendTo(t)
-        $('<tr/>').append($('<td>Undocumented:</td>')).append($('<td/>').text(undocumented)).appendTo(t)
+        $('<tr/>').append($('<td>Documented:</td>')).append($('<td/>').text(cov.documented)).appendTo(t)
+        $('<tr/>').append($('<td>Undocumented:</td>')).append($('<td/>').text(cov.undocumented)).appendTo(t)
 
         t = $('<table class="undocumented"/>').appendTo(container)
 
@@ -48,8 +63,14 @@ class Coverage extends Node
             row = $('<tr/>').appendTo(t)
 
             $('<td/>').text(undoc.attr('id')).appendTo(row)
-            $('<td/>').text(undoc.attr('file')).appendTo(row)
-            $('<td/>').text(undoc.attr('line') + ':' + undoc.attr('column')).appendTo(row)
+
+            for loc in undoc.children('location')
+                loc = $(loc)
+
+                $('<td/>').text(loc.attr('file')).appendTo(row)
+                $('<td/>').text(loc.attr('line') + ':' + loc.attr('column')).appendTo(row)
+
+                row = $('<tr/>').append('<td/>').appendTo(t)
 
     render: (container) ->
         types = @node.children('type')

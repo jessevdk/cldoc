@@ -1,13 +1,31 @@
 $font: 'ubuntu', 'lucida grande';
-$link_color: #268BD2;
+
+$solarized_base03:  #002b36;
+$solarized_base02:  #073642;
+$solarized_base01:  #586E75;
+$solarized_base00:  #657B83;
+$solarized_base0:   #839496;
+$solarized_base1:   #93A1A1;
+$solarized_base2:   #EEE8D5;
+$solarized_base3:   #FDF6E3;
+$solarized_yellow:  #B58900;
+$solarized_orange:  #CB4B16;
+$solarized_red:     #DC322F;
+$solarized_magenta: #D33682;
+$solarized_violet:  #6C71C4;
+$solarized_blue:    #268BD2;
+$solarized_cyan:    #2AA198;
+$solarized_green:   #859900;
+
+$link_color: $solarized_blue;
 $sidebar_bg_color: #eee;
 $sidebar_width: 260px;
 $header_color: #333;
 $selection_color: #ffffab;
 
-$builtin_color: #B58900;
-$keyword_color: #CB4B16;
-$identifier_color: $link_color;
+$builtin_color: $solarized_yellow;
+$keyword_color: $solarized_orange;
+$identifier_color: $solarized_blue;
 
 $in_group_row_spacing: 40px;
 
@@ -87,54 +105,51 @@ body, html {
       padding-right: 5px;
     }
   }
-}
 
-#sidebar .subtitle {
-  font-size: 1.1em;
-  text-align: center;
-  margin-top: 15px;
+ .subtitle {
+    font-size: 1.1em;
+    text-align: center;
+    margin-top: 15px;
 
-  text-shadow: 1px 1px #eee;
-  color: #333;
-}
+    text-shadow: 1px 1px #eee;
+    color: #333;
+  }
 
-#sidebar ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 
-  padding-left: 10px;
-  font-size: 0.9em;
-  margin-top: 5px;
-}
+    padding-left: 10px;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
 
-#sidebar * {
+  * {
+      text-overflow: ellipsis;
+  }
+
+  li {
+    padding-bottom: 2px;
+    padding-top: 2px;
     text-overflow: ellipsis;
-}
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-#sidebar li {
-  padding-bottom: 2px;
-  padding-top: 2px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+  span.counter {
+    padding: 2px 4px 2px 4px;
+    margin-left: 5px;
+    font-size: 0.6em;
+    vertical-align: super;
+    background-color: #4298d8;
+    color: #fff;
+    display: none;
+    border-radius: 10px;
+    min-width: 10px;
+    text-align: center;
+  }
 
-}
-
-#sidebar span.counter {
-  padding: 2px 4px 2px 4px;
-  margin-left: 5px;
-  font-size: 0.6em;
-  vertical-align: super;
-  background-color: #4298d8;
-  color: #fff;
-  display: none;
-  border-radius: 10px;
-  min-width: 10px;
-  text-align: center;
-}
-
-#sidebar {
   span.virtual, span.protected {
     font-size: 0.6em;
     min-width: 1.6em;
@@ -146,18 +161,31 @@ body, html {
     margin-right: 5px;
     padding-bottom: 2px;
   }
-}
 
-#sidebar .brief {
-  text-shadow: none;
-  font-size: 0.9em;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding: 2px;
-  margin: 0px;
-  margin-bottom: 3px;
-  color: #999;
+  .brief {
+    text-shadow: none;
+    font-size: 0.9em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 2px;
+    margin: 0px;
+    margin-bottom: 3px;
+    color: #999;
+  }
+
+  span.bullet {
+    font-weight: bold;
+    padding-right: 5px;
+  }
+
+  span.bullet.complete {
+    color: $solarized_green;
+  }
+
+  span.bullet.incomplete {
+    color: $solarized_red;
+  }
 }
 
 a {
@@ -392,12 +420,15 @@ div.brief p:last-child, div.doc p:last-child {
       @include table-base;
       font-size: 0.8em;
 
-      tr.title td {
-        padding-top: 30px;
+      tr.title {
       }
 
-      tr.undocumented td:first-child, tr.misspelled td:first-child {
-        font-weight: bold;
+      tr.last td {
+        padding-bottom: 40px;
+      }
+
+      tr.undocumented td, tr.misspelled td {
+        font-size: 0.9em;
         color: lighten(#333, 10%);
       }
 
@@ -408,6 +439,20 @@ div.brief p:last-child, div.doc p:last-child {
       span.undocumented:first-of-type, span.misspelled:first-of-type {
         padding-left: 0px;
       }
+    }
+  }
+
+  table.references {
+    @include table-base;
+    font-size: 0.8em;
+
+    tr.last td {
+      padding-bottom: 40px;
+    }
+
+    tr.missing td {
+      font-size: 0.9em;
+      color: lighten(#333, 10%);
     }
   }
 
@@ -435,10 +480,17 @@ div.brief p:last-child, div.doc p:last-child {
   font-weight: bold;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
   color: $header_color;
   padding-bottom: 3px;
+}
+
+h1, h2 {
   border-bottom: 1px solid lighten($header_color, 50%);
+}
+
+h3, h4, h5, h6 {
+  margin-bottom: 0px;
 }
 
 h1 {

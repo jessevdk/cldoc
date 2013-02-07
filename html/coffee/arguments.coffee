@@ -5,7 +5,9 @@ class Arguments extends Node
         super(@node)
 
     render_sidebar_function: (func, container) ->
-        $('<li/>').text(func.attr('name')).appendTo(container)
+        a = Page.make_link(Page.current_page + '#' + func.attr('id'), func.attr('name'))
+
+        $('<li/>').html(a).appendTo(container)
 
     render_sidebar: (container) ->
         funcs = @node.children('function')
@@ -14,28 +16,36 @@ class Arguments extends Node
             @render_sidebar_function($(f), container)
 
     render_function: (func, container) ->
-        $('<tr class="title"/>').append($('<td/>').text(func.attr('name')))
-                  .append($('<td/>').text(func.attr('file')))
-                  .append($('<td/>').text(func.attr('line') + ':' + func.attr('column')))
-                  .appendTo(container)
+        row = $('<tr class="title"/>').append($('<td class="identifier"/>').text(func.attr('name'))).appendTo(container)
+        row.attr('id', func.attr('id'))
+
+        for loc in func.children('location')
+            loc = $(loc)
+
+            $('<td/>').text(loc.attr('file')).appendTo(row)
+            $('<td/>').text(loc.attr('line') + ':' + loc.attr('column')).appendTo(row)
+
+            row = $('<tr/>').append('<td/>').appendTo(container)
 
         undocumented = func.children('undocumented')
 
         if undocumented.length > 0
-            $('<tr class="undocumented"/>').append($('<td/>').text('Undocumented:'))
-                      .append($('<td colspan="2"/>').html(['<span class="undocumented">' + $(x).attr('name') + '</span>' for x in undocumented].join(', ')))
+            row = $('<tr class="undocumented"/>').append($('<td/>').text('Undocumented arguments:'))
+                      .append($('<td colspan="2"/>').html(($(x).attr('name') for x in undocumented).join(', ')))
                       .appendTo(container)
 
         misspelled = func.children('misspelled')
 
         if misspelled.length > 0
-            $('<tr class="misspelled"/>').append($('<td/>').text('Misspelled:'))
-                      .append($('<td colspan="2"/>').html(['<span class="misspelled">' + $(x).attr('name') + '</span>' for x in misspelled].join(', ')))
+            row = $('<tr class="misspelled"/>').append($('<td/>').text('Misspelled arguments:'))
+                      .append($('<td colspan="2"/>').html(($(x).attr('name') for x in misspelled).join(', ')))
                       .appendTo(container)
 
         if func.children('undocumented-return')
-            $('<tr class="undocumented"/>').append($('<td colspan="3"/>').text('Undocumented return value'))
+            row = $('<tr class="undocumented"/>').append($('<td colspan="3"/>').text('Undocumented return value'))
                       .appendTo(container)
+
+        row.addClass('last')
 
     render: (container) ->
         funcs = @node.children('function')

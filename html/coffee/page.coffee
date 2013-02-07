@@ -112,7 +112,12 @@ class Page
             if type
                 $('<span class="keyword"/>').text(type.title[0]).appendTo(ret)
 
-            $('<span/>').text(id).appendTo(ret)
+            title = item.attr('title')
+
+            if title
+                $('<span/>').text(title).appendTo(ret)
+            else
+                $('<span/>').text(id).appendTo(ret)
 
             return ret
         else
@@ -158,6 +163,7 @@ class Page
                 continue
 
             h2 = $('<h2/>').text(type.title[1])
+            h2.attr('id', type.title[1].toLowerCase())
             h2.appendTo(content)
 
             container = type.render_container()

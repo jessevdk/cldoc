@@ -25,7 +25,9 @@ coffee_files = [
     'base.coffee',
     'subclass.coffee',
     'coverage.coffee',
-    'arguments.coffee'
+    'arguments.coffee',
+    'report.coffee',
+    'references.coffee'
 ]
 
 class cldoc_build(build):

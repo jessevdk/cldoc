@@ -4,6 +4,7 @@ class Node
     @groups = [
         'coverage',
         'arguments',
+        'references',
         'category',
         'namespace',
         'base',
@@ -16,6 +17,7 @@ class Node
         'variable',
         'constructor',
         'method, function',
+        'report'
     ]
 
     constructor: (@node) ->
