@@ -177,6 +177,9 @@ class Xml(Generator):
         if not node.typedef is None:
             elem.set('typedef', 'yes')
 
+        if node.isclass:
+            elem.set('class', 'yes')
+
     def struct_to_xml(self, node, elem):
         self.class_to_xml(node, elem)
 
