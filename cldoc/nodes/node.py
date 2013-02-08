@@ -25,6 +25,8 @@ class Node(object):
         self.access = cindex.CXXAccessSpecifier.PUBLIC
         self._comment_locations = []
         self._refs = []
+        self.num_anon = 0
+        self.anonymous_id = 0
 
         self.sortid = 0
         cls = self.__class__
@@ -42,6 +44,10 @@ class Node(object):
 
         if self._comment:
             self.parse_comment()
+
+    @property
+    def is_anonymous(self):
+        return False
 
     def qid_from_to(self, nq, mq):
         # Find the minimal required typename from the perspective of <node>
@@ -93,28 +99,31 @@ class Node(object):
         if ret == 0:
             ret = cmp(self.sortid, other.sortid)
 
-        if ret == 0 and self.name and other.name:
-            ret = cmp(self.name.lower(), other.name.lower())
+        if ret == 0:
+            self.compare_same(other)
 
         return ret
 
     @property
     def resolve_nodes(self):
-        from enum import Enum
-
         for child in self.children:
             yield child
 
-            if isinstance(child, Enum):
+            if child.is_anonymous:
                 for ev in child.children:
                     yield ev
 
     @property
     def name(self):
         if self.cursor is None:
-            return ''
+            ret = ''
         else:
-            return self.cursor.spelling
+            ret = self.cursor.spelling
+
+        if ret == '' and self.anonymous_id > 0:
+            return '(anonymous::' + str(self.anonymous_id) + ')'
+        else:
+            return ret
 
     def descendants(self):
         for child in self.children:
@@ -131,15 +140,25 @@ class Node(object):
 
     @property
     def qid(self):
-        from root import Root
-
         meid = self.name
 
-        if self.parent and not isinstance(self.parent, Root):
-            q = self.parent.qid
-            return q + '::' + meid
-        else:
+        parent = self.parent
+
+        while parent and parent.is_anonymous:
+            parent = parent.parent
+
+        if not parent:
             return meid
+        else:
+            q = self.parent.qid
+
+            if not q:
+                return meid
+
+            if not meid:
+                return q
+
+            return q + '::' + meid
 
     @property
     def comment(self):
@@ -151,6 +170,9 @@ class Node(object):
             'id': self.qid,
             'name': self.name,
         }
+
+        if self.is_anonymous:
+            ret['anonymous'] = 'yes'
 
         if self.access == cindex.CXXAccessSpecifier.PROTECTED:
             ret['access'] = 'protected'
@@ -166,6 +188,10 @@ class Node(object):
     def append(self, child):
         self.children.append(child)
         child.parent = self
+
+        if not child.name:
+            self.num_anon += 1
+            child.anonymous_id = self.num_anon
 
     def visit(self, cursor, citer):
         return None

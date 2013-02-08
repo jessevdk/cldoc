@@ -5,7 +5,10 @@ class Enum extends Node
         super(@node)
 
     render: (container) ->
-        id = $('<span class="identifier"/>').text(@name)
+        id = $('<span class="identifier"/>')
+
+        if not @name.startswith('(anonymous')
+            id.text(@name)
 
         isprot = @node.attr('access') == 'protected'
 

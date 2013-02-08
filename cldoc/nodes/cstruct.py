@@ -13,6 +13,10 @@ class Struct(cls.Class):
         self.current_access = cindex.CXXAccessSpecifier.PUBLIC
 
     @property
+    def is_anonymous(self):
+        return not cls.Class.name.fget(self)
+
+    @property
     def comment(self):
         ret = cls.Class.comment.fget(self)
 

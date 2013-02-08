@@ -8,4 +8,8 @@ class Union(Node):
         Node.__init__(self, cursor, comment)
         self.visit_children = True
 
+    @property
+    def is_anonymous(self):
+        return not self.cursor.spelling
+
 # vi:ts=4:et

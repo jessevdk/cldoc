@@ -20,18 +20,6 @@ class EnumValue(Node):
             return cmp(loc1.column, loc2.column)
 
     @property
-    def qid(self):
-        from enum import Enum
-
-        if self.parent and isinstance(self.parent, Enum) and not self.parent.typedef:
-            pname = self.parent.name
-
-            if not pname:
-                return self.parent.parent.qid + '::' + self.name
-
-        return Node.qid.fget(self)
-
-    @property
     def value(self):
         return self.cursor.enum_value
 

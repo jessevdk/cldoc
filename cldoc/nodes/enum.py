@@ -23,6 +23,10 @@ class Enum(Node):
             pass
 
     @property
+    def is_anonymous(self):
+        return not self.isclass
+
+    @property
     def comment(self):
         ret = Node.comment.fget(self)
 
