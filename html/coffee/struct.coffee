@@ -26,6 +26,18 @@ class Struct extends Node
         name.attr('id', @id)
 
         name.append(id)
+
+        templatetypes = @node.children('templatetypeparameter')
+
+        if templatetypes.length > 0
+            name.append('&lt;')
+
+            for t in templatetypes
+                t = $(t)
+                name.append(t.attr('name'))
+
+            name.append('&gt;')
+
         item.append(name)
 
         item.append(Doc.either(@node))
