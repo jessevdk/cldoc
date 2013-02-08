@@ -6,16 +6,17 @@ class Node(object):
     recomment = re.compile('^' + Comment.rebrief + Comment.redoc + '$', re.S)
 
     class SortId:
-        NAMESPACE = 0
-        CLASS = 1
-        ENUM = 2
-        ENUMVALUE = 3
-        FIELD = 4
-        TYPEDEF = 5
-        CONSTRUCTOR = 6
-        DESTRUCTOR = 7
-        METHOD = 8
-        FUNCTION = 9
+        CATEGORY = 0
+        NAMESPACE = 1
+        CLASS = 2
+        ENUM = 3
+        ENUMVALUE = 4
+        FIELD = 5
+        TYPEDEF = 6
+        CONSTRUCTOR = 7
+        DESTRUCTOR = 8
+        METHOD = 9
+        FUNCTION = 10
 
     def __init__(self, cursor, comment):
         self.cursor = cursor
