@@ -15,8 +15,8 @@ def generate(opts):
         t.merge(opts.merge)
 
     if opts.type == 'html' or opts.type == 'xml':
-        generator = generators.Xml(t)
-        generator.generate(os.path.join(opts.output, 'xml'), report=opts.report)
+        generator = generators.Xml(t, opts)
+        generator.generate(os.path.join(opts.output, 'xml'))
 
         if opts.type == 'html':
             generators.Html().generate(opts.output)
@@ -104,6 +104,9 @@ def run():
 
     parser.add_argument('--merge', default=None, metavar='FILES',
                         help='specify additional description files to merge into the documentation')
+
+    parser.add_argument('--basedir', default=None, metavar='DIR',
+                        help='the project base directory')
 
     parser.add_argument('files', nargs='+', help='files to parse')
 

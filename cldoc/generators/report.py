@@ -13,8 +13,9 @@ from xml.etree import ElementTree
 class Report:
     Coverage = Struct.define('Coverage', name='', documented=[], undocumented=[])
 
-    def __init__(self, tree):
+    def __init__(self, tree, options):
         self.tree = tree
+        self.options = options
 
     def indent(self, elem, level=0):
         i = "\n" + "  " * level
@@ -37,7 +38,12 @@ class Report:
     def make_location(self, loc):
         elem = ElementTree.Element('location')
 
-        elem.set('file', os.path.relpath(str(loc.file)))
+        if self.options.basedir:
+            start = self.options.basedir
+        else:
+            start = os.curdir
+
+        elem.set('file', os.path.relpath(str(loc.file), start))
         elem.set('line', str(loc.line))
         elem.set('column', str(loc.column))
 

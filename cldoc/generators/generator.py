@@ -1,6 +1,7 @@
 class Generator(object):
-    def __init__(self, tree=None):
+    def __init__(self, tree=None, opts=None):
         self.tree = tree
+        self.options = opts
 
     def generate(self, outdir):
         self.outdir = outdir

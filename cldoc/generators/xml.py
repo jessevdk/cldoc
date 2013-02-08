@@ -8,10 +8,7 @@ from xml.etree import ElementTree
 import sys, os
 
 class Xml(Generator):
-    def __init__(self, tree):
-        Generator.__init__(self, tree)
-
-    def generate(self, outdir, report=False):
+    def generate(self, outdir):
         if not outdir:
             outdir = 'xml'
 
@@ -38,7 +35,7 @@ class Xml(Generator):
 
         Generator.generate(self, outdir)
 
-        if report:
+        if self.options.report:
             self.add_report()
 
         self.write_xml(self.index, 'index.xml')
@@ -53,7 +50,7 @@ class Xml(Generator):
         while reportname + '.xml' in self.written:
             reportname = '_' + reportname
 
-        page = Report(self.tree).generate(reportname)
+        page = Report(self.tree, self.options).generate(reportname)
 
         elem = ElementTree.Element('report')
         elem.set('name', 'Documentation generator')
