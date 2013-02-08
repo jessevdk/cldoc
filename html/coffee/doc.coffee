@@ -22,7 +22,7 @@ class Doc extends Node
         return new Doc(node.children('doc')).render()
 
     escape: (text) ->
-        r = /([*_\\`{}#+-.!\[\]])/
+        r = /([*_\\`{}#+-.!\[\]])/g
 
         return text.replace(r, (m) -> "\\" + m)
 
