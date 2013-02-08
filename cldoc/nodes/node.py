@@ -7,15 +7,16 @@ class Node(object):
     class SortId:
         CATEGORY = 0
         NAMESPACE = 1
-        CLASS = 2
-        ENUM = 3
-        ENUMVALUE = 4
-        FIELD = 5
-        TYPEDEF = 6
-        CONSTRUCTOR = 7
-        DESTRUCTOR = 8
-        METHOD = 9
-        FUNCTION = 10
+        TEMPLATETYPEPARAMETER = 2
+        CLASS = 3
+        ENUM = 4
+        ENUMVALUE = 5
+        FIELD = 6
+        TYPEDEF = 7
+        CONSTRUCTOR = 8
+        DESTRUCTOR = 9
+        METHOD = 10
+        FUNCTION = 11
 
     def __init__(self, cursor, comment):
         self.cursor = cursor
@@ -25,6 +26,7 @@ class Node(object):
         self.access = cindex.CXXAccessSpecifier.PUBLIC
         self._comment_locations = []
         self._refs = []
+        self.sort_index = 0
         self.num_anon = 0
         self.anonymous_id = 0
 
@@ -92,6 +94,12 @@ class Node(object):
         if len(m.brief) > 0:
             self._comment.brief = m.brief
             self._comment.doc = m.body
+
+    def compare_same(self, other):
+        if self.name and other.name:
+            return cmp(self.name.lower(), other.name.lower())
+        else:
+            return 0
 
     def compare_sort(self, other):
         ret = cmp(self.access, other.access)
@@ -186,6 +194,7 @@ class Node(object):
         return self.__class__.__name__.lower()
 
     def append(self, child):
+        child.sort_index = len(self.children)
         self.children.append(child)
         child.parent = self
 

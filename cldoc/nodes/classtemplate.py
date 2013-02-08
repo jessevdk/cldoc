@@ -12,12 +12,8 @@ class TemplateTypeParameter(Node):
 
     def __init__(self, cursor, comment):
         Node.__init__(self, cursor, comment)
-        self.sort_index = 0
 
-    def compare_sort(self, other):
-        if not isinstance(other, TemplateTypeParameter):
-            return Node.compare_sort(self, other)
-
+    def compare_same(self, other):
         return cmp(self.sort_index, other.sort_index)
 
 class ClassTemplate(cls.Class):
@@ -43,14 +39,13 @@ class ClassTemplate(cls.Class):
                 break
 
     def append(self, child):
+        Node.append(self, child)
+
         if isinstance(child, TemplateTypeParameter):
-            child.sort_index = len(self.template_types)
             self.template_types[child.name] = child
 
             if child.name in self.template_type_comments:
                 child.merge_comment(self.template_type_comments[child.name])
-
-        Node.append(self, child)
 
     def parse_comment(self):
         m = Parser.parse(self._comment.text)
