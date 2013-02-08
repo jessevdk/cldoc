@@ -1,14 +1,35 @@
 from node import Node
 from cldoc.clang import cindex
 import importlib
+from cldoc.comment import Comment
+import re
 
 cls = importlib.import_module('.class', 'cldoc.nodes')
+
+class TemplateTypeParameter(Node):
+    kind = cindex.CursorKind.TEMPLATE_TYPE_PARAMETER
+
+    def __init__(self, cursor, comment):
+        Node.__init__(self, cursor, comment)
+        self.sort_index = 0
+
+    def compare_sort(self, other):
+        if not isinstance(other, TemplateTypeParameter):
+            return Node.compare_sort(self, other)
+
+        return cmp(self.sort_index, other.sort_index)
 
 class ClassTemplate(cls.Class):
     kind = cindex.CursorKind.CLASS_TEMPLATE
 
+    recomment = re.compile('^' + Comment.rebrief + '\s*' + Comment.reparams + '\s*' + Comment.redoc + '\s*$', re.S)
+    reparam = re.compile(Comment.reparam)
+
     def __init__(self, cursor, comment):
         cls.Class.__init__(self, cursor, comment)
+
+        self.template_types = {}
+        self.template_type_comments = {}
 
         # Check manually if this is actually a struct, so that we set the
         # current access level correctly. I'm not sure there is another
@@ -23,10 +44,28 @@ class ClassTemplate(cls.Class):
                         self.current_access = cindex.CXXAccessSpecifier.PUBLIC
                 break
 
-class TemplateTypeParameter(Node):
-    kind = cindex.CursorKind.TEMPLATE_TYPE_PARAMETER
+    def append(self, child):
+        if isinstance(child, TemplateTypeParameter):
+            child.sort_index = len(self.template_types)
+            self.template_types[child.name] = child
 
-    def __init__(self, cursor, comment):
-        Node.__init__(self, cursor, comment)
+            if child.name in self.template_type_comments:
+                child.merge_comment(self.template_type_comments[child.name])
+
+        Node.append(self, child)
+
+    def parse_comment(self):
+        m = ClassTemplate.recomment.match(self._comment.text)
+
+        if m:
+            self._comment.brief = m.group('brief').strip()
+            self._comment.doc = m.group('doc').strip()
+
+            for p in ClassTemplate.reparam.finditer(m.group('params')):
+                pname = p.group('paramname')
+                self.template_type_comments[pname] = Comment(p.group('paramdoc').strip(), self._comment.location)
+
+                if pname in self.template_types:
+                    self.template_types[pname].merge_comment(self.template_type_comments[pname])
 
 # vi:ts=4:et
