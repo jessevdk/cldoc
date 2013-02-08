@@ -420,7 +420,7 @@ class Tree:
         self.usr_to_node[node.cursor.get_usr()] = node
         self.cursor_to_node[node.cursor] = node
 
-        # Typedefs in clang are not parents of typerefs, but we like it better
+        # Typedefs in clang are not parents of typedefs, but we like it better
         # that way, explicitly set the parent directly here
         if parent and isinstance(parent, nodes.Typedef):
             parent.append(node)
