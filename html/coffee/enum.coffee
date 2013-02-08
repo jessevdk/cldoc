@@ -17,6 +17,9 @@ class Enum extends Node
         else
             n = 'enum'
 
+        if @node.attr('class')
+            n += ' class'
+
         if @node.attr('typedef')
             n = 'typedef ' + n
 
