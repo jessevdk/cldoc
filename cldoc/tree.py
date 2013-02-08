@@ -121,10 +121,10 @@ class Tree:
                 key = parts[1]
 
             if not self.qid_to_node[qid]:
-                sys.stderr.write('Could not find node for id `{0}\' (at {1})\n'.format(parts[0], filename))
-                sys.exit(1)
-
-            node = self.qid_to_node[qid]
+                self.add_categories([qid])
+                node = self.category_to_node[qid]
+            else:
+                node = self.qid_to_node[qid]
 
             if key == 'doc':
                 node.merge_comment(comment.Comment(categories[category], None), override=True)
