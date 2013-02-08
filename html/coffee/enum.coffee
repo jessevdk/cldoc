@@ -47,9 +47,9 @@ class Enum extends Node
         for value in @node.children('enumvalue')
             value = $(value)
             row = $('<tr/>')
+            row.attr('id', value.attr('id'))
 
             nm = $('<td class="name identifier"/>').text(value.attr('name'))
-            nm.attr('id', value.attr('id'))
 
             row.append(nm)
             row.append($('<td class="value"/>').text(value.attr('value')))
