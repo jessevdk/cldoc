@@ -65,7 +65,7 @@ class Struct extends Node
 
     render_fields: (item) ->
         # Add fields
-        fields = @node.children('field')
+        fields = @node.children('field, union')
 
         if fields.length == 0
             return
@@ -74,7 +74,12 @@ class Struct extends Node
         item.append(container)
 
         for field in fields
-            new Field($(field)).render(container)
+            field = $(field)
+
+            tp = Page.node_type(field)
+
+            if tp
+                new tp(field).render(container)
 
 Node.types.struct = Struct
 

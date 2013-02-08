@@ -13,7 +13,7 @@ class Node
         'class, classtemplate',
         'struct',
         'enum',
-        'field',
+        'field, union',
         'variable',
         'constructor',
         'destructor',
@@ -39,6 +39,9 @@ class Node
 
         @brief = node.children('brief').first()
         @doc = node.children('doc').first()
+
+    sidebar_name: ->
+        @name
 
     @render_container: ->
         $('<div/>', {'class': @title[1].toLowerCase()})

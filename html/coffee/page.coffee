@@ -169,7 +169,15 @@ class Page
             container = type.render_container()
 
             for item in items
-                new type($(item)).render(container)
+                item = $(item)
+
+                if item.tag()[0] != items.tag()[0]
+                    tp = @node_type(item)
+                else
+                    tp = type
+
+                if tp
+                    new tp($(item)).render(container)
 
             if container
                 content.append(container)

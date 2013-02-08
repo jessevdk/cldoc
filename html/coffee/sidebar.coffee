@@ -42,12 +42,11 @@ class Sidebar
         if items.length != 0
             # Lookup the class representing this type by the tag name of the
             # first element
-            typename = items.tag()[0]
+            ftag = $(items[0]).tag()[0]
+            type = Page.node_type(items)
 
-            if !(typename of Node.types)
+            if !type
                 return
-
-            type = Node.types[typename]
 
             # Add subtitle header for this group
             $('<div class="subtitle"/>').text(type.title[1]).appendTo(container)
@@ -56,7 +55,17 @@ class Sidebar
             prev = null
 
             for item in items
-                item = new type($(item))
+                item = $(item)
+
+                if item.tag()[0] != ftag
+                    tp = Page.node_type(item)
+                else
+                    tp = type
+
+                if !tp
+                    continue
+
+                item = new tp(item)
 
                 if 'render_sidebar' of item
                     item.render_sidebar(ul)
@@ -80,7 +89,9 @@ class Sidebar
 
                     continue
 
-                a = $('<a/>', {href: Page.make_internal_ref(Page.current_page, item.id)}).text(item.name)
+                nm = item.sidebar_name()
+
+                a = $('<a/>', {href: Page.make_internal_ref(Page.current_page, item.id)}).append(nm)
                 li = $('<li/>')
 
                 a.on('click', do (item) =>
