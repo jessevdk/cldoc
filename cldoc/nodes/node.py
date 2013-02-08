@@ -1,10 +1,9 @@
 from cldoc.clang import cindex
 from cldoc.comment import Comment
+from cldoc.comment import Parser
 import re
 
 class Node(object):
-    recomment = re.compile('^' + Comment.rebrief + Comment.redoc + '$', re.S)
-
     class SortId:
         CATEGORY = 0
         NAMESPACE = 1
@@ -82,11 +81,11 @@ class Node(object):
 
     def parse_comment(self):
         # Just extract brief and doc
-        m = Node.recomment.match(self._comment.text)
+        m = Parser.parse(self._comment.text)
 
-        if m:
-            self._comment.brief = m.group('brief').strip()
-            self._comment.doc = m.group('doc').strip()
+        if len(m.brief) > 0:
+            self._comment.brief = m.brief
+            self._comment.doc = m.body
 
     def compare_sort(self, other):
         ret = cmp(self.access, other.access)

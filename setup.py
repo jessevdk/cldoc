@@ -107,6 +107,7 @@ setup(name='cldoc',
       packages=['cldoc'],
       scripts=['scripts/cldoc'],
       package_data={'cldoc': ['data/*']},
-      cmdclass=cmdclass)
+      cmdclass=cmdclass,
+      requires=['pyparsing'])
 
 # vi:ts=4:et

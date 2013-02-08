@@ -2,6 +2,7 @@ from node import Node
 from cldoc.clang import cindex
 from ctype import Type
 from cldoc.comment import Comment
+from cldoc.comment import Parser
 
 import re
 
@@ -27,9 +28,6 @@ class Argument:
 class Function(Node):
     kind = cindex.CursorKind.FUNCTION_DECL
 
-    recomment = re.compile('^' + Comment.rebrief + '\s*' + Comment.reparams + '\s*' + Comment.redoc + '\s*' + Comment.rereturn + '\s*$', re.S)
-    reparam = re.compile(Comment.reparam)
-
     def __init__(self, cursor, comment):
         Node.__init__(self, cursor, comment)
 
@@ -54,20 +52,19 @@ class Function(Node):
             yield k.name
 
     def parse_comment(self):
-        m = Function.recomment.match(self._comment.text)
+        m = Parser.parse(self._comment.text)
         self._comment.params = {}
 
-        if m:
-            self._comment.brief = m.group('brief').strip()
-            self._comment.doc = m.group('doc').strip()
+        if len(m.brief) > 0:
+            self._comment.brief = m.brief
+            self._comment.doc = m.body
 
-            ret = m.group('return')
+            for pre in m.preparam:
+                self._comment.params[pre.name] = pre.description
 
-            if ret:
-                self._comment.returns = ret
-
-            for p in Function.reparam.finditer(m.group('params')):
-                self._comment.params[p.group('paramname')] = p.group('paramdoc').strip()
+            for post in m.postparam:
+                if post.name == 'return':
+                    self._comment.returns = post.description
 
     @property
     def return_type(self):

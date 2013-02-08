@@ -63,12 +63,7 @@ class Comment(object):
         pass
 
     redocref = re.compile('(?P<isregex>[$]?)<(?P<ref>operator(?:>>|>|>=)|[^> ]+)>')
-
-    rebrief = '(?P<brief>[^.]*(\.|$))'
-    redoc = '(?P<doc>.*?)'
-    reparam = '(?:@(?P<paramname>[^\s]+)\s+(?P<paramdoc>[^\n]*))\n'
-    reparams = '(?P<params>(?:' + reparam + ')*)'
-    rereturn = '(@return\s(?P<return>[^.]*.))?'
+    redoccode = re.compile('^    \\[code\\]\n(?P<code>(?:(?:    .*|)\n)*)', re.M)
 
     def __init__(self, text, location):
         self.__dict__['docstrings'] = []
@@ -345,5 +340,29 @@ class CommentsDatabase(object):
             return "\n".join(retl)
         else:
             return comment
+
+from pyparsing import *
+
+class Parser:
+    ParserElement.setDefaultWhitespaceChars(' \t\r')
+
+    identifier = Word(alphas + '_', alphanums + '_')
+
+    brief = restOfLine.setResultsName('brief') + lineEnd
+
+    paramdesc = restOfLine + ZeroOrMore(lineEnd + ~('@' | lineEnd) + Regex('[^\n]+')) + lineEnd.suppress()
+    param = '@' + identifier.setResultsName('name') + White() + Combine(paramdesc).setResultsName('description')
+
+    preparams = ZeroOrMore(param.setResultsName('preparam', listAllMatches=True))
+    postparams = ZeroOrMore(param.setResultsName('postparam', listAllMatches=True))
+
+    bodyline = NotAny('@') + (lineEnd | (Regex('[^\n]+') + lineEnd))
+    body = ZeroOrMore(lineEnd) + Combine(ZeroOrMore(bodyline)).setResultsName('body')
+
+    doc = brief + preparams + body + postparams
+
+    @staticmethod
+    def parse(s):
+        return Parser.doc.parseString(s)
 
 # vi:ts=4:et

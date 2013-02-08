@@ -2,6 +2,7 @@ from node import Node
 from cldoc.clang import cindex
 import importlib
 from cldoc.comment import Comment
+from cldoc.comment import Parser
 import re
 
 cls = importlib.import_module('.class', 'cldoc.nodes')
@@ -21,9 +22,6 @@ class TemplateTypeParameter(Node):
 
 class ClassTemplate(cls.Class):
     kind = cindex.CursorKind.CLASS_TEMPLATE
-
-    recomment = re.compile('^' + Comment.rebrief + '\s*' + Comment.reparams + '\s*' + Comment.redoc + '\s*$', re.S)
-    reparam = re.compile(Comment.reparam)
 
     def __init__(self, cursor, comment):
         cls.Class.__init__(self, cursor, comment)
@@ -55,17 +53,17 @@ class ClassTemplate(cls.Class):
         Node.append(self, child)
 
     def parse_comment(self):
-        m = ClassTemplate.recomment.match(self._comment.text)
+        m = Parser.parse(self._comment.text)
 
-        if m:
-            self._comment.brief = m.group('brief').strip()
-            self._comment.doc = m.group('doc').strip()
+        if len(m.brief) > 0:
+            self._comment.brief = m.brief
+            self._comment.doc = m.body
 
-            for p in ClassTemplate.reparam.finditer(m.group('params')):
-                pname = p.group('paramname')
-                self.template_type_comments[pname] = Comment(p.group('paramdoc').strip(), self._comment.location)
+            for p in m.preparam:
+                cm = Comment(p.description, self._comment.location)
+                self.template_type_comments[p.name] = cm
 
-                if pname in self.template_types:
-                    self.template_types[pname].merge_comment(self.template_type_comments[pname])
+                if p.name in self.template_types:
+                    self.template_types[p.name].merge_comment(cm)
 
 # vi:ts=4:et
