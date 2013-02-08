@@ -26,6 +26,8 @@ $selection_color: #ffffab;
 $builtin_color: $solarized_yellow;
 $keyword_color: $solarized_orange;
 $identifier_color: $solarized_blue;
+$preprocessor_color: $solarized_violet;
+$comment_color: $solarized_base1;
 
 $in_group_row_spacing: 40px;
 
@@ -477,6 +479,14 @@ div.brief p:last-child, div.doc p:last-child {
 .keyword {
   color: $keyword_color;
   font-weight: bold;
+}
+
+.preprocessor {
+  color: $preprocessor_color;
+}
+
+.comment {
+  color: $comment_color;
 }
 
 .identifier {

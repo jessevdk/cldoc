@@ -47,6 +47,20 @@ class Sorted(list):
             return None
 
 class Comment(object):
+    class Example(str):
+        def __new__(self, s, strip=True):
+            if strip:
+                s = '\n'.join([self._strip_prefix(x) for x in s.split('\n')])
+
+            return str.__new__(self, s)
+
+        @staticmethod
+        def _strip_prefix(s):
+            if s.startswith('    '):
+                return s[4:]
+            else:
+                return s
+
     class String(object):
         def __init__(self, s):
             self.components = [s]
@@ -90,30 +104,43 @@ class Comment(object):
 
     def redoc_split(self, doc):
         ret = []
-        lastpos = 0
 
-        for m in Comment.redocref.finditer(doc):
-            span = m.span(0)
+        # First split examples
+        components = Comment.redoccode.split(doc)
+        for i in range(0, len(components), 2):
+            rdoc = components[i]
+            lastpos = 0
 
-            prefix = doc[lastpos:span[0]]
-            lastpos = span[1]
+            for m in Comment.redocref.finditer(rdoc):
+                span = m.span(0)
 
-            ret.append(prefix)
-            ref = m.group('ref')
+                prefix = rdoc[lastpos:span[0]]
+                lastpos = span[1]
 
-            if len(m.group('isregex')) > 0:
-                ret.append(re.compile(ref))
-            else:
-                ret.append(ref)
+                ref = m.group('ref')
 
-        ret.append(doc[lastpos:])
+                if len(m.group('isregex')) > 0:
+                    ref = re.compile(ref)
+
+                ret.append((prefix, ref))
+
+            ret.append((rdoc[lastpos:], None))
+
+            if i < len(components) - 1:
+                ret.append((Comment.Example(components[i + 1]), None))
+
         return ret
 
     def resolve_refs_for_doc(self, doc, resolver, root):
-        components = self.redoc_split(str(doc))
+        comps = self.redoc_split(str(doc))
+        components = []
 
-        for i in range(1, len(components), 2):
-            name = components[i]
+        for pair in comps:
+            prefix, name = pair
+            components.append(prefix)
+
+            if name is None:
+                continue
 
             if isinstance(name, basestring):
                 names = name.split('::')
@@ -134,9 +161,9 @@ class Comment(object):
                 nds = newnds
 
             if len(newnds) > 0:
-                components[i] = newnds
+                components.append(newnds)
             else:
-                components[i] = Comment.UnresolvedReference(components[i])
+                components.append(Comment.UnresolvedReference(name))
 
         doc.components = components
 

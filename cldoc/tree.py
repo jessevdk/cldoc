@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from clang import cindex
+import tempfile
 
 from defdict import Defdict
 
 import comment
 import nodes
 import includepaths
+
+from cldoc import example
 
 import os, sys, sets, re, glob
 
@@ -272,6 +275,73 @@ class Tree:
 
         # Resolve cross-references in documentation
         self.cross_ref(self.root)
+        self.markup_code(index)
+
+    def markup_code(self, index):
+        for node in self.all_nodes:
+            if not node.comment:
+                continue
+
+            if not node.comment.doc:
+                continue
+
+            comps = node.comment.doc.components
+
+            for i in range(len(comps)):
+                component = comps[i]
+
+                if not isinstance(component, comment.Comment.Example):
+                    continue
+
+                text = str(component)
+
+                tmpfile = tempfile.NamedTemporaryFile(delete=False)
+                tmpfile.write(text)
+                filename = tmpfile.name
+                tmpfile.close()
+
+                tu = index.parse(filename, self.flags + includepaths.flags, options=1)
+                tokens = tu.get_tokens(extent=tu.get_extent(filename, (0, os.stat(filename).st_size)))
+                os.unlink(filename)
+
+                hl = []
+                incstart = None
+
+                for token in tokens:
+                    start = token.extent.start.offset
+                    end = token.extent.end.offset
+
+                    if token.kind == cindex.TokenKind.KEYWORD:
+                        hl.append((start, end, 'keyword'))
+                        continue
+                    elif token.kind == cindex.TokenKind.COMMENT:
+                        hl.append((start, end, 'comment'))
+
+                    cursor = token.cursor
+
+                    if cursor.kind == cindex.CursorKind.PREPROCESSING_DIRECTIVE:
+                        hl.append((start, end, 'preprocessor'))
+                    elif cursor.kind == cindex.CursorKind.INCLUSION_DIRECTIVE and incstart is None:
+                        incstart = cursor
+                    elif (not incstart is None) and \
+                         token.kind == cindex.TokenKind.PUNCTUATION and \
+                         token.spelling == '>':
+                        hl.append((incstart.extent.start.offset, end, 'preprocessor'))
+                        incstart = None
+
+                ex = example.Example()
+                lastpos = 0
+
+                for ih in range(len(hl)):
+                    h = hl[ih]
+
+                    ex.append(text[lastpos:h[0]])
+                    ex.append(text[h[0]:h[1]], h[2])
+
+                    lastpos = h[1]
+
+                ex.append(text[lastpos:])
+                comps[i] = ex
 
     def match_ref(self, child, name):
         if isinstance(name, basestring):

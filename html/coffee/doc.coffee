@@ -1,4 +1,6 @@
 class Doc extends Node
+    @magic_separator = '%~@#~!'
+
     constructor: (@node) ->
         super(@node)
 
@@ -26,31 +28,74 @@ class Doc extends Node
 
         return text.replace(r, (m) -> "\\" + m)
 
+    process_markdown: (text) ->
+        converter = new Showdown.converter()
+        html = converter.makeHtml(text)
+
+        parts = html.split(Doc.magic_separator)
+        rethtml = ''
+
+        for i in [0..parts.length-2] by 3
+            a = Page.make_link(parts[i + 1], parts[i + 2])
+            rethtml += parts[i] + a[0].outerHTML
+
+        return rethtml + parts[parts.length - 1]
+
+    process_code: (code) ->
+        ret = $('<pre/>')
+        container = $('<code/>').appendTo(ret)
+
+        for c in $(code).contents()
+            if c.nodeType == document.ELEMENT_NODE
+                tag = c.tagName.toLowerCase()
+
+                c = $(c)
+
+                if tag == 'ref'
+                    Page.make_link(c.attr('ref'), c.attr('name')).appendTo(container)
+                else
+                    span = $('<span/>').text(c.text()).appendTo(container)
+                    span.addClass(tag)
+            else
+                text = $(c).text()
+                container.append(text)
+
+        return ret
+
     render: ->
         if !@node
             return null
 
+        container = $('<div/>', {'class': @node.tag()})
+
         contents = @node.contents()
-        ret = ''
+        astext = ''
+
+        msep = Doc.magic_separator
 
         for c in contents
-            if c.nodeType == document.ELEMENT_NODE and c.tagName.toLowerCase() == 'ref'
-                # Add markdown link
-                c = $(c)
+            if c.nodeType == document.ELEMENT_NODE
+                tag = c.tagName.toLowerCase()
 
-                iref = Page.make_internal_ref(c.attr('ref'))
-                ret += '[' + @escape(c.text()) + '](' + iref + ')'
+                if tag == 'ref'
+                    # Add markdown link
+                    c = $(c)
+                    astext += msep + c.attr('ref') + msep + c.text() + msep
+                else if tag == 'code'
+                    # Do the code!
+                    if astext
+                        container.append(@process_markdown(astext))
+                        astext = ''
+
+                    container.append(@process_code(c))
             else
-                ret += $(c).text()
+                astext += $(c).text()
 
-        text = ret.trim()
-        ret = $('<div/>', {'class': @node.tag()})
-
-        converter = new Showdown.converter()
-        ret.html(converter.makeHtml(text))
+        if astext
+            container.append(@process_markdown(astext))
 
         # Replace reference links with our custom onclick
-        for a in ret.find('a')
+        for a in container.find('a')
             a = $(a)
             href = a.attr('href')
 
@@ -61,7 +106,7 @@ class Doc extends Node
                         false
                 )
 
-        return ret
+        return container
 
 Node.types.doc = Doc
 

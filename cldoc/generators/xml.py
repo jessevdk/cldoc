@@ -3,6 +3,7 @@ from cldoc.clang import cindex
 
 from .generator import Generator
 from cldoc import nodes
+from cldoc import example
 
 from xml.etree import ElementTree
 import sys, os
@@ -62,6 +63,9 @@ class Xml(Generator):
 
     def indent(self, elem, level=0):
         i = "\n" + "  " * level
+
+        if elem.tag == 'doc':
+            return
 
         if len(elem):
             if not elem.text or not elem.text.strip():
@@ -295,6 +299,42 @@ class Xml(Generator):
         for component in doc.components:
             if isinstance(component, basestring):
                 s += component
+            elif isinstance(component, example.Example):
+                # Make highlighting
+                if last is None:
+                    doce.text = s
+                else:
+                    last.tail = s
+
+                s = ''
+
+                code = ElementTree.Element('code')
+                doce.append(code)
+
+                last = code
+
+                for item in component:
+                    if item.classes is None:
+                        s += item.text
+                    else:
+                        last.tail = s
+
+                        s = ''
+                        par = code
+
+                        for cls in item.classes:
+                            e = ElementTree.Element(cls)
+
+                            par.append(e)
+                            par = e
+
+                        par.text = item.text
+                        last = par
+
+                last.tail = s
+
+                s = ''
+                last = code
             else:
                 if last is None:
                     doce.text = s
