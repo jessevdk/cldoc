@@ -1,4 +1,4 @@
-class Category extends Node
+class cldoc.Category extends cldoc.Node
     @title = ['Category', 'Categories']
 
     constructor: (@node) ->
@@ -8,11 +8,11 @@ class Category extends Node
         div = $('<div class="item"/>')
         container.append(div)
 
-        a = Page.make_link(@ref, @name)
+        a = cldoc.Page.make_link(@ref, @name)
         a.attr('id', @id)
 
         div.append(a)
-        div.append(new Doc(@brief).render())
+        div.append(new cldoc.Doc(@brief).render())
 
         categories = @node.children('category')
 
@@ -23,13 +23,13 @@ class Category extends Node
                 cat = $(cat)
 
                 row = $('<tr/>')
-                a = Page.make_link(cat.attr('ref'), cat.attr('name'))
+                a = cldoc.Page.make_link(cat.attr('ref'), cat.attr('name'))
                 row.append($('<td/>').append(a))
-                row.append($('<td class="doc"/>').append(Doc.either(cat)))
+                row.append($('<td class="doc"/>').append(cldoc.Doc.either(cat)))
                 tb.append(row)
 
             div.append(tb)
 
-Node.types.category = Category
+cldoc.Node.types.category = cldoc.Category
 
 # vi:ts=4:et

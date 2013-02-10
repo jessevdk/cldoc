@@ -1,4 +1,4 @@
-class References extends Node
+class cldoc.References extends cldoc.Node
     @title = ['References', 'References']
 
     constructor: (@node) ->
@@ -8,8 +8,8 @@ class References extends Node
         for child in @node.children()
             child = $(child)
 
-            a = Page.make_link(Page.current_page + '#ref-' + child.attr('id'), child.attr('name'))
-            $('<li/>').append($('<span class="keyword"/>').text(child.tag()[0])).append(' ').append(a).appendTo(container)
+            a = cldoc.Page.make_link(cldoc.Page.current_page + '#ref-' + child.attr('id'), child.attr('name'))
+            $('<li/>').append($('<span class="keyword"/>').text(cldoc.tag(child)[0])).append(' ').append(a).appendTo(container)
 
     @render_container: ->
         $('<table class="references"/>')
@@ -18,7 +18,7 @@ class References extends Node
         for child in @node.children()
             child = $(child)
 
-            kw = $('<span class="keyword"/>').text(child.tag()[0]).append('&nbsp;')
+            kw = $('<span class="keyword"/>').text(cldoc.tag(child)[0]).append('&nbsp;')
             id = $('<span class="identifier"/>').text(child.attr('id'))
 
             row = $('<tr/>').append($('<td class="title"/>').append(kw).append(id)).appendTo(container)
@@ -46,6 +46,6 @@ class References extends Node
 
             row.addClass('last')
 
-Node.types.references = References
+cldoc.Node.types.references = cldoc.References
 
 # vi:ts=4:et

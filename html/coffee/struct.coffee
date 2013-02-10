@@ -1,4 +1,4 @@
-class Struct extends Node
+class cldoc.Struct extends cldoc.Node
     @title = ['Struct', 'Structures']
 
     constructor: (@node) ->
@@ -40,10 +40,10 @@ class Struct extends Node
 
         item.append(name)
 
-        item.append(Doc.either(@node))
+        item.append(cldoc.Doc.either(@node))
 
         if @ref
-            item.append(Page.know_more(@ref))
+            item.append(cldoc.Page.know_more(@ref))
         else
             @render_fields(item)
             @render_variables(item)
@@ -57,11 +57,11 @@ class Struct extends Node
         if variables.length == 0
             return
 
-        container = Variable.render_container()
+        container = cldoc.Variable.render_container()
         item.append(container)
 
         for variable in variables
-            new Variable($(variable)).render(container)
+            new cldoc.Variable($(variable)).render(container)
 
     render_fields: (item) ->
         # Add fields
@@ -70,17 +70,17 @@ class Struct extends Node
         if fields.length == 0
             return
 
-        container = Field.render_container()
+        container = cldoc.Field.render_container()
         item.append(container)
 
         for field in fields
             field = $(field)
 
-            tp = Page.node_type(field)
+            tp = cldoc.Page.node_type(field)
 
             if tp
                 new tp(field).render(container)
 
-Node.types.struct = Struct
+cldoc.Node.types.struct = cldoc.Struct
 
 # vi:ts=4:et

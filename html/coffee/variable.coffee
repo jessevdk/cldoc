@@ -1,4 +1,4 @@
-class Variable extends Node
+class cldoc.Variable extends cldoc.Node
     @title = ['Variable', 'Variables']
 
     constructor: (@node) ->
@@ -13,13 +13,13 @@ class Variable extends Node
         row.attr('id', @node.attr('id'))
 
         row.append($('<td class="variable_name identifier"/>').text(@node.attr('name')))
-        row.append($('<td class="variable_type"/>').append(new Type(@node.children('type')).render()))
+        row.append($('<td class="variable_type"/>').append(new cldoc.Type(@node.children('type')).render()))
 
         doctd = $('<td class="doc"/>').appendTo(row)
-        doctd.append(Doc.either(@node))
+        doctd.append(cldoc.Doc.either(@node))
 
         container.append(row)
 
-Node.types.variable = Variable
+cldoc.Node.types.variable = cldoc.Variable
 
 # vi:ts=4:et

@@ -1,4 +1,4 @@
-class Type extends Node
+class cldoc.Type extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
@@ -15,7 +15,7 @@ class Type extends Node
 
         if @name
             if @ref
-                a = Page.make_link(@ref, @name)
+                a = cldoc.Page.make_link(@ref, @name)
                 @typeparts.push(a)
             else
                 @typeparts.push($('<span class="name"/>').text(@name))
@@ -37,6 +37,6 @@ class Type extends Node
 
         return ret
 
-Node.types.type = Type
+cldoc.Node.types.type = cldoc.Type
 
 # vi:ts=4:et

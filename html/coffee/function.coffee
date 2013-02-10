@@ -1,4 +1,4 @@
-class Function extends Node
+class cldoc.Function extends cldoc.Node
     @title = ['Function', 'Functions']
 
     constructor: (@node) ->
@@ -37,7 +37,7 @@ class Function extends Node
             retdiv = $('<div class="return_type"/>').appendTo(decldiv)
 
             returntype = ret.children('type')
-            retdiv.append(new Type(returntype).render())
+            retdiv.append(new cldoc.Type(returntype).render())
 
         table = $('<table class="declaration"/>').appendTo(decldiv)
 
@@ -56,11 +56,11 @@ class Function extends Node
                 $('<td colspan="2"/>').appendTo(row)
 
             arg = $(args[i])
-            doc = Doc.either(arg)
+            doc = cldoc.Doc.either(arg)
 
             argtype = arg.children('type')
 
-            $('<td class="argumen_type"/>').append(new Type(argtype).render()).appendTo(row)
+            $('<td class="argumen_type"/>').append(new cldoc.Type(argtype).render()).appendTo(row)
 
             name = arg.attr('name')
 
@@ -79,10 +79,10 @@ class Function extends Node
 
         $('<td class="close_paren"/>').text(')').appendTo(row)
 
-        Doc.either(@node).appendTo(div)
+        cldoc.Doc.either(@node).appendTo(div)
         argtable.appendTo(div)
 
-        retdoc = Doc.either(ret)
+        retdoc = cldoc.Doc.either(ret)
 
         if retdoc.length > 0
             tr = $('<tr class="return"/>').appendTo(argtable)
@@ -104,8 +104,8 @@ class Function extends Node
                     else
                         overrides.append(', ')
 
-                overrides.append(Page.make_link(ov.attr('ref'), ov.attr('name')))
+                overrides.append(cldoc.Page.make_link(ov.attr('ref'), ov.attr('name')))
 
-Node.types.function = Function
+cldoc.Node.types.function = cldoc.Function
 
 # vi:ts=4:et

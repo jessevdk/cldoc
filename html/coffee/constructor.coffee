@@ -1,9 +1,9 @@
-class Constructor extends Method
+class cldoc.Constructor extends cldoc.Method
     @title = ['Constructor', 'Constructors']
 
     constructor: (@node) ->
         super(@node)
 
-Node.types.constructor = Constructor
+cldoc.Node.types.constructor = cldoc.Constructor
 
 # vi:ts=4:et

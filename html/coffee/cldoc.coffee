@@ -1,13 +1,13 @@
-(($) =>
-    $.fn.tag = ->
-        $.map(this, (e) -> e.tagName.toLowerCase())
-)(jQuery)
+window.cldoc = {
+    tag: (node) ->
+        $.map(node, (e) -> e.tagName.toLowerCase())
 
-String.prototype.startswith = (prefix) ->
-    @indexOf(prefix) != -1
+    startswith: (s, prefix) ->
+        s.indexOf(prefix) != -1
+}
 
 $(document).ready(->
-    Page.route()
+    cldoc.Page.route()
 )
 
 # vi:ts=4:et

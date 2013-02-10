@@ -1,9 +1,9 @@
-class Destructor extends Method
+class cldoc.Destructor extends cldoc.Method
     @title = ['Destructor', 'Destructors']
 
     constructor: (@node) ->
         super(@node)
 
-Node.types.destructor = Destructor
+cldoc.Node.types.destructor = cldoc.Destructor
 
 # vi:ts=4:et

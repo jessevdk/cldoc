@@ -1,4 +1,4 @@
-class Coverage extends Node
+class cldoc.Coverage extends cldoc.Node
     @title = ['Coverage', 'Coverage']
 
     constructor: (@node) ->
@@ -25,7 +25,7 @@ class Coverage extends Node
 
         tt = cov.documented + ' out of ' + cov.total + ' (' + cov.percentage + '%)'
 
-        a = Page.make_link(Page.current_page + '#' + typename, typename)
+        a = cldoc.Page.make_link(cldoc.Page.current_page + '#' + typename, typename)
         li = $('<li/>').appendTo(container)
 
         if cov.undocumented == 0
@@ -78,6 +78,6 @@ class Coverage extends Node
         for type in types
             @render_type($(type), container)
 
-Node.types.coverage = Coverage
+cldoc.Node.types.coverage = cldoc.Coverage
 
 # vi:ts=4:et

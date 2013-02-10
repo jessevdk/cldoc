@@ -1,4 +1,4 @@
-class Enum extends Node
+class cldoc.Enum extends cldoc.Node
     @title = ['Enum', 'Enumerations']
 
     constructor: (@node) ->
@@ -7,7 +7,7 @@ class Enum extends Node
     render: (container) ->
         id = $('<span class="identifier"/>')
 
-        if not @name.startswith('(anonymous')
+        if not cldoc.startswith(@name, '(anonymous')
             id.text(@name)
 
         isprot = @node.attr('access') == 'protected'
@@ -31,12 +31,12 @@ class Enum extends Node
         name.append(id)
         container.append(name)
 
-        doc = new Doc(@doc).render()
+        doc = new cldoc.Doc(@doc).render()
 
         if doc
             container.append(doc)
         else
-            brief = new Doc(@doc).render()
+            brief = new cldoc.Doc(@doc).render()
 
             if brief
                 container.append(brief)
@@ -55,10 +55,10 @@ class Enum extends Node
             row.append($('<td class="value"/>').text(value.attr('value')))
 
             doctd = $('<td class="doc"/>').appendTo(row)
-            doctd.append(Doc.either(value))
+            doctd.append(cldoc.Doc.either(value))
 
             table.append(row)
 
-Node.types.enum = Enum
+cldoc.Node.types.enum = cldoc.Enum
 
 # vi:ts=4:et

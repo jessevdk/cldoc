@@ -1,11 +1,11 @@
-class Arguments extends Node
+class cldoc.Arguments extends cldoc.Node
     @title = ['Arguments', 'Arguments']
 
     constructor: (@node) ->
         super(@node)
 
     render_sidebar_function: (func, container) ->
-        a = Page.make_link(Page.current_page + '#' + func.attr('id'), func.attr('name'))
+        a = cldoc.Page.make_link(cldoc.Page.current_page + '#' + func.attr('id'), func.attr('name'))
 
         $('<li/>').html(a).appendTo(container)
 
@@ -54,6 +54,6 @@ class Arguments extends Node
         for f in funcs
             @render_function($(f), t)
 
-Node.types.arguments = Arguments
+cldoc.Node.types.arguments = cldoc.Arguments
 
 # vi:ts=4:et

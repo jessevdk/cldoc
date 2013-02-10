@@ -1,4 +1,4 @@
-class Node
+class cldoc.Node
     @types = {}
 
     @groups = [

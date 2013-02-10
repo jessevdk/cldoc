@@ -1,4 +1,4 @@
-class Union extends Node
+class cldoc.Union extends cldoc.Node
     @title = ['Union', 'Unions']
 
     constructor: (@node) ->
@@ -17,7 +17,7 @@ class Union extends Node
         $('<td/>').appendTo(row)
 
         doctd = $('<td class="doc"/>').appendTo(row)
-        doctd.append(Doc.either(@node))
+        doctd.append(cldoc.Doc.either(@node))
 
         ctable = $('<table class="fields union"/>')
         row = $('<tr/>').appendTo(container)
@@ -26,11 +26,11 @@ class Union extends Node
         # Add also the things contained in the union
         for child in @node.children()
             child = $(child)
-            tp = Page.node_type(child)
+            tp = cldoc.Page.node_type(child)
 
             if tp
                 new tp(child).render(ctable)
 
-Node.types.union = Union
+cldoc.Node.types.union = cldoc.Union
 
 # vi:ts=4:et

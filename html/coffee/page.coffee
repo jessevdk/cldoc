@@ -1,4 +1,4 @@
-class Page
+class cldoc.Page
     @pages = {}
     @current_page = null
     @first = true
@@ -50,11 +50,11 @@ class Page
         @current_page = page
         data = @pages[page]
 
-        $('#content').empty()
+        $('#cldoc #content').empty()
 
         root = data.children(':first')
 
-        Sidebar.load(root)
+        cldoc.Sidebar.load(root)
         @load_contents(root)
 
         title = root.attr('name')
@@ -124,7 +124,7 @@ class Page
             return null
 
     @load_description: (page, content) ->
-        doc = new Doc(page.children('doc')).render()
+        doc = new cldoc.Doc(page.children('doc')).render()
 
         id = page.attr('id')
 
@@ -141,17 +141,17 @@ class Page
             content.append(desc)
 
     @node_type: (item) ->
-        typename = item.tag()[0]
+        typename = cldoc.tag(item)[0]
 
-        if !(typename of Node.types)
+        if !(typename of cldoc.Node.types)
             return null
 
-        return Node.types[typename]
+        return cldoc.Node.types[typename]
 
     @load_items: (page, content) ->
         all = page.children()
 
-        for group in Node.groups
+        for group in cldoc.Node.groups
             items = all.filter(group)
 
             if items.length == 0
@@ -159,7 +159,7 @@ class Page
 
             type = @node_type(items)
 
-            if !type || type == Node.types.report
+            if !type || type == cldoc.Node.types.report
                 continue
 
             h2 = $('<h2/>').text(type.title[1])
@@ -171,7 +171,7 @@ class Page
             for item in items
                 item = $(item)
 
-                if item.tag()[0] != items.tag()[0]
+                if cldoc.tag(item)[0] != cldoc.tag(items)[0]
                     tp = @node_type(item)
                 else
                     tp = type
@@ -183,7 +183,7 @@ class Page
                 content.append(container)
 
     @load_contents: (page) ->
-        content = $('#content')
+        content = $('#cldoc #content')
         content.empty()
 
         @load_description(page, content)

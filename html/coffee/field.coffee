@@ -1,4 +1,4 @@
-class Field extends Node
+class cldoc.Field extends cldoc.Node
     @title = ['Field', 'Fields']
 
     constructor: (@node) ->
@@ -13,13 +13,13 @@ class Field extends Node
         row.attr('id', @node.attr('id'))
 
         row.append($('<td class="field_name identifier"/>').text(@node.attr('name')))
-        row.append($('<td class="field_type"/>').append(new Type(@node.children('type')).render()))
+        row.append($('<td class="field_type"/>').append(new cldoc.Type(@node.children('type')).render()))
 
         doctd = $('<td class="doc"/>').appendTo(row)
-        doctd.append(Doc.either(@node))
+        doctd.append(cldoc.Doc.either(@node))
 
         container.append(row)
 
-Node.types.field = Field
+cldoc.Node.types.field = cldoc.Field
 
 # vi:ts=4:et

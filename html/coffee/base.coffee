@@ -1,4 +1,4 @@
-class Base extends Node
+class cldoc.Base extends cldoc.Node
     @title = ['Base', 'Bases']
 
     constructor: (@node) ->
@@ -14,15 +14,15 @@ class Base extends Node
         $('<table class="bases"/>')
 
     render: (container) ->
-        type = new Type(@type)
+        type = new cldoc.Type(@type)
 
         row = $('<tr/>').appendTo(container)
         row.attr('id', @id)
 
         $('<td class="keyword"/>').text(@access).appendTo(row)
         $('<td/>').html(type.render()).appendTo(row)
-        $('<td/>').html(Doc.brief(@node)).appendTo(row)
+        $('<td/>').html(cldoc.Doc.brief(@node)).appendTo(row)
 
-Node.types.base = Base
+cldoc.Node.types.base = cldoc.Base
 
 # vi:ts=4:et

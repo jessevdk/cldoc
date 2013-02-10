@@ -1,4 +1,4 @@
-class Doc extends Node
+class cldoc.Doc extends cldoc.Node
     @magic_separator = '%~@#~!'
 
     constructor: (@node) ->
@@ -36,7 +36,7 @@ class Doc extends Node
         rethtml = ''
 
         for i in [0..parts.length-2] by 3
-            a = Page.make_link(parts[i + 1], parts[i + 2])
+            a = cldoc.Page.make_link(parts[i + 1], parts[i + 2])
             rethtml += parts[i] + a[0].outerHTML
 
         return rethtml + parts[parts.length - 1]
@@ -52,7 +52,7 @@ class Doc extends Node
                 c = $(c)
 
                 if tag == 'ref'
-                    Page.make_link(c.attr('ref'), c.attr('name')).appendTo(container)
+                    cldoc.Page.make_link(c.attr('ref'), c.attr('name')).appendTo(container)
                 else
                     span = $('<span/>').text(c.text()).appendTo(container)
                     span.addClass(tag)
@@ -66,7 +66,7 @@ class Doc extends Node
         if !@node
             return null
 
-        container = $('<div/>', {'class': @node.tag()})
+        container = $('<div/>', {'class': cldoc.tag(@node)[0]})
 
         contents = @node.contents()
         astext = ''
@@ -102,12 +102,12 @@ class Doc extends Node
             if href[0] == '#'
                 a.on('click', do (href) ->
                     ->
-                        Page.load_ref(Page.make_external_ref(href))
+                        cldoc.Page.load_ref(cldoc.Page.make_external_ref(href))
                         false
                 )
 
         return container
 
-Node.types.doc = Doc
+cldoc.Node.types.doc = cldoc.Doc
 
 # vi:ts=4:et

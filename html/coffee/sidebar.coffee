@@ -1,9 +1,13 @@
-class Sidebar
+class cldoc.Sidebar
     @load: (page) ->
-        items = $('#sidebar_items')
+        items = $('#cldoc #sidebar_items')
+
+        if !items
+            return
+
         items.empty()
 
-        head = Page.make_header(page)
+        head = cldoc.Page.make_header(page)
 
         if head
             div = $('<div class="back"/>')
@@ -18,7 +22,7 @@ class Sidebar
 
             l = parts.slice(0, parts.length - 1).join('::')
 
-            a = Page.make_link(l)
+            a = cldoc.Page.make_link(l)
             a.addClass('back')
 
             a.html('<span class="arrow">&crarr;</span>')
@@ -33,17 +37,15 @@ class Sidebar
         # Take everything that's not a reference (i.e. everything on this page)
         onpage = page.children().filter(':not([access]), [access=protected], [access=public]')
 
-        for group in Node.groups
-            @load_group(page, onpage.filter(group))
+        for group in cldoc.Node.groups
+            @load_group(items, page, onpage.filter(group))
 
-    @load_group: (page, items) ->
-        container = $('#sidebar_items')
-
+    @load_group: (container, page, items) ->
         if items.length != 0
             # Lookup the class representing this type by the tag name of the
             # first element
-            ftag = $(items[0]).tag()[0]
-            type = Page.node_type(items)
+            ftag = cldoc.tag($(items[0]))[0]
+            type = cldoc.Page.node_type(items)
 
             if !type
                 return
@@ -57,8 +59,8 @@ class Sidebar
             for item in items
                 item = $(item)
 
-                if item.tag()[0] != ftag
-                    tp = Page.node_type(item)
+                if cldoc.tag(item)[0] != ftag
+                    tp = cldoc.Page.node_type(item)
                 else
                     tp = type
 
@@ -91,12 +93,12 @@ class Sidebar
 
                 nm = item.sidebar_name()
 
-                a = $('<a/>', {href: Page.make_internal_ref(Page.current_page, item.id)}).append(nm)
+                a = $('<a/>', {href: cldoc.Page.make_internal_ref(cldoc.Page.current_page, item.id)}).append(nm)
                 li = $('<li/>')
 
                 a.on('click', do (item) =>
                     =>
-                        Page.load(Page.current_page, item.id, true)
+                        cldoc.Page.load(cldoc.Page.current_page, item.id, true)
                         false
                 )
 
@@ -120,7 +122,7 @@ class Sidebar
 
                 li.append(a)
 
-                brief = new Doc(item.brief).render()
+                brief = new cldoc.Doc(item.brief).render()
 
                 if brief
                     brief.appendTo(li)

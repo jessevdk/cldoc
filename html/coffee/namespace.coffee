@@ -1,4 +1,4 @@
-class Namespace extends Node
+class cldoc.Namespace extends cldoc.Node
     @title = ['Namespace', 'Namespaces']
 
     constructor: (@node) ->
@@ -8,11 +8,11 @@ class Namespace extends Node
         div = $('<div class="item"/>')
         container.append(div)
 
-        a = Page.make_link(@ref, @name)
+        a = cldoc.Page.make_link(@ref, @name)
         a.attr('id', @id)
 
         div.append(a)
-        div.append(new Doc(@brief).render())
+        div.append(new cldoc.Doc(@brief).render())
 
         classes = @node.children('class,struct')
 
@@ -23,13 +23,13 @@ class Namespace extends Node
                 cls = $(cls)
 
                 row = $('<tr/>')
-                a = Page.make_link(cls.attr('ref'), cls.attr('name'))
+                a = cldoc.Page.make_link(cls.attr('ref'), cls.attr('name'))
                 row.append($('<td/>').append(a))
-                row.append($('<td class="doc"/>').append(Doc.either(cls)))
+                row.append($('<td class="doc"/>').append(cldoc.Doc.either(cls)))
                 tb.append(row)
 
             div.append(tb)
 
-Node.types.namespace = Namespace
+cldoc.Node.types.namespace = cldoc.Namespace
 
 # vi:ts=4:et

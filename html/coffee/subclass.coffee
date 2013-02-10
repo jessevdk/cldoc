@@ -1,4 +1,4 @@
-class Subclass extends Node
+class cldoc.Subclass extends cldoc.Node
     @title = ['Subclass', 'Subclasses']
 
     constructor: (@node) ->
@@ -15,9 +15,9 @@ class Subclass extends Node
         row.attr('id', @id)
 
         $('<td class="keyword"/>').text(@access).appendTo(row)
-        $('<td/>').html(Page.make_link(@ref, @name)).appendTo(row)
-        $('<td/>').html(Doc.brief(@node)).appendTo(row)
+        $('<td/>').html(cldoc.Page.make_link(@ref, @name)).appendTo(row)
+        $('<td/>').html(cldoc.Doc.brief(@node)).appendTo(row)
 
-Node.types.subclass = Subclass
+cldoc.Node.types.subclass = cldoc.Subclass
 
 # vi:ts=4:et
