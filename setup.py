@@ -3,7 +3,7 @@
 from distutils.core import setup
 from distutils.command.build import build
 
-import subprocess, os
+import subprocess, os, shutil, glob
 
 coffee_files = [
     'cldoc.coffee',
@@ -50,28 +50,36 @@ class cldoc_build(build):
     def run_coffee(self):
         print('running {0}'.format(self.coffee))
 
-        try:
-            os.makedirs('html/javascript')
-        except:
-            pass
+        for d in ('html/javascript', 'cldoc/data/javascript'):
+            try:
+                os.makedirs(d)
+            except:
+                pass
 
         args = [self.coffee, '--bare', '--join', 'html/javascript/cldoc.js', '--compile']
         files = ['html/coffee/' + x for x in coffee_files]
 
         subprocess.call(args + files)
 
+        for js in glob.glob('html/javascript/*.js'):
+            shutil.copyfile(js, 'cldoc/data/javascript/' + os.path.basename(js))
+
     def run_sass(self):
         print('running {0}'.format(self.sass))
 
-        try:
-            os.makedirs('html/styles')
-        except:
-            pass
+        for d in ('html/styles', 'cldoc/data/styles'):
+            try:
+                os.makedirs(d)
+            except:
+                pass
 
         args = [self.sass, '--scss', '--line-numbers', '--no-cache', '--style', 'compressed']
         files = ['html/sass/cldoc.scss', 'html/styles/cldoc.css']
 
         subprocess.call(args + files)
+
+        for css in glob.glob('html/styles/*.css'):
+            shutil.copyfile(css, 'cldoc/data/styles/' + os.path.basename(css))
 
     def run_inliner(self):
         print('running {0}'.format(self.inliner))
@@ -107,7 +115,7 @@ setup(name='cldoc',
       url='http://github.com/jessevdk/cldoc',
       packages=['cldoc'],
       scripts=['scripts/cldoc'],
-      package_data={'cldoc': ['data/*']},
+      package_data={'cldoc': ['data/*.html', 'data/javascript/*.js', 'data/styles/*.css']},
       cmdclass=cmdclass,
       requires=['pyparsing'])
 
