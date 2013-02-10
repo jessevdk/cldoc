@@ -2,12 +2,11 @@ from __future__ import absolute_import
 
 import sys, os, argparse, shlex
 
-def generate(opts):
+def generate(opts, cxxflags):
     from . import tree
     from . import generators
 
-    flags = shlex.split(os.getenv('CXXFLAGS'))
-    t = tree.Tree(opts.files, flags)
+    t = tree.Tree(opts.files, cxxflags)
 
     t.process()
 
@@ -75,17 +74,23 @@ def serve(opts):
             t.join()
             break
 
-def inspect(opts):
+def inspect(opts, cxxflags):
     from . import tree
     from . import inspecttree
 
-    flags = shlex.split(os.getenv('CXXFLAGS'))
-
-    t = tree.Tree(opts.files, flags)
+    t = tree.Tree(opts.files, cxxflags)
     inspecttree.inspect(t)
 
 def run():
-    parser = argparse.ArgumentParser(description='clang based documentation generator.')
+    if not '--help' in sys.argv:
+        try:
+            sep = sys.argv.index('--')
+        except ValueError:
+            sys.stderr.write('Please use: cldoc [CXXFLAGS] -- [OPTIONS] [FILES]\n')
+            sys.exit(1)
+
+    parser = argparse.ArgumentParser(description='clang based documentation generator.',
+                                     usage='%(prog)s [CXXFLAGS] -- [OPTIONS] [FILES]')
 
     parser.add_argument('--inspect', default=False,
                         action='store_const', const=True, help='inspect the AST')
@@ -110,14 +115,17 @@ def run():
 
     parser.add_argument('files', nargs='+', help='files to parse')
 
-    opts = parser.parse_args()
+    args = sys.argv[sep + 1:]
+
+    cxxflags = sys.argv[1:sep]
+    opts = parser.parse_args(args)
 
     if opts.inspect:
-        inspect(opts)
+        inspect(opts, cxxflags)
     elif opts.serve:
         serve(opts)
     else:
-        generate(opts)
+        generate(opts, cxxflags)
 
 if __name__ == '__main__':
     run()
