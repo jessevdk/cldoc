@@ -18,7 +18,7 @@ from .generator import Generator
 from .search import Search
 
 class Html(Generator):
-    def generate(self, output):
+    def generate(self, output, isstatic):
         # Write out json document for search
         self.write_search(output)
 
