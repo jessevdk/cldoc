@@ -1,4 +1,4 @@
-window.cldoc = {
+window.cldoc = $.extend((window.cldoc ? {}), {
     tag: (node) ->
         $.map(node, (e) -> e.tagName.toLowerCase())
 
