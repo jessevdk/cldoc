@@ -83,473 +83,442 @@ $in_group_row_spacing: 40px;
   }
 }
 
-body, html {
-  margin: 0;
-  padding: 0;
+#cldoc {
   font-family: $font;
-}
 
-#sidebar {
-  width: $sidebar_width;
-  background-color: $sidebar_bg_color;
-  border-right: 1px solid darken($sidebar_bg_color, 30%);
-  padding: 5px;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-
-  overflow: auto;
-
-  a.back {
-    .arrow {
-      padding-right: 5px;
-    }
+  .selected {
+    background-color: $selection_color;
   }
 
- .subtitle {
-    font-size: 1.1em;
-    text-align: center;
-    margin-top: 15px;
-
-    text-shadow: 1px 1px #eee;
-    color: #333;
+  .builtin {
+    color: $builtin_color;
   }
 
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    padding-left: 10px;
-    font-size: 0.9em;
-    margin-top: 5px;
-  }
-
-  * {
-      text-overflow: ellipsis;
-  }
-
-  li {
-    padding-bottom: 2px;
-    padding-top: 2px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  span.counter {
-    padding: 2px 4px 2px 4px;
-    margin-left: 5px;
-    font-size: 0.6em;
-    vertical-align: super;
-    background-color: #4298d8;
-    color: #fff;
-    display: none;
-    border-radius: 10px;
-    min-width: 10px;
-    text-align: center;
-  }
-
-  span.virtual, span.protected {
-    font-size: 0.6em;
-    min-width: 1.6em;
-    display: inline-block;
-    vertical-align: super;
-    text-align: center;
-    background-color: $keyword_color;
-    color: #fff;
-    margin-right: 5px;
-    padding-bottom: 2px;
-  }
-
-  .brief {
-    text-shadow: none;
-    font-size: 0.9em;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    padding: 2px;
-    margin: 0px;
-    margin-bottom: 3px;
-    color: #999;
-  }
-
-  span.bullet {
+  .keyword {
+    color: $keyword_color;
     font-weight: bold;
-    padding-right: 5px;
   }
 
-  span.bullet.complete {
-    color: $solarized_green;
+  .preprocessor {
+    color: $preprocessor_color;
   }
 
-  span.bullet.incomplete {
-    color: $solarized_red;
-  }
-}
-
-a {
-  cursor: hand;
-  text-decoration: underline;
-  color: #0876c8;
-}
-
-#sidebar a {
-  text-decoration: none;
-}
-
-#page_title * {
-  vertical-align: middle;
-}
-
-#content {
-  margin-left: $sidebar_width + 20px;
-  padding: 10px;
-  padding-left: 20px;
-}
-
-.index_item {
-  padding-left: 15px;
-}
-
-.section_title {
-  font-size: 1.4em;
-  color: #666;
-  border-bottom: 1px solid #666;
-  margin-bottom: 10px;
-}
-
-.index_item .summary {
-  font-style: italic;
-  font-size: 0.9em;
-  color: #888;
-  margin-top: 2px;
-}
-
-.index_item {
-  margin-top: 10px;
-}
-
-div.brief p:first-child, div.doc p:first-child {
-  padding-top: 0px;
-  margin-top: 0px;
-}
-
-div.brief p:last-child, div.doc p:last-child {
-  padding-bottom: 0px;
-  margin-bottom: 0px;
-}
-
-#content {
-  div.fulldoc div.brief {
-    margin: 0px;
-    margin-bottom: 10px;
-    padding: 0px;
+  .comment {
+    color: $comment_color;
   }
 
-  div.fulldoc div.doc {
-    margin: 0px;
-    padding: 0px;
+  .identifier {
+    color: $identifier_color;
+    font-weight: bold;
   }
 
-  div.brief, div.doc, div.fulldoc {
-    margin-left: 10px;
-    color: #666;
-    padding: 5px;
-    margin-top: 2px;
-    margin-bottom: 15px;
-    font-size: 0.9em;
-    background-color: #eee;
+  h1, h2, h3, h4, h5, h6 {
+    color: $header_color;
+    padding-bottom: 3px;
   }
 
-  div.structures, div.classes {
-    div.item {
-      margin-bottom: 30px;
+  h1, h2 {
+    border-bottom: 1px solid lighten($header_color, 50%);
+  }
+
+  h3, h4, h5, h6 {
+    margin-bottom: 0px;
+  }
+
+  h1 {
+    border: 0;
+    margin-top: 0px;
+    text-shadow: 1px 1px lighten($header_color, 60%);
+
+    span.keyword {
+      padding-right: 20px;
     }
   }
 
-  div.typedefs {
-    table {
-      @include table-base;
-    }
+  h2 {
+    margin-top: 60px;
   }
 
-  div.structures, div.classes, div.enumerations {
-    table {
-      @include table-items;
-      @include inline-doc;
-      @include table-alt;
-    }
+  a {
+    cursor: hand;
+    text-decoration: underline;
+    color: #0876c8;
   }
 
-  table.category, table.namespace, table.fields, table.variables, table.arguments, table.bases, table.subclasses {
-    @include table-items;
-    @include inline-doc;
-    @include table-alt;
-
-    tr.union td {
-      padding-top: 15px;
-    }
-  }
-
-  table.union td {
+  div.brief p:first-child, div.doc p:first-child {
     padding-top: 0px;
+    margin-top: 0px;
+  }
+
+  div.brief p:last-child, div.doc p:last-child {
     padding-bottom: 0px;
-    font-size: 0.9em;
+    margin-bottom: 0px;
   }
 
-  table.category, table.namespace {
-    margin-bottom: 10px;
-  }
+  #sidebar {
+    width: $sidebar_width;
+    background-color: $sidebar_bg_color;
+    border-right: 1px solid darken($sidebar_bg_color, 30%);
+    padding: 5px;
 
-  div.structures, div.classes {
-    table {
-      border-left: 1px solid #999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
 
-      td {
-        padding-left: 10px;
-      }
-    }
-  }
+    overflow: auto;
 
-  div.enumerations {
-    table {
-      td.value {
-        text-align: right;
-      }
-    }
-  }
-
-  div.function {
-    margin-bottom: 50px;
-
-    div.declaration {
-        background-color: lighten(#729fcf, 35%);
-        border: 1px solid lighten(#729fcf, 20%);
-        padding: 5px;
-    }
-
-    div.declaration.selected {
-      background-color: $selection_color;
-      border: 1px solid darken($selection_color, 40%);
-    }
-
-    table.declaration {
-      @include table-base;
-
-      td {
-        padding: 0px;
+    a.back {
+      .arrow {
         padding-right: 5px;
       }
-
-      td.identifier {
-        padding-right: 30px;
-      }
-
-      td.close_paren {
-        padding: 0px;
-      }
-
-      td.open_paren {
-        padding-right: 1px;
-      }
-
-      td.argument_name {
-        text-align: left;
-        padding-right: 1px;
-        padding-left: 20px;
-      }
     }
 
-    div.overrides {
-      margin-top: 10px;
-      font-size: 0.8em;
+    div.back {
+      div.name {
+        padding-bottom: 5px;
 
-      span.title {
-        color: $keyword_color;
-        padding-right: 10px;
-      }
-
-      a {
-        color: lighten($link_color, 10%);
-      }
-    }
-
-    table.arguments {
-      td {
-        font-size: 0.9em;
-      }
-
-      div.doc, div.brief, div.fulldoc {
-        font-size: 1em;
-      }
-
-      tr.return {
-        background: transparent;
-
-        td {
-          padding-top: 15px;
+        span.keyword {
+          padding-right: 5px;
+          font-weight: normal;
         }
       }
 
+      a.back {
+        display: block;
+        margin-left: 10px;
+      }
+    }
+
+   .subtitle {
+      font-size: 1.1em;
+      text-align: center;
+      margin-top: 15px;
+
+      text-shadow: 1px 1px #eee;
+      color: #333;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      padding-left: 10px;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+    * {
+        text-overflow: ellipsis;
+    }
+
+    li {
+      padding-bottom: 2px;
+      padding-top: 2px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    span.counter {
+      padding: 2px 4px 2px 4px;
+      margin-left: 5px;
+      font-size: 0.6em;
+      vertical-align: super;
+      background-color: #4298d8;
+      color: #fff;
+      display: none;
+      border-radius: 10px;
+      min-width: 10px;
+      text-align: center;
+    }
+
+    span.virtual, span.protected {
+      font-size: 0.6em;
+      min-width: 1.6em;
+      display: inline-block;
+      vertical-align: super;
+      text-align: center;
+      background-color: $keyword_color;
+      color: #fff;
+      margin-right: 5px;
+      padding-bottom: 2px;
+    }
+
+    .brief {
+      text-shadow: none;
+      font-size: 0.9em;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      padding: 2px;
+      margin: 0px;
+      margin-bottom: 3px;
+      color: #999;
+    }
+
+    span.bullet {
+      font-weight: bold;
+      padding-right: 5px;
+    }
+
+    span.bullet.complete {
+      color: $solarized_green;
+    }
+
+    span.bullet.incomplete {
+      color: $solarized_red;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  #content {
+    margin-left: $sidebar_width + 20px;
+    padding: 10px;
+    padding-left: 20px;
+
+    div.fulldoc div.brief {
+      margin: 0px;
+      margin-bottom: 10px;
+      padding: 0px;
+    }
+
+    div.fulldoc div.doc {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    div.brief, div.doc, div.fulldoc {
+      margin-left: 10px;
+      color: #666;
+      padding: 5px;
+      margin-top: 2px;
+      margin-bottom: 15px;
+      font-size: 0.9em;
+      background-color: #eee;
+    }
+
+    div.structures, div.classes {
+      div.item {
+        margin-bottom: 30px;
+      }
+    }
+
+    div.typedefs {
+      table {
+        @include table-base;
+      }
+    }
+
+    div.structures, div.classes, div.enumerations {
+      table {
+        @include table-items;
+        @include inline-doc;
+        @include table-alt;
+      }
+    }
+
+    table.category, table.namespace, table.fields, table.variables, table.arguments, table.bases, table.subclasses {
+      @include table-items;
+      @include inline-doc;
+      @include table-alt;
+
+      tr.union td {
+        padding-top: 15px;
+      }
+    }
+
+    table.union td {
+      padding-top: 0px;
+      padding-bottom: 0px;
+      font-size: 0.9em;
+    }
+
+    table.category, table.namespace {
       margin-bottom: 10px;
     }
 
-    div.doc, div.fulldoc, div.brief {
-      background: transparent;
-      margin-bottom: 0px;
-    }
+    div.structures, div.classes {
+      table {
+        border-left: 1px solid #999;
 
-    div.return_type {
-      padding-bottom: 5px;
-    }
-
-    ul.specifiers {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      float: left;
-      padding-top: 0.05em;
-
-      li {
-        display: inline;
-        padding-right: 5px;
-        color: $keyword_color;
-        font-size: 0.9em;
-      }
-
-      li:last-child {
-        padding-right: 10px;
+        td {
+          padding-left: 10px;
+        }
       }
     }
-  }
 
-  table.undocumented {
-    @include table-base;
-    font-size: 0.8em;
-  }
+    div.enumerations {
+      table {
+        td.value {
+          text-align: right;
+        }
+      }
+    }
 
-  div.arguments {
-    table.function {
+    div.function {
+      margin-bottom: 50px;
+
+      div.declaration {
+          background-color: lighten(#729fcf, 35%);
+          border: 1px solid lighten(#729fcf, 20%);
+          padding: 5px;
+      }
+
+      div.declaration.selected {
+        background-color: $selection_color;
+        border: 1px solid darken($selection_color, 40%);
+      }
+
+      table.declaration {
+        @include table-base;
+
+        td {
+          padding: 0px;
+          padding-right: 5px;
+        }
+
+        td.identifier {
+          padding-right: 30px;
+        }
+
+        td.close_paren {
+          padding: 0px;
+        }
+
+        td.open_paren {
+          padding-right: 1px;
+        }
+
+        td.argument_name {
+          text-align: left;
+          padding-right: 1px;
+          padding-left: 20px;
+        }
+      }
+
+      div.overrides {
+        margin-top: 10px;
+        font-size: 0.8em;
+
+        span.title {
+          color: $keyword_color;
+          padding-right: 10px;
+        }
+
+        a {
+          color: lighten($link_color, 10%);
+        }
+      }
+
+      table.arguments {
+        td {
+          font-size: 0.9em;
+        }
+
+        div.doc, div.brief, div.fulldoc {
+          font-size: 1em;
+        }
+
+        tr.return {
+          background: transparent;
+
+          td {
+            padding-top: 15px;
+          }
+        }
+
+        margin-bottom: 10px;
+      }
+
+      div.doc, div.fulldoc, div.brief {
+        background: transparent;
+        margin-bottom: 0px;
+      }
+
+      div.return_type {
+        padding-bottom: 5px;
+      }
+
+      ul.specifiers {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        float: left;
+        padding-top: 0.05em;
+
+        li {
+          display: inline;
+          padding-right: 5px;
+          color: $keyword_color;
+          font-size: 0.9em;
+        }
+
+        li:last-child {
+          padding-right: 10px;
+        }
+      }
+    }
+
+    table.undocumented {
       @include table-base;
       font-size: 0.8em;
+    }
 
-      tr.title {
+    div.arguments {
+      table.function {
+        @include table-base;
+        font-size: 0.8em;
+
+        tr.title {
+        }
+
+        tr.last td {
+          padding-bottom: 40px;
+        }
+
+        tr.undocumented td, tr.misspelled td {
+          font-size: 0.9em;
+          color: lighten(#333, 10%);
+        }
+
+        span.undocumented, span.misspelled {
+          padding-left: 5px;
+        }
+
+        span.undocumented:first-of-type, span.misspelled:first-of-type {
+          padding-left: 0px;
+        }
       }
+    }
+
+    table.references {
+      @include table-base;
+      font-size: 0.8em;
 
       tr.last td {
         padding-bottom: 40px;
       }
 
-      tr.undocumented td, tr.misspelled td {
+      tr.missing td {
         font-size: 0.9em;
         color: lighten(#333, 10%);
       }
-
-      span.undocumented, span.misspelled {
-        padding-left: 5px;
-      }
-
-      span.undocumented:first-of-type, span.misspelled:first-of-type {
-        padding-left: 0px;
-      }
-    }
-  }
-
-  table.references {
-    @include table-base;
-    font-size: 0.8em;
-
-    tr.last td {
-      padding-bottom: 40px;
     }
 
-    tr.missing td {
+    a.know_more {
+      padding-left: 15px;
       font-size: 0.9em;
-      color: lighten(#333, 10%);
+    }
+
+    div.description {
+      @include inline-doc;
     }
   }
-
-  a.know_more {
-    padding-left: 15px;
-    font-size: 0.9em;
-  }
 }
-
-.selected {
-  background-color: $selection_color;
-}
-
-.builtin {
-  color: $builtin_color;
-}
-
-.keyword {
-  color: $keyword_color;
-  font-weight: bold;
-}
-
-.preprocessor {
-  color: $preprocessor_color;
-}
-
-.comment {
-  color: $comment_color;
-}
-
-.identifier {
-  color: $identifier_color;
-  font-weight: bold;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  color: $header_color;
-  padding-bottom: 3px;
-}
-
-h1, h2 {
-  border-bottom: 1px solid lighten($header_color, 50%);
-}
-
-h3, h4, h5, h6 {
-  margin-bottom: 0px;
-}
-
-h1 {
-  border: 0;
-  margin-top: 0px;
-  text-shadow: 1px 1px lighten($header_color, 60%);
-
-  span.keyword {
-    padding-right: 20px;
-  }
-}
-
-h2 {
-  margin-top: 60px;
-}
-
-div.back {
-  div.name {
-    padding-bottom: 5px;
-
-    span.keyword {
-      padding-right: 5px;
-      font-weight: normal;
-    }
-  }
-
-  a.back {
-    display: block;
-    margin-left: 10px;
-  }
-}
-
-#content div.description {
-  @include inline-doc;
-}
-
 
 /* vi:ts=2:et */
