@@ -12,6 +12,11 @@ class Argument:
         self.parent = func
 
         self._type = Type(self.cursor.type)
+        self._refid = None
+
+    @property
+    def refid(self):
+        return self.parent.refid + '::' + self.name
 
     @property
     def name(self):
