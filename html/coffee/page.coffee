@@ -1,7 +1,124 @@
+cldoc.SearchWorker = ->
+    db = null
+
+    load_db = ->
+        xhr = new XMLHttpRequest()
+        xhr.open('GET', 'http://localhost:6060/search.json', false)
+        xhr.send()
+
+        return JSON.parse(xhr.responseText)
+
+    bsearch = (term, l, r, sel) =>
+        suffix_record = (i) => db.suffixes[i][0]
+
+        while l < r
+            mid = Math.floor((l + r) / 2)
+
+            rec = suffix_record(mid)
+            suf = db.records[rec[0]][0].substring(rec[1])
+
+            [l, r] = if sel(suf) then [mid + 1, r] else [l, mid]
+
+        return [l, r]
+
+    search_term = (term) =>
+        l = 0
+        r = db.suffixes.length
+
+        [start, _] = bsearch(term,
+                          0,
+                          db.suffixes.length,
+                          (suf) -> term > suf
+        )
+
+        [_, end] = bsearch(term,
+                            start,
+                            db.suffixes.length,
+                            (suf) -> suf.indexOf(term) == 0
+        )
+
+        return [start, end]
+
+    self.onmessage = (ev) =>
+        if db == null
+            db = load_db()
+
+        m = ev.data
+        words = m.q.split(/\s+/)
+
+        ret = {type: 'result', id: m.id, q: m.q, words: words, records: {}, results: []}
+
+        for word in words
+            [start, end] = search_term(word)
+
+            for i in [start..(end - 1)] by 1
+                items = db.suffixes[i]
+
+                for rec in items
+                    recid = rec[0]
+
+                    if !(recid of ret.records)
+                        ret.records[recid] = db.records[recid]
+
+                ret.results[i - start] = items
+
+            self.postMessage(ret)
+
+class cldoc.SearchDb
+    constructor: ->
+        @searchid = 0
+
+        wurl = window.webkitURL ? window
+
+        blob = new Blob(['worker = ' + cldoc.SearchWorker.toString() + '; worker();'],
+                        {type: 'text/javascript'})
+
+        @worker = new Worker(wurl.createObjectURL(blob))
+
+        @worker.onmessage = (msg) =>
+            m = msg.data
+
+            if m.type == 'log'
+                console.log(m.message)
+            else if m.type == 'result'
+                if m.id != @searchid
+                    return
+
+                @searchid = 0
+                console.log(m)
+
+    search: (q) ->
+        # Split q in "words"
+        @searchid += 1
+        @worker.postMessage({type: 'search', q: q, id: @searchid})
+
 class cldoc.Page
     @pages = {}
     @current_page = null
     @first = true
+
+    @search = {
+        db: null,
+        original_content: null
+    }
+
+    @request_page: (page, cb) ->
+        if page in @pages
+            cb(@pages[page])
+            return
+
+        if page == '(report)'
+            url = 'report.xml'
+        else
+            url = 'xml/' + page + '.xml'
+
+        $.ajax({
+            url: url,
+            cache: false,
+            success: (data) =>
+                @pages[page] = $(data)
+                cb(@pages[page])
+        })
 
     @load: (page, scrollto, updatenav) ->
         if page == null || page == 'undefined'
@@ -14,23 +131,8 @@ class cldoc.Page
             @push_nav(page, scrollto)
 
         if @current_page != page
-            # Load <page>.xml from the xml/ dir
-            if !(page in @pages)
-                if page == '(report)'
-                    url = 'report.xml'
-                else
-                    url = 'xml/' + page + '.xml'
-
-                $.ajax({
-                    url: url,
-                    cache: false,
-                    success: (data) =>
-                        @pages[page] = $(data)
-                        @load_page(page, scrollto)
-                })
-
-            else
-                @load_page(page, scrollto)
+            # Load <page>.xml from the xml/ dir if needed
+            @request_page(page, => @load_page(page, scrollto))
         else
             @scroll(page, scrollto)
 
@@ -50,7 +152,7 @@ class cldoc.Page
         @current_page = page
         data = @pages[page]
 
-        $('#cldoc #content').empty()
+        $('#cldoc #cldoc_content').empty()
 
         root = data.children(':first')
 
@@ -183,7 +285,7 @@ class cldoc.Page
                 content.append(container)
 
     @load_contents: (page) ->
-        content = $('#cldoc #content')
+        content = $('#cldoc #cldoc_content')
         content.empty()
 
         @load_description(page, content)
@@ -275,5 +377,22 @@ class cldoc.Page
             @select(null, true)
 
         @first = false
+
+    @search_result: (result) ->
+        true
+
+    @search: (q) ->
+        if q.length < 3
+            return false
+
+        # First make sure to load the search db
+        if !@search.db
+            @search.db = new cldoc.SearchDb()
+
+        @search_result(@search.db.search(q))
+        return true
+
+    @exit_search: ->
+        false
 
 # vi:ts=4:et
