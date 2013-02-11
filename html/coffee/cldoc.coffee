@@ -3,7 +3,7 @@ window.cldoc = $.extend((window.cldoc ? {}), {
         $.map(node, (e) -> e.tagName.toLowerCase())
 
     startswith: (s, prefix) ->
-        s.indexOf(prefix) != -1
+        s.indexOf(prefix) == 0
 })
 
 $(document).ready(->
