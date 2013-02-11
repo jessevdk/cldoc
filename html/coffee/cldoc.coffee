@@ -4,7 +4,7 @@ window.cldoc = $.extend((window.cldoc ? {}), {
 
     startswith: (s, prefix) ->
         s.indexOf(prefix) != -1
-}
+})
 
 $(document).ready(->
     cldoc.Page.route()
