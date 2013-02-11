@@ -1,8 +1,53 @@
 class cldoc.Sidebar
-    @load: (page) ->
-        items = $('#cldoc #sidebar_items')
+    @init: ->
+        sidebar = $('#cldoc #cldoc_sidebar')
 
-        if !items
+        if !sidebar
+            return
+
+        sidebar.append($('<div/>').attr('id', 'cldoc_sidebar_page_title'))
+        sidebar.append($('<div/>').attr('id', 'cldoc_sidebar_items'))
+
+        div = $('<div/>').attr('id', 'cldoc_search')
+        icon = $('<div class="icon"/>')
+        close = $('<div class="close" title="Cancel search"/>')
+
+        input = $('<input type="text" accesskey="s" title="Search documentation (Alt+S)"/>')
+
+        items = $().add(div).add(icon).add(close)
+
+        input.on('focus', -> items.addClass('focus'))
+        input.on('blur', -> items.removeClass('focus'))
+        icon.on('click', -> input.focus())
+
+        exitsearch = ->
+            input.val('')
+            input.blur()
+            cldoc.Page.exit_search()
+
+        close.on('click', exitsearch)
+
+        input.on('keypress', (e) ->
+            if e.charCode == 13
+                cldoc.Page.search(input.val())
+                return true
+        )
+
+        input.on('keydown', (e) ->
+            if e.keyCode == 27
+                exitsearch()
+        )
+
+        div.append(icon)
+        div.append(input)
+        div.append(close)
+
+        sidebar.append(div)
+
+    @load: (page) ->
+        items = $('#cldoc #cldoc_sidebar #cldoc_sidebar_items')
+
+        if items.length == 0
             return
 
         items.empty()
@@ -41,94 +86,96 @@ class cldoc.Sidebar
             @load_group(items, page, onpage.filter(group))
 
     @load_group: (container, page, items) ->
-        if items.length != 0
-            # Lookup the class representing this type by the tag name of the
-            # first element
-            ftag = cldoc.tag($(items[0]))[0]
-            type = cldoc.Page.node_type(items)
+        if items.length == 0
+            return
 
-            if !type
-                return
+        # Lookup the class representing this type by the tag name of the
+        # first element
+        ftag = cldoc.tag($(items[0]))[0]
+        type = cldoc.Page.node_type(items)
 
-            # Add subtitle header for this group
-            $('<div class="subtitle"/>').text(type.title[1]).appendTo(container)
+        if !type
+            return
 
-            ul = $('<ul/>')
-            prev = null
+        # Add subtitle header for this group
+        $('<div class="subtitle"/>').text(type.title[1]).appendTo(container)
 
-            for item in items
-                item = $(item)
+        ul = $('<ul/>')
+        prev = null
 
-                if cldoc.tag(item)[0] != ftag
-                    tp = cldoc.Page.node_type(item)
+        for item in items
+            item = $(item)
+
+            if cldoc.tag(item)[0] != ftag
+                tp = cldoc.Page.node_type(item)
+            else
+                tp = type
+
+            if !tp
+                continue
+
+            item = new tp(item)
+
+            if 'render_sidebar' of item
+                item.render_sidebar(ul)
+                continue
+
+            # Check if we have multiple times the same name for an item.
+            # This happens for example for C++ methods with the same name
+            # but with different arguments. Those methods are grouped
+            # in the sidebar and a counter indicates how many items have
+            # the same name
+            if prev && prev.name == item.name
+                cnt = prev.li.find('.counter')
+                cnti = cnt.text()
+
+                if !cnti
+                    cnt.text('2')
                 else
-                    tp = type
+                    cnt.text(parseInt(cnti) + 1)
 
-                if !tp
-                    continue
+                cnt.css('display', 'inline-block')
 
-                item = new tp(item)
+                continue
 
-                if 'render_sidebar' of item
-                    item.render_sidebar(ul)
-                    continue
+            nm = item.sidebar_name()
 
-                # Check if we have multiple times the same name for an item.
-                # This happens for example for C++ methods with the same name
-                # but with different arguments. Those methods are grouped
-                # in the sidebar and a counter indicates how many items have
-                # the same name
-                if prev && prev.name == item.name
-                    cnt = prev.li.find('.counter')
-                    cnti = cnt.text()
+            a = $('<a/>', {href: cldoc.Page.make_internal_ref(cldoc.Page.current_page, item.id)}).append(nm)
+            li = $('<li/>')
 
-                    if !cnti
-                        cnt.text('2')
-                    else
-                        cnt.text(parseInt(cnti) + 1)
+            a.on('click', do (item) =>
+                =>
+                    cldoc.Page.load(cldoc.Page.current_page, item.id, true)
+                    false
+            )
 
-                    cnt.css('display', 'inline-block')
+            prev = {
+                'name': item.name,
+                'item': item,
+                'li': li
+            }
 
-                    continue
+            a.append($('<span class="counter"/>'))
 
-                nm = item.sidebar_name()
+            isvirt = item.node.attr('virtual')
+            isprot = item.node.attr('access') == 'protected'
 
-                a = $('<a/>', {href: cldoc.Page.make_internal_ref(cldoc.Page.current_page, item.id)}).append(nm)
-                li = $('<li/>')
+            if isprot && isvirt
+                li.append($('<span class="protected virtual">p&nbsp;v</span>'))
+            else if isprot
+                li.append($('<span class="protected">p</span>'))
+            else if isvirt
+                li.append($('<span class="virtual">v</span>'))
 
-                a.on('click', do (item) =>
-                    =>
-                        cldoc.Page.load(cldoc.Page.current_page, item.id, true)
-                        false
-                )
+            li.append(a)
 
-                prev = {
-                    'name': item.name,
-                    'item': item,
-                    'li': li
-                }
+            brief = new cldoc.Doc(item.brief).render()
 
-                a.append($('<span class="counter"/>'))
+            if brief
+                brief.appendTo(li)
 
-                isvirt = item.node.attr('virtual')
-                isprot = item.node.attr('access') == 'protected'
+            ul.append(li)
 
-                if isprot && isvirt
-                    li.append($('<span class="protected virtual">p&nbsp;v</span>'))
-                else if isprot
-                    li.append($('<span class="protected">p</span>'))
-                else if isvirt
-                    li.append($('<span class="virtual">v</span>'))
-
-                li.append(a)
-
-                brief = new cldoc.Doc(item.brief).render()
-
-                if brief
-                    brief.appendTo(li)
-
-                ul.append(li)
-
-            ul.appendTo(container)
+        ul.appendTo(container)
 
 # vi:ts=4:et

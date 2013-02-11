@@ -7,6 +7,7 @@ window.cldoc = $.extend((window.cldoc ? {}), {
 })
 
 $(document).ready(->
+    cldoc.Sidebar.init()
     cldoc.Page.route()
 )
 
