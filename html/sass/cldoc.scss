@@ -419,6 +419,14 @@ VAAAAABJRU5ErkJggg==');
       @include table-base;
     }
 
+    table.search_results {
+      @include table-base;
+
+      span.search_result {
+        background-color: $selection_color;
+      }
+    }
+
     div.structures, div.classes, div.enumerations {
       table {
         @include table-items;
