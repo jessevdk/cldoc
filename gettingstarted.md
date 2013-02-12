@@ -40,7 +40,8 @@ by using `npm install coffee-script inliner`. sass can be installed using
 `gem install --user-install sass`. It's also possible that your system provides
 packages for these dependencies.
 
-After the requirements are installed, simply run `python setup.py install` to
+After the requirements are installed, first run `python setup.py generate` to
+generate the webapp. After that simply run `python setup.py install` to
 install cldoc. Note that if you have used npm and gem to install coffeescript,
 sass and inliner locally (e.g. in node_modules/ and ~/.gem), use:
 
