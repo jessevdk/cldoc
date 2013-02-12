@@ -362,9 +362,9 @@ class cldoc.Page
                     @load(state.page, state.scrollto, false)
                 else
                     @select(state.scrollto)
-            else
-                @load(page, scrollto)
         )
+
+        @load(page, scrollto)
 
     @select: (scrollto, doanimate) ->
         scrollto = $(scrollto)
