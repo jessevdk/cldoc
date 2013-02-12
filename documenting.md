@@ -187,5 +187,5 @@ This is useful because it allows you to easily write additional documentation
 
 ## Wrapping it up
 To wrap it up, please have a look at the example
-[transport project](https://github.com/jessevdk/cldoc/example) and the
-corresponding generated [documentation](transport.html).
+[transport project](https://github.com/jessevdk/cldoc/tree/master/example) and the
+corresponding generated [documentation](example/).
