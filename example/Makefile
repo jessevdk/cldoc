@@ -22,4 +22,4 @@ doc:
 		$(SOURCES) $(HEADERS)
 
 serve:
-	cldoc -- --output html --serve $(SOURCES)
+	cldoc -- --output html --serve
