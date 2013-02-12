@@ -15,7 +15,18 @@ class cldoc.Sidebar
 
         items = $().add(div).add(icon).add(close)
 
-        input.on('focus', -> items.addClass('focus'))
+        input.on('focus', (e) ->
+            items.addClass('focus')
+        )
+
+        $('body').on('keydown', (e) ->
+            if e.altKey && e.keyCode == 83
+                input.focus()
+                input.select()
+
+                return true
+        )
+
         input.on('blur', -> items.removeClass('focus'))
         icon.on('click', -> input.focus())
 
