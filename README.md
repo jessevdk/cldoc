@@ -20,12 +20,12 @@ For more information, please visit https://jessevdk.github.com/cldoc.
 
 # Get started now!
 To get started using cldoc, please have a look at
-[Getting started](https://jessevdk.github.com/cldoc/gettingstarted.html) to install cldoc. Then explore how
-to [document your code](https://jessevdk.github.com/cldoc/documenting.html) so that cldoc can extract it. Finally
-go and read [Generating site](https://jessevdk.github.com/cldoc/generating.html) to find out how to use the cldoc
+[Getting started](http://jessevdk.github.com/cldoc/gettingstarted.html) to install cldoc. Then explore how
+to [document your code](http://jessevdk.github.com/cldoc/documenting.html) so that cldoc can extract it. Finally
+go and read [Generating site](http://jessevdk.github.com/cldoc/generating.html) to find out how to use the cldoc
 command in your project to generate the documentation.
 
 # Example
 For an easy introduction into using cldoc, please have a look at the
 [example project](https://github.com/jessevdk/cldoc/tree/master/example) and corresponding
-generated [documentation](https://jessevdk.github.com/cldoc/example/).
+generated [documentation](http://jessevdk.github.com/cldoc/example/).
