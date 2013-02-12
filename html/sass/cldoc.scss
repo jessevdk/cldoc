@@ -29,6 +29,9 @@ $identifier_color: $solarized_blue;
 $preprocessor_color: $solarized_violet;
 $comment_color: $solarized_base1;
 
+$scrollbar_bg_color: darken($sidebar_bg_color, 10%);
+$scrollbar_color: darken($sidebar_bg_color, 30%);
+
 $in_group_row_spacing: 40px;
 
 @mixin table-base {
@@ -80,6 +83,30 @@ $in_group_row_spacing: 40px;
     background: transparent;
     margin: 0px;
     padding: 0px;
+  }
+}
+
+#cldoc, #cldoc_sidebar_items {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $scrollbar_bg_color;
+    margin: 2px;
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar_color;
+    margin: 2px;
+    border-radius: 5px;
+  }
+
+  &.hide_scrollbar {
+    &::-webkit-scrollbar-track, &::-webkit-scrollbar-thumb {
+      background-color: $sidebar_bg_color;
+    }
   }
 }
 
@@ -168,6 +195,7 @@ $in_group_row_spacing: 40px;
   #cldoc_sidebar {
     width: $sidebar_width;
     background-color: $sidebar_bg_color;
+    border-right: 1px solid $scrollbar_bg_color;
 
     position: fixed;
     top: 0;
@@ -176,8 +204,6 @@ $in_group_row_spacing: 40px;
   }
 
   #cldoc_sidebar.search {
-    border-right: 1px solid darken($sidebar_bg_color, 30%);
-
     #cldoc_sidebar_items {
       display: none;
     }

@@ -5,7 +5,17 @@ class cldoc.Sidebar
         if !sidebar
             return
 
-        sidebar.append($('<div/>').attr('id', 'cldoc_sidebar_items'))
+        items = $('<div/>').attr('id', 'cldoc_sidebar_items')
+        it = items[0]
+
+        items.on('DOMSubtreeModified', (e) =>
+            if it.scrollHeight > it.clientHeight
+                $(it).removeClass('hide_scrollbar')
+            else
+                $(it).addClass('hide_scrollbar')
+        )
+
+        sidebar.append(items)
 
         div = $('<div/>').attr('id', 'cldoc_search')
         icon = $('<div class="icon"/>')
