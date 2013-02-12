@@ -1,4 +1,6 @@
-window.cldoc = $.extend((window.cldoc ? {}), {
+window.cldoc = $.extend($.extend({
+    host: document.location.origin,
+}, (window.cldoc ? {})), {
     tag: (node) ->
         $.map(node, (e) -> e.tagName.toLowerCase())
 
