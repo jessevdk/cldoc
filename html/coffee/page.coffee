@@ -146,6 +146,8 @@ class cldoc.Page
         })
 
     @load: (page, scrollto, updatenav) ->
+        cldoc.Sidebar.exit_search()
+
         if page == null || page == 'undefined'
             page = @current_page
 
