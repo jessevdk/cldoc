@@ -13,8 +13,8 @@ Ubuntu precise, you might want to install libclang from the
 [dr-graef ppa](https://launchpad.net/~dr-graef/+archive/llvm-3.1.precise).
 
 # 1. Installing using pip
-cldoc is avaible at the [Python Package Index](pypi.python.org/pypi). This is
-the easiest way to install cldoc. Simple use `pip install cldoc`.
+cldoc is avaible at the [Python Package Index](http://pypi.python.org/pypi/cldoc/). This is
+by far the easiest way to install cldoc. Simply use `pip install cldoc`.
 
 # 2. Installing from source
 First checkout the latest source from [git](https://github.com/jessevdk/cldoc).
