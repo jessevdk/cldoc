@@ -80,7 +80,7 @@ class cldoc.Doc extends cldoc.Node
                 if tag == 'ref'
                     # Add markdown link
                     c = $(c)
-                    astext += msep + c.attr('ref') + msep + c.text() + msep
+                    astext += @escape(msep + c.attr('ref') + msep + c.text() + msep)
                 else if tag == 'code'
                     # Do the code!
                     if astext
