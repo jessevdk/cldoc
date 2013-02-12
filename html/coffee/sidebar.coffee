@@ -54,6 +54,18 @@ class cldoc.Sidebar
 
         sidebar.append(div)
 
+    @render_search: (results) ->
+        $('#cldoc_sidebar').addClass('search')
+
+    @exit_search: ->
+        $('#cldoc_sidebar').removeClass('search')
+
+    @load_html: (html) ->
+        items = $('#cldoc #cldoc_sidebar #cldoc_sidebar_items')
+        items.children().detach()
+
+        items.append(html)
+
     @load: (page) ->
         items = $('#cldoc #cldoc_sidebar #cldoc_sidebar_items')
 
