@@ -124,11 +124,10 @@ class cldoc.Page
 
     @search = {
         db: null,
-        original_content: null
     }
 
     @request_page: (page, cb) ->
-        if page in @pages
+        if page of @pages
             cb(@pages[page])
             return
 
@@ -141,7 +140,7 @@ class cldoc.Page
             url: url,
             cache: false,
             success: (data) =>
-                @pages[page] = $(data)
+                @pages[page] = {xml: $(data), html: null}
                 cb(@pages[page])
         })
 
@@ -176,15 +175,26 @@ class cldoc.Page
         return a
 
     @load_page: (page, scrollto) ->
-        @current_page = page
-        data = @pages[page]
+        @first = @current_page == null
 
-        $('#cldoc #cldoc_content').empty()
+        @current_page = page
+        cpage = @pages[page]
+
+        data = cpage.xml
+        html = cpage.html
+
+        $('#cldoc #cldoc_content').children().detach()
 
         root = data.children(':first')
 
-        cldoc.Sidebar.load(root)
-        @load_contents(root)
+        if html
+            $('#cldoc #cldoc_content').append(html.content)
+            cldoc.Sidebar.load_html(html.sidebar)
+        else
+            cpage.html = {
+                sidebar: cldoc.Sidebar.load(root),
+                content: @load_contents(root)
+            }
 
         title = root.attr('name')
 
@@ -197,11 +207,10 @@ class cldoc.Page
                 if title[title.length - 1] == '.'
                     title = title.substring(0, title.length - 1)
 
-            if !title
-                title = 'Documentation'
+        if !title
+            title = 'Documentation'
 
         document.title = title
-
         @scroll(page, scrollto, true)
 
     @make_external_ref: (page, id) ->
@@ -226,8 +235,11 @@ class cldoc.Page
         else
             return '#' + page + '/' + id
 
+    @split_ref: (ref) ->
+        return ref.split('#', 2)
+
     @load_ref: (ref) ->
-        r = ref.split('#')
+        r = @split_ref(ref)
         @load(r[0], r[1], true)
 
     @make_header: (item) ->
@@ -313,7 +325,7 @@ class cldoc.Page
 
     @load_contents: (page) ->
         content = $('#cldoc #cldoc_content')
-        content.empty()
+        content.children().detach()
 
         @load_description(page, content)
         @load_items(page, content)

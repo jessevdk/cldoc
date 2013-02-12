@@ -70,9 +70,9 @@ class cldoc.Sidebar
         items = $('#cldoc #cldoc_sidebar #cldoc_sidebar_items')
 
         if items.length == 0
-            return
+            return null
 
-        items.empty()
+        items.children().detach()
 
         head = cldoc.Page.make_header(page)
 
@@ -106,6 +106,8 @@ class cldoc.Sidebar
 
         for group in cldoc.Node.groups
             @load_group(items, page, onpage.filter(group))
+
+        return $('#cldoc_sidebar_items').children()
 
     @load_group: (container, page, items) ->
         if items.length == 0
