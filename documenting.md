@@ -115,7 +115,7 @@ namespace transport
 	 * for a bike for use on the road, you might be better off using a
 	 * <RacingBike> though.
 	 */
-	class MountainBike : public Bycicle
+	class MountainBike : public Bicycle
 	{
 	public:
 		/* Set suspension stiffness.
