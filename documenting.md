@@ -31,8 +31,10 @@ namespace transport
 		// PedalHarder makes you go faster (usually).
 		virtual void PedalHarder();
 
-		/* RingBell rings the bell on the bike. Note that not all bikes
-		 * have bells. */
+		/* Ring bell on the bike.
+		 *
+		 * RingBell rings the bell on the bike. Note that not all
+		 * bikes have bells. */
 		virtual void RingBell();
 
 		// Default destructor.
@@ -83,7 +85,7 @@ namespace transport
 		/* @inherit */
 		virtual void PedalHarder();
 
-		/* RingBell is not implemented on <RacingBike>. */
+		/* RingBell is not implemented. */
 		virtual void RingBell();
 	};
 }
