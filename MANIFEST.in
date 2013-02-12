@@ -1,0 +1,7 @@
+include README.md
+include COPYING
+
+include html/coffee/*
+include html/sass/*
+include html/index.html
+
