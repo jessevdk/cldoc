@@ -10,4 +10,4 @@ a complete working example of how to document your code and generate a website
 using [cldoc](http://jessevdk.github.com/cldoc).
 
 The source for this example can be found in the
-[cldoc repository](https://github.com/jessevdk/cldoc/example) on github.
+[cldoc repository](https://github.com/jessevdk/cldoc/tree/master/example) on github.
