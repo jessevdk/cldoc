@@ -4,9 +4,9 @@ cldoc.SearchWorker = ->
     log = (msg) ->
         self.postMessage({type: 'log', message: msg})
 
-    load_db = ->
+    load_db = (host) ->
         xhr = new XMLHttpRequest()
-        xhr.open('GET', 'http://localhost:6060/search.json?' + new Date().getTime(), false)
+        xhr.open('GET', host + '/search.json?' + new Date().getTime(), false)
         xhr.send()
 
         return JSON.parse(xhr.responseText)
@@ -44,10 +44,11 @@ cldoc.SearchWorker = ->
         return [start, end]
 
     self.onmessage = (ev) =>
-        if db == null
-            db = load_db()
-
         m = ev.data
+
+        if db == null
+            db = load_db(m.host)
+
         words = m.q.split(/\s+/)
 
         records = {}
@@ -115,7 +116,7 @@ class cldoc.SearchDb
         @searchid += 1
         @searchcb = cb
 
-        @worker.postMessage({type: 'search', q: q, id: @searchid})
+        @worker.postMessage({type: 'search', q: q, id: @searchid, host: cldoc.host})
 
 class cldoc.Page
     @pages = {}
