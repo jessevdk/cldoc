@@ -5,7 +5,6 @@ class cldoc.Sidebar
         if !sidebar
             return
 
-        sidebar.append($('<div/>').attr('id', 'cldoc_sidebar_page_title'))
         sidebar.append($('<div/>').attr('id', 'cldoc_sidebar_items'))
 
         div = $('<div/>').attr('id', 'cldoc_search')
