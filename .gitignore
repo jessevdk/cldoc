@@ -1,5 +1,7 @@
 *.pyc
 /build
+/dist
 html/styles/cldoc.css
 html/javascript/cldoc.js
 cldoc/data/index.html
+MANIFEST
