@@ -6,7 +6,7 @@ cldoc.SearchWorker = ->
 
     load_db = ->
         xhr = new XMLHttpRequest()
-        xhr.open('GET', 'http://localhost:6060/search.json', false)
+        xhr.open('GET', 'http://localhost:6060/search.json?' + new Date().getTime(), false)
         xhr.send()
 
         return JSON.parse(xhr.responseText)
