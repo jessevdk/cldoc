@@ -173,7 +173,23 @@ $in_group_row_spacing: 40px;
     top: 0;
     left: 0;
     bottom: 0;
+  }
+
+  #cldoc_sidebar.search {
+    border-right: 1px solid darken($sidebar_bg_color, 30%);
+
+    #cldoc_sidebar_items {
+      display: none;
+    }
+  }
+
+  #cldoc_sidebar_items {
+    position: fixed;
+    top: 0;
+    left: 0;
     bottom: 2.5em;
+    width: $sidebar_width - 10px;
+    padding: 5px;
 
     overflow: auto;
     overflow-y: scroll;
@@ -289,11 +305,12 @@ $in_group_row_spacing: 40px;
   #cldoc_search {
     position: fixed;
     bottom: 0.5em;
-    width: $sidebar_width - 6px;
-    left: 5px;
+    width: $sidebar_width - 27px;
+    left: 8px;
     height: 1.2em;
     padding: 2px 5px 2px 5px;
     border: 1px solid #aaa;
+    background-color: #fafafa;
   }
 
   #cldoc_search.focus {
@@ -304,7 +321,7 @@ $in_group_row_spacing: 40px;
     padding: 0;
     margin: 0;
     top: 3px;
-    right: 0px;
+    right: 18px;
     left: 20px;
     position: absolute;
     border: 0;
