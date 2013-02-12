@@ -16,7 +16,7 @@ non-intrusive and robust approach.
 * Generates a formatted documentation coverage report and integrates it in the
   website.
 
-For more information, please visit [https://jessevdk.github.com/cldoc].
+For more information, please visit https://jessevdk.github.com/cldoc.
 
 # Get started now!
 To get started using cldoc, please have a look at
