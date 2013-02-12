@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
-from distutils.command.build import build
+from distutils.core import setup, Command
 
 import subprocess, os, shutil, glob
 
@@ -33,19 +32,22 @@ coffee_files = [
     'union.coffee'
 ]
 
-class cldoc_build(build):
-    user_options = build.user_options + [
+class cldoc_generate(Command):
+    description = "generate css, js and html files"
+
+    user_options = [
         ('coffee=', None, 'path to coffeescript compiler'),
         ('sass=', None, 'path to sass compiler'),
         ('inliner=', None, 'path to inliner')
     ]
 
     def initialize_options(self):
-        build.initialize_options(self)
-
         self.coffee = 'coffee'
         self.sass = 'sass'
         self.inliner = 'inliner'
+
+    def finalize_options(self):
+        pass
 
     def run_coffee(self):
         print('running {0}'.format(self.coffee))
@@ -101,10 +103,8 @@ class cldoc_build(build):
         self.run_sass()
         self.run_inliner()
 
-        build.run(self)
-
 cmdclass = {
-    'build': cldoc_build
+    'generate': cldoc_generate
 }
 
 setup(name='cldoc',
