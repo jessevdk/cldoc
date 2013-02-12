@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 import bisect
-
+from cldoc.clang import cindex
 from cldoc.struct import Struct
 
 class Search:
@@ -13,7 +13,7 @@ class Search:
         self.db = []
 
         for node in tree.root.descendants():
-            if not node._refid is None:
+            if not node._refid is None and node.access != cindex.CXXAccessSpecifier.PRIVATE:
                 self.make_index(node)
 
     def make_index(self, node):
