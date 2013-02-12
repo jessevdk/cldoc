@@ -155,14 +155,24 @@ $in_group_row_spacing: 40px;
     margin-bottom: 0px;
   }
 
+  #cldoc_sidebar_bg {
+    overflow: none;
+    width: $sidebar_width;
+    background-color: $sidebar_bg_color;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+  }
+
   #cldoc_sidebar {
     width: $sidebar_width;
     background-color: $sidebar_bg_color;
-    padding: 5px;
 
     position: fixed;
     top: 0;
     left: 0;
+    bottom: 0;
     bottom: 2.5em;
 
     overflow: auto;
@@ -298,6 +308,7 @@ $in_group_row_spacing: 40px;
     left: 20px;
     position: absolute;
     border: 0;
+    background-color: transparent;
   }
 
   #cldoc_search input:focus {
