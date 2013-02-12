@@ -313,6 +313,8 @@ class cldoc.Page
         @load_description(page, content)
         @load_items(page, content)
 
+        return content.children()
+
     @push_nav: (page, scrollto) ->
         history.pushState({page: page, scrollto: scrollto}, page, @make_internal_ref(page, scrollto))
 
@@ -400,8 +402,131 @@ class cldoc.Page
 
         @first = false
 
+    @render_search: (result) ->
+        # Detach the current page
+        content = $('#cldoc_content')
+
+        content.children().detach()
+
+        $('<h1><span class="keyword">Search</span> </h1>').append(result.q).appendTo(content)
+
+        if result.records.length == 0
+            $('<span class="info">There were no results for this search query.</span>').appendTo(content)
+            cldoc.Sidebar.render_search([])
+
+            $('html, body').scrollTop(0)
+            return
+
+        records = []
+
+        # Resolve records to add brief docs and type info
+        for res in result.records
+            # Multiple results with the same suffix...
+            [page, pageid] = @split_ref(res.id)
+
+            if not page of @pages
+                continue
+
+            cpage = @pages[page]
+            data = cpage.xml
+
+            item = $(data[0].getElementById(pageid))
+
+            if item.length != 1
+                continue
+
+            tag = cldoc.tag(item)[0]
+
+            res.type = tag
+            res.brief = new cldoc.Doc(item.children('brief'))
+            res.page = page
+            res.qid = pageid
+
+            records.push(res)
+
+        # Sort results based on score, type and finally name
+        sortfunc = (a, b) ->
+            if a.score != b.score
+                return if a.score > b.score then -1 else 1
+
+            if a.type != b.type
+                ai = cldoc.Node.order[a.type]
+                bi = cldoc.Node.order[b.type]
+
+                if ai != bi
+                    return if ai < bi then -1 else 1
+
+            return if a.name < b.name then -1 else 1
+
+        records.sort(sortfunc)
+
+        t = $('<table class="search_results"/>').appendTo(content)
+
+        for res in records
+            # Highlight matches
+            res.results.sort((a, b) ->
+                if a[0] != b[0]
+                    return if a[0] < b[0] then -1 else 1
+
+                if a[1] > b[1]
+                    return -1
+
+                if a[1] < b[1]
+                    return 1
+
+                return 0)
+
+            prev = 0
+            parts = []
+
+            for [start, end] in res.results
+                if start < prev
+                    continue
+
+                parts.push(res.qid.substring(prev, start))
+                parts.push($('<span class="search_result"/>').text(res.qid.substring(start, end)))
+                prev = end
+
+            parts.push(res.qid.substring(prev, res.qid.length))
+
+            a = $('<a/>', {href: @make_internal_ref(res.id)}).html(parts)
+            a.on('click', => @load_ref(res.id); false)
+
+            $('<tr/>').append($('<td class="keyword"/>').text(res.type))
+                      .append($('<td class="identifier"/>').html(a))
+                      .appendTo(t)
+
+            $('<tr/>').append($('<td/>'))
+                      .append($('<td/>').html(res.brief.render()))
+                      .appendTo(t)
+
+        cldoc.Sidebar.render_search(records)
+        $('html, body').scrollTop(0)
+
     @search_result: (result) ->
-        true
+        # First prefetch all the pages to access the docs and type info etc.
+        pagereqcount = 0
+        pages = {}
+
+        for record in result.records
+            [page, pageid] = @split_ref(record.id)
+
+            if page of pages
+                continue
+
+            pagereqcount += 1
+            pages[page] = true
+
+        if pagereqcount == 0
+            @render_search(result)
+
+        for page of pages
+            @request_page(page, =>
+                pagereqcount -= 1
+
+                if pagereqcount == 0
+                    @render_search(result)
+            )
 
     @search: (q) ->
         if q.length < 3
@@ -411,10 +536,14 @@ class cldoc.Page
         if !@search.db
             @search.db = new cldoc.SearchDb()
 
-        @search_result(@search.db.search(q))
+        @search.db.search(q, (res) => @search_result(res))
         return true
 
     @exit_search: ->
-        false
+        ref = Page.make_external_ref(document.location.hash.substring(1))
+        cldoc.Sidebar.exit_search()
+
+        @current_page = null
+        @load_ref(ref)
 
 # vi:ts=4:et
