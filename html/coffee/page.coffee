@@ -25,6 +25,9 @@ cldoc.SearchWorker = ->
         return [l, r]
 
     search_term = (term) =>
+        if term.length < 3
+            return [0, 0]
+
         l = 0
         r = db.suffixes.length
 
