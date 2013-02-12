@@ -50,7 +50,9 @@ cldoc.SearchWorker = ->
         m = ev.data
         words = m.q.split(/\s+/)
 
-        ret = {type: 'result', id: m.id, q: m.q, words: words, records: {}, results: []}
+        records = {}
+
+        ret = {type: 'result', id: m.id, q: m.q, words: words, records: []}
 
         for word in words
             [start, end] = search_term(word)
@@ -61,12 +63,28 @@ cldoc.SearchWorker = ->
                 for rec in items
                     recid = rec[0]
 
-                    if !(recid of ret.records)
-                        ret.records[recid] = db.records[recid]
+                    if !(recid of records)
+                        rr = {
+                            name: db.records[recid][0],
+                            id: db.records[recid][1],
+                            score: 0,
+                            results: [],
+                            suffixhash: {},
+                        }
 
-                ret.results[i - start] = items
+                        ret.records.push(rr)
+                        records[recid] = rr
+                    else
+                        rr = records[recid]
 
-            self.postMessage(ret)
+                    if !(rec[1] of rr.suffixhash)
+                        rr.score += 1
+                        rr.results.push([rec[1], rec[1] + word.length])
+
+                        rr.suffixhash[rec[1]] = true
+
+        ret.records.sort((a, b) -> a.score > b.score ? (a.score < b.score ? -1 : 0))
+        self.postMessage(ret)
 
 class cldoc.SearchDb
     constructor: ->
