@@ -89,6 +89,7 @@ cldoc.SearchWorker = ->
 class cldoc.SearchDb
     constructor: ->
         @searchid = 0
+        @searchcb = null
 
         wurl = window.webkitURL ? window
 
@@ -107,11 +108,13 @@ class cldoc.SearchDb
                     return
 
                 @searchid = 0
-                console.log(m)
+                @searchcb(m)
 
-    search: (q) ->
+    search: (q, cb) ->
         # Split q in "words"
         @searchid += 1
+        @searchcb = cb
+
         @worker.postMessage({type: 'search', q: q, id: @searchid})
 
 class cldoc.Page
