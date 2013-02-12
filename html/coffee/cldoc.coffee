@@ -1,5 +1,5 @@
 window.cldoc = $.extend($.extend({
-    host: document.location.origin,
+    host: document.location.origin + '/' + document.location.pathname.substring(0, document.location.pathname.lastIndexOf('/') - 1),
 }, (window.cldoc ? {})), {
     tag: (node) ->
         $.map(node, (e) -> e.tagName.toLowerCase())
