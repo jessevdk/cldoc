@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<index>
+  <brief>cldoc documentation example.</brief>
+  <doc># cldoc documentation example
+
+This documentation example shows many of the features of
+[cldoc](http://jessevdk.github.com/cldoc) and provides
+a complete working example of how to document your code and generate a website
+using [cldoc](http://jessevdk.github.com/cldoc).
+
+The source for this example can be found in the
+[cldoc repository](https://github.com/jessevdk/cldoc/tree/master/example) on github.</doc>
+  <category name="Tutorial" ref="Tutorial#Tutorial">
+    <brief>Tutorial category example.</brief>
+    <category name="Using transport" ref="Tutorial::Using transport#Tutorial::Using transport">
+      <brief>Using the transport library.</brief>
+    </category>
+    <category name="Getting on your bike" ref="Tutorial::Getting on your bike#Tutorial::Getting on your bike">
+      <brief>How to get on your bike.</brief>
+    </category>
+  </category>
+  <namespace name="transport" ref="transport#transport">
+    <brief>The transport namespace.</brief>
+    <class name="Bicycle" ref="transport::Bicycle#transport::Bicycle">
+      <brief>Standard bicycle class.</brief>
+    </class>
+    <class name="MountainBike" ref="transport::MountainBike#transport::MountainBike">
+      <brief>Mountain bike implementation of a <ref ref="transport::Bicycle#transport::Bicycle">Bicycle</ref>.</brief>
+    </class>
+    <class name="RacingBike" ref="transport::RacingBike#transport::RacingBike">
+      <brief>Racing bike class.</brief>
+    </class>
+  </namespace>
+  <report name="Documentation generator" ref="report" />
+</index>

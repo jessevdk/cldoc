@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="transport::Bicycle" name="Bicycle">
+  <brief>Standard bicycle class.</brief>
+  <doc>Bicycle implements a standard bicycle. Bicycles are a useful way of
+transporting oneself, without too much effort (unless you go uphill
+or against the wind). If there are a lot of people on the road, you
+can use <ref ref="transport::Bicycle#transport::Bicycle::RingBell">RingBell</ref> to ring your bell (**note**, not all bicycles
+have bells!).
+</doc>
+  <subclass access="public" name="MountainBike" ref="transport::MountainBike#transport::MountainBike">
+    <brief>Mountain bike implementation of a <ref ref="transport::Bicycle#transport::Bicycle">Bicycle</ref>.</brief>
+  </subclass>
+  <subclass access="public" name="RacingBike" ref="transport::RacingBike#transport::RacingBike">
+    <brief>Racing bike class.</brief>
+  </subclass>
+  <destructor id="transport::Bicycle::~Bicycle" name="~Bicycle" virtual="yes">
+    <brief>Default destructor.</brief>
+  </destructor>
+  <method id="transport::Bicycle::PedalHarder" name="PedalHarder" virtual="yes">
+    <brief>PedalHarder makes you go faster (usually).</brief>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+  <method id="transport::Bicycle::RingBell" name="RingBell" virtual="yes">
+    <brief> Ring bell on the bike.</brief>
+    <doc>RingBell rings the bell on the bike. Note that not all
+bikes have bells.</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+</class>

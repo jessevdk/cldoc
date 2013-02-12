@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<category id="Tutorial::Using transport" name="Using transport">
+  <brief>Using the transport library.</brief>
+  <doc>This could describe how the transport library works
+</doc>
+</category>

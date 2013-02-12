@@ -29,5 +29,5 @@ command in your project to generate the documentation.
 
 # Example
 For an easy introduction into using cldoc, please have a look at the
-[example project](https://github.com/jessevdk/cldoc/example) and corresponding
-generated [documentation](example.html).
+[example project](https://github.com/jessevdk/cldoc/tree/master/example) and corresponding
+generated [documentation](example/).

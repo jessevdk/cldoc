@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<namespace id="transport" name="transport">
+  <brief>The transport namespace.</brief>
+  <doc>The transport namespace contains various classes used for transportation. This
+namespace contains only the *best* types of transportation (i.e. bycicles).
+Please have a look at the base <ref ref="transport::Bicycle#transport::Bicycle">Bicycle</ref> class. If you are more interested
+in cycling on the road, you can check out the <ref ref="transport::RacingBike#transport::RacingBike">RacingBike</ref> class. If you're
+more of an offroad type of person then a <ref ref="transport::MountainBike#transport::MountainBike">MountainBike</ref> might be more for you.</doc>
+  <class name="Bicycle" ref="transport::Bicycle#transport::Bicycle">
+    <brief>Standard bicycle class.</brief>
+  </class>
+  <class name="MountainBike" ref="transport::MountainBike#transport::MountainBike">
+    <brief>Mountain bike implementation of a <ref ref="transport::Bicycle#transport::Bicycle">Bicycle</ref>.</brief>
+  </class>
+  <class name="RacingBike" ref="transport::RacingBike#transport::RacingBike">
+    <brief>Racing bike class.</brief>
+  </class>
+</namespace>

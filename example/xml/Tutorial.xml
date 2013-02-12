@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<category id="Tutorial" name="Tutorial">
+  <brief>Tutorial category example.</brief>
+  <doc># Example category
+This is an example of a category file. You can create as many categories and
+subcategories as you want. Categories can also appear under other symbols
+such as namespaces.
+</doc>
+  <category name="Using transport" ref="Tutorial::Using transport#Tutorial::Using transport">
+    <brief>Using the transport library.</brief>
+  </category>
+  <category name="Getting on your bike" ref="Tutorial::Getting on your bike#Tutorial::Getting on your bike">
+    <brief>How to get on your bike.</brief>
+  </category>
+</category>

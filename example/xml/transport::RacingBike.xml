@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="transport::RacingBike" name="RacingBike">
+  <brief>Racing bike class.</brief>
+  <doc>RacingBike is a special kind of bike which can go much faster
+on the road, with much less effort (even uphill!). It doesn't make
+sense to call <ref ref="transport::RacingBike#transport::RacingBike::RingBell">RingBell</ref> and <ref ref="transport::Bicycle#transport::Bicycle::RingBell">Bicycle::RingBell</ref> on a racing bike for they don't have bells.
+</doc>
+  <base access="public">
+    <type name="Bicycle" ref="transport::Bicycle#transport::Bicycle" />
+    <brief>Standard bicycle class.</brief>
+  </base>
+  <method id="transport::RacingBike::PedalHarder" name="PedalHarder" override="yes" virtual="yes">
+    <brief>PedalHarder makes you go faster (usually).</brief>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="Bicycle::PedalHarder" ref="transport::Bicycle#transport::Bicycle::PedalHarder" />
+  </method>
+  <method id="transport::RacingBike::RingBell" name="RingBell" override="yes" virtual="yes">
+    <brief> RingBell is not implemented. </brief>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="Bicycle::RingBell" ref="transport::Bicycle#transport::Bicycle::RingBell" />
+  </method>
+</class>

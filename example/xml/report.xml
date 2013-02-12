@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<report id="report" title="Documention generator">
+  <doc>
+This page provides a documentation coverage report. Any undocumented symbols
+are reported here together with the location of where you should document them.
+
+This report contains the following sections:
+
+1. [Coverage](#report/coverage): The documented symbols coverage.
+2. [Arguments](#report/arguments): Errors about undocumented, misspelled function arguments and
+return values.
+3. [References](#report/references): Unresolved cross references.
+</doc>
+  <coverage>
+    <type documented="3" name="category" undocumented="0" />
+    <type documented="1" name="destructor" undocumented="0" />
+    <type documented="1" name="namespace" undocumented="0" />
+    <type documented="3" name="class" undocumented="0" />
+    <type documented="5" name="method" undocumented="0" />
+  </coverage>
+  <arguments />
+  <references />
+</report>

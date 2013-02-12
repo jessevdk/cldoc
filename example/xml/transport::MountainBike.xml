@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="transport::MountainBike" name="MountainBike">
+  <brief>Mountain bike implementation of a <ref ref="transport::Bicycle#transport::Bicycle">Bicycle</ref>.</brief>
+  <doc>MountainBike is an implementation of a <ref ref="transport::Bicycle#transport::Bicycle">Bicycle</ref>
+providing a bike for cycling on rough terrain. Mountain bikes
+are pretty cool because they have stuff like **Suspension** (and
+you can even adjust it using <ref ref="transport::MountainBike#transport::MountainBike::SetSuspension">SetSuspension</ref>). If you're looking
+for a bike for use on the road, you might be better off using a
+<ref ref="transport::RacingBike#transport::RacingBike">RacingBike</ref> though.
+</doc>
+  <base access="public">
+    <type name="Bicycle" ref="transport::Bicycle#transport::Bicycle" />
+    <brief>Standard bicycle class.</brief>
+  </base>
+  <method id="transport::MountainBike::SetSuspension" name="SetSuspension">
+    <brief> Set suspension stiffness.</brief>
+    <doc>SetSuspension changes the stiffness of the suspension
+on the bike. The method will return false if the stiffness
+could not be adjusted.
+
+</doc>
+    <return>
+      <doc>true if the suspension was adjusted successfully,
+        false otherwise.</doc>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="transport::MountainBike::SetSuspension::stiffness" name="stiffness">
+      <doc>the suspension stiffness.</doc>
+      <type builtin="yes" name="double" />
+    </argument>
+  </method>
+</class>
