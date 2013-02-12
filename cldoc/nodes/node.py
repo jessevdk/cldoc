@@ -29,6 +29,7 @@ class Node(object):
         self.sort_index = 0
         self.num_anon = 0
         self.anonymous_id = 0
+        self._refid = None
 
         self.sortid = 0
         cls = self.__class__
@@ -46,6 +47,13 @@ class Node(object):
 
         if self._comment:
             self.parse_comment()
+
+    @property
+    def refid(self):
+        if not self._refid is None:
+            return self._refid
+        else:
+            return self.qid
 
     @property
     def is_anonymous(self):

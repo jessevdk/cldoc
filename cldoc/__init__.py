@@ -18,7 +18,7 @@ def generate(opts, cxxflags):
         generator.generate(os.path.join(opts.output, 'xml'))
 
         if opts.type == 'html':
-            generators.Html().generate(opts.output)
+            generators.Html(t).generate(opts.output)
 
 def serve(opts):
     import subprocess, SimpleHTTPServer, SocketServer, threading, time

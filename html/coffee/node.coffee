@@ -22,6 +22,26 @@ class cldoc.Node
         'report'
     ]
 
+    @order = {
+        'category': 0,
+        'namespace': 1,
+        'base': 2,
+        'subclass': 3,
+        'typedef': 4,
+        'class': 5,
+        'classtemplate': 5,
+        'struct': 6,
+        'enum': 7,
+        'enumvalue': 8,
+        'field': 9,
+        'union': 10,
+        'variable': 11,
+        'constructor': 12,
+        'destructor': 13,
+        'method': 14,
+        'function': 15
+    }
+
     constructor: (@node) ->
         if !@node
             return

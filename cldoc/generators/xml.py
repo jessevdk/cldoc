@@ -123,21 +123,32 @@ class Xml(Generator):
 
         return False
 
-    def add_ref_node_id(self, node, elem):
+    def refid(self, node):
+        if not node._refid is None:
+            return node._refid
+
         parent = node
 
         meid = node.qid
 
         if not node.parent or (isinstance(node.parent, nodes.Root) and not self.is_page(node)):
-            elem.set('ref', 'index#' + meid)
-            return
+            return 'index#' + meid
 
         # Find topmost parent
-        while not self.is_page(node):
-            node = node.parent
+        while not self.is_page(parent):
+            parent = parent.parent
 
         if not node is None:
-            elem.set('ref', node.qid + '#' + meid)
+            node._refid = parent.qid + '#' + meid
+            return node._refid
+        else:
+            return None
+
+    def add_ref_node_id(self, node, elem):
+        r = self.refid(node)
+
+        if not r is None:
+            elem.set('ref', r)
 
     def add_ref_id(self, cursor, elem):
         if not cursor:
@@ -436,6 +447,8 @@ class Xml(Generator):
         # Ignore private stuff
         if node.access == cindex.CXXAccessSpecifier.PRIVATE:
             return
+
+        self.refid(node)
 
         if self.is_page(node):
             elem = self.node_to_xml_ref(node)
