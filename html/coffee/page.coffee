@@ -25,16 +25,14 @@ cldoc.SearchWorker = ->
         l = 0
         r = db.suffixes.length
 
-        [start, _] = bsearch(term,
-                          0,
-                          db.suffixes.length,
-                          (suf) -> term > suf
+        t = term.toLowerCase()
+
+        [start, _] = bsearch(t, 0, db.suffixes.length,
+                             (suf) -> t > suf
         )
 
-        [_, end] = bsearch(term,
-                            start,
-                            db.suffixes.length,
-                            (suf) -> suf.indexOf(term) == 0
+        [_, end] = bsearch(t, start, db.suffixes.length,
+                           (suf) -> suf.indexOf(t) == 0
         )
 
         return [start, end]

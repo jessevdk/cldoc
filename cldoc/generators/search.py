@@ -17,7 +17,7 @@ class Search:
                 self.make_index(node)
 
     def make_index(self, node):
-        name = node.qid
+        name = node.qid.lower()
 
         r = Search.Record(node=node, s=name, id=len(self.records))
         self.records.append(r)
