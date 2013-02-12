@@ -1,6 +1,9 @@
 cldoc.SearchWorker = ->
     db = null
 
+    log = (msg) ->
+        self.postMessage({type: 'log', message: msg})
+
     load_db = ->
         xhr = new XMLHttpRequest()
         xhr.open('GET', 'http://localhost:6060/search.json', false)
