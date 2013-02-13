@@ -18,8 +18,9 @@ fedora, you can install `clang-devel`.
 cldoc is avaible at the [Python Package Index](http://pypi.python.org/pypi/cldoc/).
 This is by far the easiest way to install cldoc. Make sure you have `pip`
 installed (install `python-pip` on `ubuntu` and `fedora`) Simply use
-`pip install cldoc` (you might need to use the `python-pip` command instead
-on fedora).
+`pip install --user cldoc` (you might need to use the `python-pip` command instead
+on fedora). The `--user` will install cldoc locally in `~/.local`. If you want
+to install it globally in your system, use `sudo pip install cldoc` instead.
 
 # 2. Installing from source
 First checkout the latest source from [git](https://github.com/jessevdk/cldoc).
