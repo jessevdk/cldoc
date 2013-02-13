@@ -108,7 +108,7 @@ cmdclass = {
 }
 
 setup(name='cldoc',
-      version='1.1',
+      version='1.2',
       description='clang based documentation generator for C/C++',
       author='Jesse van den Kieboom',
       author_email='jessevdk@gmail.com',
