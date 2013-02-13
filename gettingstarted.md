@@ -7,14 +7,19 @@ Before you can get started with documenting your code and generating a beautiful
 website for it, you first need to install cldoc. This is a fairly simple process,
 and the instructions below should allow you to install cldoc in a few minutes.
 
-Before you start, make sure you have at least **libclang 3.1** installed on your
-system. Most recent distributions ship packages of recent enough libclang. For
-Ubuntu precise, you might want to install libclang from the
-[dr-graef ppa](https://launchpad.net/~dr-graef/+archive/llvm-3.1.precise).
+Before you start, make sure you have at least **libclang 3.1** development
+installed on your system. Most recent distributions ship packages of recent
+enough `libclang-dev` (or clang-devel). For Ubuntu precise, you might want to
+install libclang-dev from the
+[dr-graef ppa](https://launchpad.net/~dr-graef/+archive/llvm-3.1.precise). For
+fedora, you can install `clang-devel`.
 
 # 1. Installing using pip
-cldoc is avaible at the [Python Package Index](http://pypi.python.org/pypi/cldoc/). This is
-by far the easiest way to install cldoc. Simply use `pip install cldoc`.
+cldoc is avaible at the [Python Package Index](http://pypi.python.org/pypi/cldoc/).
+This is by far the easiest way to install cldoc. Make sure you have `pip`
+installed (install `python-pip` on `ubuntu` and `fedora`) Simply use
+`pip install cldoc` (you might need to use the `python-pip` command instead
+on fedora).
 
 # 2. Installing from source
 First checkout the latest source from [git](https://github.com/jessevdk/cldoc).
