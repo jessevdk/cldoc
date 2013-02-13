@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup, Command
+from setuptools import setup, Command
 
 import subprocess, os, shutil, glob
 
@@ -113,10 +113,12 @@ setup(name='cldoc',
       author='Jesse van den Kieboom',
       author_email='jessevdk@gmail.com',
       url='http://jessevdk.github.com/cldoc',
+      license='GPLv2',
+      keywords=['clang', 'c++', 'documentation'],
       packages=['cldoc', 'cldoc.clang', 'cldoc.nodes', 'cldoc.generators'],
       scripts=['scripts/cldoc'],
       package_data={'cldoc': ['data/*.html', 'data/javascript/*.js', 'data/styles/*.css']},
       cmdclass=cmdclass,
-      requires=['pyparsing'])
+      install_requires=['pyparsing'])
 
 # vi:ts=4:et
