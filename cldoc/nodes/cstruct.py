@@ -10,27 +10,25 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-import importlib
 from cldoc.clang import cindex
+from .cclass import Class
 
-cls = importlib.import_module('.class', 'cldoc.nodes')
-
-class Struct(cls.Class):
+class Struct(Class):
     kind = cindex.CursorKind.STRUCT_DECL
 
     def __init__(self, cursor, comment):
-        cls.Class.__init__(self, cursor, comment)
+        Class.__init__(self, cursor, comment)
 
         self.typedef = None
         self.current_access = cindex.CXXAccessSpecifier.PUBLIC
 
     @property
     def is_anonymous(self):
-        return not cls.Class.name.fget(self)
+        return not Class.name.fget(self)
 
     @property
     def comment(self):
-        ret = cls.Class.comment.fget(self)
+        ret = Class.comment.fget(self)
 
         if not ret and self.typedef:
             ret = self.typedef.comment
@@ -43,6 +41,6 @@ class Struct(cls.Class):
             # The name is really the one of the typedef
             return self.typedef.name
         else:
-            return cls.Class.name.fget(self)
+            return Class.name.fget(self)
 
 # vi:ts=4:et

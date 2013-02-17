@@ -10,14 +10,13 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from node import Node
+from .node import Node
+from .cclass import Class
+
 from cldoc.clang import cindex
-import importlib
 from cldoc.comment import Comment
 from cldoc.comment import Parser
 import re
-
-cls = importlib.import_module('.class', 'cldoc.nodes')
 
 class TemplateTypeParameter(Node):
     kind = cindex.CursorKind.TEMPLATE_TYPE_PARAMETER
@@ -28,11 +27,11 @@ class TemplateTypeParameter(Node):
     def compare_same(self, other):
         return cmp(self.sort_index, other.sort_index)
 
-class ClassTemplate(cls.Class):
+class ClassTemplate(Class):
     kind = cindex.CursorKind.CLASS_TEMPLATE
 
     def __init__(self, cursor, comment):
-        cls.Class.__init__(self, cursor, comment)
+        Class.__init__(self, cursor, comment)
 
         self.template_types = {}
         self.template_type_comments = {}

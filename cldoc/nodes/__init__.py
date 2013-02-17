@@ -10,26 +10,26 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-import inspect, os, glob, importlib
-
-current = inspect.getfile(inspect.currentframe())
-d = os.path.dirname(current)
-
-__all__ = []
-
-for py in glob.glob(os.path.join(d, '*.py')):
-    base = os.path.basename(py)
-
-    if base.startswith('_'):
-        continue
-
-    modname = base[:-3]
-    mod = importlib.import_module('.' + modname, 'cldoc.nodes')
-
-    for a in dir(mod):
-        aa = getattr(mod, a)
-
-        if isinstance(aa, type) and aa.__module__ == mod.__name__:
-            globals()[a] = aa
+from .category import *
+from .cclass import *
+from .classtemplate import *
+from .constructor import *
+from .conversionfunction import *
+from .cstruct import *
+from .ctype import *
+from .destructor import *
+from .enum import *
+from .enumvalue import *
+from .field import *
+from .function import *
+from .functiontemplate import *
+from .method import *
+from .namespace import *
+from .node import *
+from .root import *
+from .templatetype import *
+from .typedef import *
+from .union import *
+from .variable import *
 
 # vi:ts=4:et
