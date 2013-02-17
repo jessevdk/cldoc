@@ -18,6 +18,10 @@ def generate(opts, cxxflags):
     from . import tree
     from . import generators
 
+    if not opts.output:
+        sys.stderr.write("Please specify the output directory\n")
+        sys.exit(1)
+
     t = tree.Tree(opts.files, cxxflags)
 
     t.process()
