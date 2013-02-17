@@ -10,13 +10,26 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+from node import Node
 from method import Method
+from function import Function
 from cldoc.clang import cindex
 
-class FunctionTemplate(Method):
+class FunctionTemplate(Function):
+    pass
+
+class MethodTemplate(Method):
+    pass
+
+class FunctionPlexer(Node):
     kind = cindex.CursorKind.FUNCTION_TEMPLATE
 
-    def __init__(self, cursor, comment):
-        Method.__init__(self, cursor, comment)
+    def __new__(cls, cursor, comment):
+        if not cursor is None and (cursor.semantic_parent.kind == cindex.CursorKind.CLASS_DECL or \
+                                   cursor.semantic_parent.kind == cindex.CursorKind.CLASS_TEMPLATE or \
+                                   cursor.semantic_parent.kind == cindex.CursorKind.STRUCT_DECL):
+            return MethodTemplate(cursor, comment)
+        else:
+            return FunctionTemplate(cursor, comment)
 
 # vi:ts=4:et
