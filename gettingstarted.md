@@ -63,4 +63,4 @@ your `$PATH`.
 # Installation completed
 After following these steps you should have successfully installed cldoc!
 Continue to [Documenting code](documenting.html) or directly to
-[Generating site](generatingsite.html).
+[Generating site](generating.html).
