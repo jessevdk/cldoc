@@ -208,10 +208,18 @@ class Tree:
             tu = index.parse(f, self.flags + includepaths.flags)
 
             if len(tu.diagnostics) != 0:
-                    for d in tu.diagnostics:
-                        sys.stderr.write(d.format)
-                        sys.stderr.write("\n")
+                fatal = False
 
+                for d in tu.diagnostics:
+                    sys.stderr.write(d.format)
+                    sys.stderr.write("\n")
+
+                    if d.severity == cindex.Diagnostic.Fatal or \
+                       d.severity == cindex.Diagnostic.Error:
+                        fatal = True
+
+                if fatal:
+                    sys.stderr.write("\nCould not generate documentation due to parser errors\n")
                     sys.exit(1)
 
             if not tu:
