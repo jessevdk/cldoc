@@ -16,10 +16,10 @@ from function import Function
 from cldoc.clang import cindex
 
 class FunctionTemplate(Function):
-    pass
+    kind = None
 
 class MethodTemplate(Method):
-    pass
+    kind = None
 
 class FunctionPlexer(Node):
     kind = cindex.CursorKind.FUNCTION_TEMPLATE
