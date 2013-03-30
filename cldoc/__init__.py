@@ -22,6 +22,16 @@ def generate(opts, cxxflags):
         sys.stderr.write("Please specify the output directory\n")
         sys.exit(1)
 
+    haslang = False
+
+    for x in cxxflags:
+        if x.startswith('-x'):
+            haslang = True
+
+    if not haslang:
+        cxxflags.append('-x')
+        cxxflags.append(opts.language)
+
     t = tree.Tree(opts.files, cxxflags)
 
     t.process()
@@ -131,6 +141,9 @@ def run():
 
     parser.add_argument('--output', default=None, metavar='DIR',
                         help='specify the output directory')
+
+    parser.add_argument('--language', default='c++', metavar='LANGUAGE',
+                        help='specify the default parse language (c++, c or objc)')
 
     parser.add_argument('--type', default='html', metavar='TYPE',
                         help='specify the type of output (html or xml, default html)')
