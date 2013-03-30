@@ -453,9 +453,7 @@ class Tree:
     def cursor_is_exposed(self, cursor):
         # Only cursors which are in headers are exposed.
         filename = str(cursor.location.file)
-        return filename in self.headers or (filename.endswith('.hh') or \
-                                            filename.endswith('.h') or \
-                                            filename.endswith('.hpp'))
+        return filename in self.headers or self.is_header(filename)
 
     def visit(self, citer, parent=None):
         """
