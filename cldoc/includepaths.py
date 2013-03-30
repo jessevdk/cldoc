@@ -29,7 +29,14 @@ for line in lines:
     elif line.startswith('End of search list.'):
         init = False
     elif init:
-        paths.append(line.strip())
+        p = line.strip()
+
+        suffix = ' (framework directory)'
+
+        if p.endswith(suffix):
+            p = p[:-len(suffix)]
+
+        paths.append(p)
 
 flags = ['-I{0}'.format(x) for x in paths]
 
