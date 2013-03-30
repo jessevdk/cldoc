@@ -22,10 +22,9 @@ class Html(Generator):
         # Write out json document for search
         self.write_search(output)
 
-        current = inspect.getfile(inspect.currentframe())
-        d = os.path.dirname(current)
+        d = os.path.dirname(__file__)
 
-        datadir = os.path.abspath(os.path.join(d, '../data'))
+        datadir = os.path.abspath(os.path.join(d, '..', 'data'))
         index = os.path.join(datadir, 'index.html')
 
         try:
