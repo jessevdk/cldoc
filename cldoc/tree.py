@@ -539,7 +539,9 @@ class Tree:
                         for node in ret:
                             self.register_node(node, par)
 
-                if not par or ret is None:
+                ignoretop = [cindex.CursorKind.TYPE_REF]
+
+                if (not par or ret is None) and not item.kind in ignoretop:
                     sys.stderr.write("Unhandled cursor: %s\n" % (item.kind))
 
 # vi:ts=4:et
