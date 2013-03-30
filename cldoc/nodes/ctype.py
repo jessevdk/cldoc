@@ -72,7 +72,7 @@ class Type(Node):
         parent = decl.semantic_parent
         meid = decl.displayname
 
-        if not parent:
+        if not parent or parent.kind == cindex.CursorKind.TRANSLATION_UNIT:
             return meid
 
         if not meid:
