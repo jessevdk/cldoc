@@ -119,6 +119,6 @@ setup(name='cldoc',
       scripts=['scripts/cldoc'],
       package_data={'cldoc': ['data/*.html', 'data/javascript/*.js', 'data/styles/*.css']},
       cmdclass=cmdclass,
-      install_requires=['pyparsing'])
+      install_requires=['pyparsing ==1.5.7'])
 
 # vi:ts=4:et
