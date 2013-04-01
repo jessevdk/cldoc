@@ -112,7 +112,7 @@ class cldoc.Sidebar
             div.append(a)
 
         # Take everything that's not a reference (i.e. everything on this page)
-        onpage = page.children().filter(':not([access]), [access=protected], [access=public]')
+        onpage = page.children()
 
         for group in cldoc.Node.groups
             @load_group(items, page, onpage.filter(group))

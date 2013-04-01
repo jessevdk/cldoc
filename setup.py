@@ -107,6 +107,14 @@ cmdclass = {
     'generate': cldoc_generate
 }
 
+datafiles = []
+dataprefix = 'cldoc'
+
+for dirpath, dirnames, filenames in os.walk(os.path.join(dataprefix, 'data')):
+    datafiles += [os.path.join(dirpath[len(dataprefix)+1:], f) for f in filenames]
+
+print datafiles
+
 setup(name='cldoc',
       version='1.4',
       description='clang based documentation generator for C/C++',
@@ -117,7 +125,7 @@ setup(name='cldoc',
       keywords=['clang', 'c++', 'documentation'],
       packages=['cldoc', 'cldoc.clang', 'cldoc.nodes', 'cldoc.generators'],
       scripts=['scripts/cldoc'],
-      package_data={'cldoc': ['data/*.html', 'data/javascript/*.js', 'data/styles/*.css']},
+      package_data={'cldoc': datafiles},
       cmdclass=cmdclass,
       install_requires=['pyparsing ==1.5.7'])
 

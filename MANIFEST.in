@@ -1,5 +1,3 @@
 include README.md
 include COPYING
-include cldoc/data/*.html
-include cldoc/data/javascript/*.js
-include cldoc/data/styles/*.css
+recursive-include cldoc/data *
