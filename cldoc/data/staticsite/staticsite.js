@@ -50,8 +50,20 @@ for (var i = 0; i < files.length; i++)
 		},
 	});
 
+	if (doc.errors)
+	{
+		for (var e = 0; e < doc.errors.length; e++)
+		{
+			console.error(doc.errors[e].message);
+			console.error(doc.errors[e].data);
+		}
+
+		process.exit(1);
+	}
+
 	var window = doc.createWindow();
 	var $ = window.jQuery;
+
 
 	var cldoc = window.cldoc;
 
