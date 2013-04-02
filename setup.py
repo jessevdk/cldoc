@@ -84,6 +84,10 @@ class cldoc_generate(Command):
             shutil.copyfile(css, 'cldoc/data/styles/' + os.path.basename(css))
 
     def run_inliner(self):
+        if self.inliner == '':
+            shutil.copyfile('html/index.html', 'cldoc/data/index.html')
+            return
+
         print('running {0}'.format(self.inliner))
 
         args = [self.inliner, 'html/index.html']
