@@ -229,7 +229,7 @@ class cldoc.Page
         # easily manipulate history and keep urls on one single entry point
 
         if !page
-            return '/'
+            return '#'
 
         if !id
             return '#' + page.replace('#', '/')
