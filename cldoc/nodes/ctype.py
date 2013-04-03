@@ -13,38 +13,38 @@
 from cldoc.clang import cindex
 from node import Node
 
-kindmap = {
-    cindex.TypeKind.POINTER: '*',
-    cindex.TypeKind.LVALUEREFERENCE: '&',
-}
-
-namemap = {
-    cindex.TypeKind.VOID: 'void',
-    cindex.TypeKind.BOOL: 'bool',
-    cindex.TypeKind.CHAR_U: 'char',
-    cindex.TypeKind.UCHAR: 'unsigned char',
-    cindex.TypeKind.CHAR16: 'char16_t',
-    cindex.TypeKind.CHAR32: 'char32_t',
-    cindex.TypeKind.USHORT: 'unsigned short',
-    cindex.TypeKind.UINT: 'unsigned int',
-    cindex.TypeKind.ULONG: 'unsigned long',
-    cindex.TypeKind.ULONGLONG: 'unsigned long long',
-    cindex.TypeKind.UINT128: 'uint128_t',
-    cindex.TypeKind.CHAR_S: 'char',
-    cindex.TypeKind.SCHAR: 'signed char',
-    cindex.TypeKind.WCHAR: 'wchar_t',
-    cindex.TypeKind.SHORT: 'unsigned short',
-    cindex.TypeKind.INT: 'int',
-    cindex.TypeKind.LONG: 'long',
-    cindex.TypeKind.LONGLONG: 'long long',
-    cindex.TypeKind.INT128: 'int128_t',
-    cindex.TypeKind.FLOAT: 'float',
-    cindex.TypeKind.DOUBLE: 'double',
-    cindex.TypeKind.LONGDOUBLE: 'long double',
-    cindex.TypeKind.NULLPTR: 'float',
-}
-
 class Type(Node):
+    kindmap = {
+        cindex.TypeKind.POINTER: '*',
+        cindex.TypeKind.LVALUEREFERENCE: '&',
+    }
+
+    namemap = {
+        cindex.TypeKind.VOID: 'void',
+        cindex.TypeKind.BOOL: 'bool',
+        cindex.TypeKind.CHAR_U: 'char',
+        cindex.TypeKind.UCHAR: 'unsigned char',
+        cindex.TypeKind.CHAR16: 'char16_t',
+        cindex.TypeKind.CHAR32: 'char32_t',
+        cindex.TypeKind.USHORT: 'unsigned short',
+        cindex.TypeKind.UINT: 'unsigned int',
+        cindex.TypeKind.ULONG: 'unsigned long',
+        cindex.TypeKind.ULONGLONG: 'unsigned long long',
+        cindex.TypeKind.UINT128: 'uint128_t',
+        cindex.TypeKind.CHAR_S: 'char',
+        cindex.TypeKind.SCHAR: 'signed char',
+        cindex.TypeKind.WCHAR: 'wchar_t',
+        cindex.TypeKind.SHORT: 'unsigned short',
+        cindex.TypeKind.INT: 'int',
+        cindex.TypeKind.LONG: 'long',
+        cindex.TypeKind.LONGLONG: 'long long',
+        cindex.TypeKind.INT128: 'int128_t',
+        cindex.TypeKind.FLOAT: 'float',
+        cindex.TypeKind.DOUBLE: 'double',
+        cindex.TypeKind.LONGDOUBLE: 'long double',
+        cindex.TypeKind.NULLPTR: 'float',
+    }
+
     def __init__(self, tp):
         Node.__init__(self, None, None)
 
@@ -89,9 +89,9 @@ class Type(Node):
         if tp.is_const_qualified():
             self._qualifier.append('const')
 
-        if tp.kind in kindmap:
+        if tp.kind in Type.kindmap:
             self.extract(tp.get_pointee())
-            self._qualifier.append(kindmap[tp.kind])
+            self._qualifier.append(Type.kindmap[tp.kind])
 
             return
         elif tp.kind == cindex.TypeKind.CONSTANTARRAY:
@@ -102,8 +102,8 @@ class Type(Node):
 
         if self._decl and self._decl.displayname:
             self._typename = self._full_typename(self._decl)
-        elif tp.kind in namemap:
-            self._typename = namemap[tp.kind]
+        elif tp.kind in Type.namemap:
+            self._typename = Type.namemap[tp.kind]
             self._builtin = True
         else:
             self._typename = ''
