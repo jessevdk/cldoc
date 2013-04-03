@@ -26,6 +26,10 @@ def run_generate(args):
     from . import cmdgenerate
     cmdgenerate.run(args)
 
+def run_gir(args):
+    from . import cmdgir
+    cmdgir.run(args)
+
 def run():
     if len(sys.argv) <= 1:
         sys.stderr.write('Please use: cldoc [command] [OPTIONS] [FILES...]\n')
@@ -40,6 +44,8 @@ def run():
         run_serve(rest)
     elif cmd == 'generate':
         run_generate(rest)
+    elif cmd == 'gir':
+        run_gir(rest)
     elif cmd == '--help':
         sys.stderr.write('Please use: cldoc [command] --help\n')
         sys.exit(1)

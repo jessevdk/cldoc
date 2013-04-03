@@ -29,7 +29,8 @@ coffee_files = [
     'arguments.coffee',
     'report.coffee',
     'references.coffee',
-    'union.coffee'
+    'union.coffee',
+    'gobjectclass.coffee'
 ]
 
 class cldoc_generate(Command):

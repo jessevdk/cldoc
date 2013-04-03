@@ -30,6 +30,7 @@ class Xml(Generator):
         except OSError:
             pass
 
+        ElementTree.register_namespace('gobject', 'http://jessevdk.github.com/cldoc/gobject/1.0')
         ElementTree.register_namespace('cldoc', 'http://jessevdk.github.com/cldoc/1.0')
 
         self.index = ElementTree.Element('index')
