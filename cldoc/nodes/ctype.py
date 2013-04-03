@@ -106,7 +106,7 @@ class Type(Node):
             self._typename = Type.namemap[tp.kind]
             self._builtin = True
         else:
-            self._typename = ''
+            self._typename = tp.spelling
 
     @property
     def builtin(self):
