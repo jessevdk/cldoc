@@ -14,6 +14,44 @@ from __future__ import absolute_import
 
 import sys, os, argparse, tempfile, subprocess, shutil
 
+def run_generate(t, opts):
+    if opts.type != 'html' and opts.type != 'xml':
+        return
+
+    from . import generators
+
+    generator = generators.Xml(t, opts)
+
+    if opts.type == 'html' and opts.static:
+        baseout = tempfile.mkdtemp()
+    else:
+        baseout = opts.output
+
+    xmlout = os.path.join(baseout, 'xml')
+    generator.generate(xmlout)
+
+    if opts.type == 'html':
+        generators.Html(t).generate(baseout, opts.static)
+
+        if opts.static:
+            # Call node to generate the static website at the actual output
+            # directory
+            datadir = os.path.join(os.path.dirname(__file__), 'data')
+            jsfile = os.path.join(datadir, 'staticsite', 'staticsite.js')
+
+            print('Generating static website...')
+
+            try:
+                subprocess.call(['node', jsfile, baseout, opts.output])
+            except OSError:
+                sys.stderr.write("\nFailed to call static site generator. The static site generator uses node.js (http://nodejs.org/). Please make sure you have node installed on your system and try again.\n")
+
+                shutil.rmtree(baseout)
+                sys.exit(1)
+
+            shutil.rmtree(baseout)
+
+
 def run(args):
     try:
         sep = args.index('--')
@@ -51,7 +89,7 @@ def run(args):
     parser.add_argument('--static', default=False, action='store_const', const=True,
                           help='generate a static website (only for when --output is html)')
 
-    parser.add_argument('files', nargs='*', help='files to parse')
+    parser.add_argument('files', nargs='+', help='files to parse')
 
     restargs = args[sep + 1:]
     cxxflags = args[1:sep]
@@ -62,7 +100,6 @@ def run(args):
         sys.stdout = open(os.devnull, 'w')
 
     from . import tree
-    from . import generators
 
     if not opts.output:
         sys.stderr.write("Please specify the output directory\n")
@@ -89,36 +126,6 @@ def run(args):
     if opts.merge:
         t.merge(*opts.merge)
 
-    if opts.type == 'html' or opts.type == 'xml':
-        generator = generators.Xml(t, opts)
-
-        if opts.type == 'html' and opts.static:
-            baseout = tempfile.mkdtemp()
-        else:
-            baseout = opts.output
-
-        xmlout = os.path.join(baseout, 'xml')
-        generator.generate(xmlout)
-
-        if opts.type == 'html':
-            generators.Html(t).generate(baseout, opts.static)
-
-            if opts.static:
-                # Call node to generate the static website at the actual output
-                # directory
-                datadir = os.path.join(os.path.dirname(__file__), 'data')
-                jsfile = os.path.join(datadir, 'staticsite', 'staticsite.js')
-
-                print('Generating static website...')
-
-                try:
-                    subprocess.call(['node', jsfile, baseout, opts.output])
-                except OSError:
-                    sys.stderr.write("\nFailed to call static site generator. The static site generator uses node.js (http://nodejs.org/). Please make sure you have node installed on your system and try again.\n")
-
-                    shutil.rmtree(baseout)
-                    sys.exit(1)
-
-                shutil.rmtree(baseout)
+    run_generate(t, opts)
 
 # vi:ts=4:et
