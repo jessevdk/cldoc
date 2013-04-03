@@ -12,42 +12,7 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from __future__ import absolute_import
 
-import subprocess, threading, time, sys, argparse, os
-import SimpleHTTPServer, SocketServer
-
-class Server(SocketServer.TCPServer):
-    allow_reuse_address = True
-
-class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    def translate_path(self, path):
-        while path.startswith('/'):
-            path = path[1:]
-
-        path = os.path.join(opts.output, path)
-        return SimpleHTTPServer.SimpleHTTPRequestHandler.translate_path(self, path)
-
-    def log_message(self, format, *args):
-        pass
-
-class SocketThread(threading.Thread):
-    def __init__(self, host):
-        threading.Thread.__init__(self)
-
-        if not ':' in host:
-            self.host = host
-            self.port = 6060
-        else:
-            self.host, port = host.split(':')
-            self.port = int(port)
-
-        self.httpd = Server((self.host, self.port), Handler)
-
-    def shutdown(self):
-        self.httpd.shutdown()
-        self.httpd.server_close()
-
-    def run(self):
-        self.httpd.serve_forever()
+import sys, argparse
 
 def run(args):
     try:
