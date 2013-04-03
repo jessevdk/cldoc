@@ -30,6 +30,8 @@ class Xml(Generator):
         except OSError:
             pass
 
+        ElementTree.register_namespace('cldoc', 'http://jessevdk.github.com/cldoc/1.0')
+
         self.index = ElementTree.Element('index')
         self.written = {}
 
@@ -97,12 +99,15 @@ class Xml(Generator):
     def write_xml(self, elem, fname):
         self.written[fname] = True
 
+        elem.attrib['xmlns'] = 'http://jessevdk.github.com/cldoc/1.0'
+
         tree = ElementTree.ElementTree(elem)
 
         self.indent(tree.getroot())
 
         f = open(os.path.join(self.outdir, fname), 'w')
         tree.write(f, encoding='utf-8', xml_declaration=True)
+
         f.close()
 
     def is_page(self, node):
