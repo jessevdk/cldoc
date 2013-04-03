@@ -16,7 +16,7 @@ from .classtemplate import *
 from .constructor import *
 from .conversionfunction import *
 from .cstruct import *
-from .ctype import *
+from .ctype import Type
 from .destructor import *
 from .enum import *
 from .enumvalue import *
