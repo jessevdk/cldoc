@@ -20,7 +20,7 @@ class EnumValue(Node):
         Node.__init__(self, cursor, comment)
 
     def compare_sort(self, other):
-        if not isinstance(other, EnumValue):
+        if not isinstance(other, EnumValue) or not hasattr(self.cursor, 'location'):
             return Node.compare_sort(self, other)
 
         loc1 = self.cursor.location
