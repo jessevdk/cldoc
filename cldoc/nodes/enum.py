@@ -23,16 +23,17 @@ class Enum(Node):
         self.process_children = True
         self.isclass = False
 
-        try:
-            tokens = self.cursor.get_tokens()
-            tokens.next()
+        if hasattr(self.cursor, 'get_tokens'):
+            try:
+                tokens = self.cursor.get_tokens()
+                tokens.next()
 
-            tt = tokens.next()
+                tt = tokens.next()
 
-            if tt.kind == cindex.TokenKind.KEYWORD and tt.spelling == 'class':
-                self.isclass = True
-        except StopIteration:
-            pass
+                if tt.kind == cindex.TokenKind.KEYWORD and tt.spelling == 'class':
+                    self.isclass = True
+            except StopIteration:
+                pass
 
     @property
     def is_anonymous(self):
