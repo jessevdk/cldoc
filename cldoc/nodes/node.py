@@ -84,7 +84,10 @@ class Node(object):
             if lnq[i] != lmq[i]:
                 return "::".join(lmq[i:])
 
-        return "::".join(lmq[len(lnq):])
+        if len(lnq) > len(lmq):
+            return lmq[-1]
+        else:
+            return "::".join(lmq[len(lnq):])
 
     def qid_from(self, qid):
         return self.qid_from_to(self.qid, qid)
