@@ -19,7 +19,7 @@ class Class(Node):
     kind = cindex.CursorKind.CLASS_DECL
 
     class Base:
-        def __init__(self, cursor, access):
+        def __init__(self, cursor, access=cindex.CXXAccessSpecifier.PUBLIC):
             self.cursor = cursor
             self.access = access
             self.type = Type(cursor.type)
