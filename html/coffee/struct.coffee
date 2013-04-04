@@ -9,7 +9,29 @@ class cldoc.Struct extends cldoc.Node
         else
             @keyword = 'struct'
 
+    @render_container: ->
+        return $('<table/>', {'class': @title[1].toLowerCase().replace(' ', '_')})
+
     render: (container) ->
+        if @ref || @node.children('field, method, function').length == 0
+            @render_short(container)
+        else
+            @render_whole(container)
+
+    render_short: (container) ->
+        row = $('<tr class="short"/>')
+
+        if @ref
+            id = cldoc.Page.make_link(@ref, @name)
+        else
+            id = $('<span class="identifier"/>').text(@name)
+
+        row.append($('<td/>').html(id))
+        row.append($('<td/>').html(cldoc.Doc.brief(@node)))
+
+        container.append(row)
+
+    render_whole: (container) ->
         item = $('<div class="item"/>')
 
         id = $('<span class="identifier"/>').text(@name)
@@ -39,16 +61,13 @@ class cldoc.Struct extends cldoc.Node
             name.append('&gt;')
 
         item.append(name)
-
         item.append(cldoc.Doc.either(@node))
 
-        if @ref
-            item.append(cldoc.Page.know_more(@ref))
-        else
-            @render_fields(item)
-            @render_variables(item)
+        @render_fields(item)
+        @render_variables(item)
 
-        container.append(item)
+        row = $('<tr class="full"/>').append($('<td colspan="2"/>').append(item))
+        container.append(row)
 
     render_variables: (item) ->
         # Add variables
