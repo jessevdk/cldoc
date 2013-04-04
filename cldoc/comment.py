@@ -86,7 +86,11 @@ class Comment(object):
             return l > 0 and (l > 1 or len(self.components[0]) > 0)
 
     class UnresolvedReference(str):
-        pass
+        reescape = re.compile('[*_]', re.I)
+
+        def __new__(self, s):
+            s = Comment.UnresolvedReference.reescape.sub(lambda x: '\\' + x.group(0), s)
+            return str.__new__(self, s)
 
     redocref = re.compile('(?P<isregex>[$]?)<(?P<ref>operator(?:>>|>|>=)|[^> ]+)>')
     redoccode = re.compile('^    \\[code\\]\n(?P<code>(?:(?:    .*|)\n)*)', re.M)
