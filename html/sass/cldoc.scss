@@ -464,7 +464,7 @@ VAAAAABJRU5ErkJggg==');
       }
     }
 
-    table.category, table.namespace, table.fields, table.variables, table.arguments, table.bases, table.subclasses, table.structures, table.gobject_classes, table.classes {
+    table.category, table.namespace, table.fields, table.variables, table.arguments, table.bases, table.subclasses, table.structures, table.gobject_classes, table.classes, table.gobject_boxed_structures {
       @include table-items;
       @include inline-doc;
       @include table-alt;

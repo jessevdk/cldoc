@@ -30,7 +30,8 @@ coffee_files = [
     'report.coffee',
     'references.coffee',
     'union.coffee',
-    'gobjectclass.coffee'
+    'gobjectclass.coffee',
+    'gobjectboxed.coffee'
 ]
 
 class cldoc_generate(Command):

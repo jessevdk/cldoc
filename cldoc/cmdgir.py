@@ -58,6 +58,14 @@ class Class(nodes.Class):
     def classname(self):
         return '{http://jessevdk.github.com/cldoc/gobject/1.0}class'
 
+class Boxed(nodes.Struct):
+    def __init__(self, cursor, comment):
+        nodes.Struct.__init__(self, cursor, comment)
+
+    @property
+    def classname(self):
+        return '{http://jessevdk.github.com/cldoc/gobject/1.0}boxed'
+
 class GirComment(comment.Comment):
     hashref = re.compile('#([a-z_][a-z0-9_]*)', re.I)
     emph = re.compile('<emphasis>(.*?)</emphasis>', re.I)
@@ -263,7 +271,7 @@ class GirCursor:
 
         self._virtual_param = None
 
-        if self.typename in ['class', 'interface']:
+        if self._is_object_type():
             self._create_virtual_param()
 
         if self.typename == 'member':
@@ -300,6 +308,10 @@ class GirCursor:
         ret.declaration = self
 
         return ret
+
+    def _is_object_type(self):
+        return self.typename in ['class', 'interface'] or \
+               (self.typename == 'record' and nsglib('get-type') in self.node.attrib)
 
     def _create_virtual_param(self):
         # Make virtual first parameter representing pointer to object
@@ -347,7 +359,7 @@ class GirCursor:
         for child in children:
             cursor = GirCursor(child)
 
-            if self.typename in ['class', 'interface'] and \
+            if not self._virtual_param is None and \
                cursor.typename == 'method' or cursor.typename == 'virtual-method':
                 self._setup_first_param(cursor)
 
@@ -525,12 +537,22 @@ class GirTree:
         # TODO
         return None
 
+    def parse_boxed(self, cursor):
+        ret = Boxed(cursor, GirComment(cursor))
+        ret.typedef = nodes.Typedef(cursor, None)
+
+        self.parse_struct_children(ret)
+        return ret
+
     def parse_record(self, cursor):
         if nsglib('is-gtype-struct-for') in cursor.node.attrib:
             return None
 
         if 'disguised' in cursor.node.attrib and cursor.node.attrib['disguised'] == '1':
             return None
+
+        if nsglib('get-type') in cursor.node.attrib:
+            return self.parse_boxed(cursor)
 
         ret = nodes.Struct(cursor, GirComment(cursor))
         ret.typedef = nodes.Typedef(cursor, None)
