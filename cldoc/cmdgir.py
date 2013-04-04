@@ -162,6 +162,7 @@ class GirType:
     def __init__(self, node):
         self.node = node
         self.kind = cindex.TypeKind.UNEXPOSED
+        self.const_qualified = False
 
         aname = nsc('type')
 
@@ -170,6 +171,7 @@ class GirType:
         else:
             self.spelling = ''
 
+        self._extract_const()
         self._extract_kind()
         self.declaration = None
 
@@ -182,6 +184,13 @@ class GirType:
 
     def is_builtin(self):
         return self.spelling in GirType.builtins
+
+    def _extract_const(self):
+        prefix = 'const '
+
+        if self.spelling.startswith(prefix):
+            self.const_qualified = True
+            self.spelling = self.spelling[len(prefix):]
 
     def _extract_kind(self):
         if self.spelling == '':
@@ -209,7 +218,7 @@ class GirType:
         return self.declaration
 
     def is_const_qualified(self):
-        return False
+        return self.const_qualified
 
     def resolve_refs(self, resolver):
         if not self.return_type is None:
@@ -229,7 +238,9 @@ class GirTypePointer(GirType):
         self.pointer_type = tp
         self.spelling = tp.spelling[:-1]
         self.kind = cindex.TypeKind.UNEXPOSED
+        self.const_qualified = False
 
+        self._extract_const()
         self._extract_kind()
 
     def get_declaration(self):
