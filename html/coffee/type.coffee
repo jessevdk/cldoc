@@ -26,7 +26,7 @@ class cldoc.Type extends cldoc.Node
             @typeparts.push(name)
 
         if @qualifier
-            @typeparts.push($('<span class="qualifier"/>').text(' ' + @qualifier + ' '))
+            @typeparts.push($('<span class="qualifier"/>').html(' ' + @qualifier.replace(/const/g, '<span class="keyword">const</span>') + ' '))
 
         if @size
             @typeparts.push($('<span class="array_size"/>').text('[' + @size + ']'))
