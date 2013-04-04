@@ -16,9 +16,14 @@ class cldoc.Type extends cldoc.Node
         if @name
             if @ref
                 a = cldoc.Page.make_link(@ref, @name)
-                @typeparts.push(a)
+                name = $('<span class="name"/>').append(a)
             else
-                @typeparts.push($('<span class="name"/>').text(@name))
+                name =$('<span class="name"/>').text(@name)
+
+            if @node.attr('builtin')
+                name.addClass('builtin')
+
+            @typeparts.push(name)
 
         if @qualifier
             @typeparts.push($('<span class="qualifier"/>').text(' ' + @qualifier + ' '))
@@ -28,9 +33,6 @@ class cldoc.Type extends cldoc.Node
 
     render: ->
         ret = $('<span class="type"/>')
-
-        if @node.attr('builtin')
-            ret.addClass('builtin')
 
         for item in @typeparts
             ret.append(item)
