@@ -271,7 +271,7 @@ class cldoc.Page
             return null
 
     @load_description: (page, content) ->
-        doc = new cldoc.Doc(page.children('doc')).render()
+        doc = cldoc.Doc.either(page)
 
         id = page.attr('id')
 
