@@ -66,6 +66,10 @@ class Boxed(nodes.Struct):
     def classname(self):
         return '{http://jessevdk.github.com/cldoc/gobject/1.0}boxed'
 
+    @property
+    def force_page(self):
+        return True
+
 class GirComment(comment.Comment):
     hashref = re.compile('#([a-z_][a-z0-9_]*)', re.I)
     emph = re.compile('<emphasis>(.*?)</emphasis>', re.I)
