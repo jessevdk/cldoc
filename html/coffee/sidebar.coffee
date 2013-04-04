@@ -174,13 +174,22 @@ class cldoc.Sidebar
 
             nm = item.sidebar_name()
 
-            a = $('<a/>', {href: cldoc.Page.make_internal_ref(cldoc.Page.current_page, item.id)}).append(nm)
+            if item.ref
+                a = $('<a/>', {href: cldoc.Page.make_internal_ref(item.ref)})
+            else
+                a = $('<a/>', {href: cldoc.Page.make_internal_ref(cldoc.Page.current_page, item.id)})
+
+            a.append(nm)
+
             li = $('<li/>')
 
             a.on('click', do (item) =>
                 =>
-                    cldoc.Page.load(cldoc.Page.current_page, item.id, true)
-                    false
+
+                    if item.ref
+                        cldoc.Page.load_ref(item.ref)
+                    else
+                        cldoc.Page.load(cldoc.Page.current_page, item.id, true)
             )
 
             prev = {
