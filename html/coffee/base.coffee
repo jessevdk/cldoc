@@ -19,7 +19,12 @@ class cldoc.Base extends cldoc.Node
         row = $('<tr/>').appendTo(container)
         row.attr('id', @id)
 
-        $('<td class="keyword"/>').text(@access).appendTo(row)
+        access = @access
+
+        if access == 'public'
+            access = ''
+
+        $('<td class="keyword"/>').text(access).appendTo(row)
         $('<td/>').html(type.render()).appendTo(row)
         $('<td/>').html(cldoc.Doc.brief(@node)).appendTo(row)
 

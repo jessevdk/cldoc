@@ -14,7 +14,12 @@ class cldoc.Subclass extends cldoc.Node
 
         row.attr('id', @id)
 
-        $('<td class="keyword"/>').text(@access).appendTo(row)
+        access = @access
+
+        if access == 'public'
+            access = ''
+
+        $('<td class="keyword"/>').text(access).appendTo(row)
         $('<td/>').html(cldoc.Page.make_link(@ref, @name)).appendTo(row)
         $('<td/>').html(cldoc.Doc.brief(@node)).appendTo(row)
 
