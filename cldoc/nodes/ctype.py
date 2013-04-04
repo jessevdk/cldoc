@@ -89,6 +89,9 @@ class Type(Node):
         if tp.is_const_qualified():
             self._qualifier.append('const')
 
+        if hasattr(tp, 'is_builtin'):
+            self._builtin = tp.is_builtin()
+
         if tp.kind in Type.kindmap:
             self.extract(tp.get_pointee())
             self._qualifier.append(Type.kindmap[tp.kind])

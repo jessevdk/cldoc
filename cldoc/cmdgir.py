@@ -138,6 +138,27 @@ class GirComment(comment.Comment):
         return text
 
 class GirType:
+    builtins = [
+        'utf8',
+        'gchar',
+        'gint',
+        'gint8',
+        'gint16',
+        'gint32',
+        'gint64',
+        'guint',
+        'guint8',
+        'guint16',
+        'guint32',
+        'guint64',
+        'gfloat',
+        'gdouble',
+        'gpointer',
+        'gsize',
+        'gboolean',
+        'none'
+    ];
+
     def __init__(self, node):
         self.node = node
         self.kind = cindex.TypeKind.UNEXPOSED
@@ -158,6 +179,9 @@ class GirType:
             self.return_type = GirCursor(retval).type
         else:
             self.return_type = None
+
+    def is_builtin(self):
+        return self.spelling in GirType.builtins
 
     def _extract_kind(self):
         if self.spelling == '':
@@ -603,7 +627,7 @@ class GirTree:
         def resolver(item):
             item = item.rstrip('*')
 
-            if item in ['utf8', 'gchar', 'gint', 'guint', 'guint8', 'gdouble', 'gfloat', 'gpointer', 'guint32', 'guint16', 'gint32', 'gint16', 'gint8', 'gsize', 'gint64', 'guint64', 'gboolean', 'none', 'GType']:
+            if item in GirType.builtins:
                 return None
 
             if not '.' in item:
