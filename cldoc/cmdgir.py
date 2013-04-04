@@ -330,7 +330,7 @@ class GirCursor:
 
         if self.typename in ['function', 'method', 'virtual-method']:
             children = self.node.iterfind(nsgtk('parameters') + '/' + nsgtk('parameter'))
-        elif self.typename == 'enumeration':
+        elif self.typename in ['enumeration', 'bitfield']:
             children = self.node.iterfind(nsgtk('member'))
         elif self.typename in ['record', 'class', 'interface']:
             self.bases = []
@@ -431,7 +431,7 @@ class GirTree:
             'interface': self.parse_interface,
             'enumeration': self.parse_enumeration,
             'callback': self.parse_callback,
-            'bitfield': self.parse_bitfield,
+            'bitfield': self.parse_enumeration,
             'virtual-method': self.parse_virtual_method,
             'method': self.parse_method,
             'constructor': self.parse_constructor,
@@ -552,10 +552,7 @@ class GirTree:
 
         return ret
 
-    def parse_callback(self, node):
-        pass
-
-    def parse_bitfield(self, node):
+    def parse_callback(self, cursor):
         pass
 
     def parse_cursor(self, cursor):
