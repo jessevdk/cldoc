@@ -24,14 +24,16 @@ coffee_files = [
     'constructor.coffee',
     'destructor.coffee',
     'base.coffee',
+    'implements.coffee',
     'subclass.coffee',
+    'implementedby.coffee',
     'coverage.coffee',
     'arguments.coffee',
     'report.coffee',
     'references.coffee',
     'union.coffee',
     'gobjectclass.coffee',
-    'gobjectboxed.coffee'
+    'gobjectboxed.coffee',
 ]
 
 class cldoc_generate(Command):

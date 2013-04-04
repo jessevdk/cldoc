@@ -282,9 +282,9 @@ class Xml(Generator):
         elif node.access == cindex.CXXAccessSpecifier.PUBLIC:
             elem.set('access', 'public')
 
-    def class_to_xml(self, node, elem):
-        for base in node.bases:
-            child = ElementTree.Element('base')
+    def process_bases(self, node, elem, bases, tagname):
+        for base in bases:
+            child = ElementTree.Element(tagname)
 
             self.set_access_attribute(base, child)
 
@@ -295,17 +295,26 @@ class Xml(Generator):
 
             elem.append(child)
 
-        for subcls in node.subclasses:
-            child = ElementTree.Element('subclass')
+    def process_subclasses(self, node, elem, subclasses, tagname):
+        for subcls in subclasses:
+            child = ElementTree.Element(tagname)
 
             self.set_access_attribute(subcls, child)
             self.add_ref_node_id(subcls, child)
+
             child.set('name', subcls.qid_to(node.qid))
 
             if subcls.comment and subcls.comment.brief:
                 child.append(self.doc_to_xml(subcls, subcls.comment.brief, 'brief'))
 
             elem.append(child)
+
+    def class_to_xml(self, node, elem):
+        self.process_bases(node, elem, node.bases, 'base')
+        self.process_bases(node, elem, node.implements, 'implements')
+
+        self.process_subclasses(node, elem, node.subclasses, 'subclass')
+        self.process_subclasses(node, elem, node.implemented_by, 'implementedby')
 
         hasabstract = False
         allabstract = True

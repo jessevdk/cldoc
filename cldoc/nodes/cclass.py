@@ -31,23 +31,39 @@ class Class(Node):
         self.process_children = True
         self.current_access = cindex.CXXAccessSpecifier.PRIVATE
         self.bases = []
+        self.implements = []
+        self.implemented_by = []
         self.subclasses = []
         self.name_to_method = {}
 
-    def resolve_bases(self, mapping):
+    def _all_bases(self):
         for b in self.bases:
+            yield b
+
+        for b in self.implements:
+            yield b
+
+    def resolve_bases(self, mapping):
+        for b in self._all_bases():
             tpname = b.type.typename
 
             if tpname in mapping:
                 b.node = mapping[tpname]
                 b.node.subclasses.append(self)
 
+        for b in self.implements:
+            tpname = b.type.typename
+
+            if tpname in mapping:
+                b.node = mapping[tpname]
+                b.node.implemented_by.append(self)
+
     @property
     def resolve_nodes(self):
         for child in Node.resolve_nodes.fget(self):
             yield child
 
-        for base in self.bases:
+        for base in self._all_bases():
             if base.node and base.access != cindex.CXXAccessSpecifier.PRIVATE:
                 yield base.node
 

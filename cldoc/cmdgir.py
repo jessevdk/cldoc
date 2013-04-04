@@ -54,6 +54,9 @@ class Class(nodes.Class):
         for b in cursor.bases:
             self.bases.append(nodes.Class.Base(b))
 
+        for i in cursor.implements:
+            self.implements.append(nodes.Class.Base(i))
+
     @property
     def classname(self):
         return '{http://jessevdk.github.com/cldoc/gobject/1.0}class'
@@ -269,6 +272,7 @@ class GirCursor:
         self.children = []
         self.parent = None
         self.bases = None
+        self.implements = None
 
         self.type = self._extract_type()
         self.kind = self._extract_kind()
@@ -350,6 +354,7 @@ class GirCursor:
             children = self.node.iterfind(nsgtk('member'))
         elif self.typename in ['record', 'class', 'interface']:
             self.bases = []
+            self.implements = []
 
             def childgen():
                 childtypes = ['function', 'method', 'constructor', 'virtual-method', 'property', 'signal', 'field']
@@ -419,6 +424,10 @@ class GirCursor:
         if not b is None:
             self.bases.append(b)
 
+    def _add_implements(self, i):
+        if not i is None:
+            self.implements.append(i)
+
     def get_usr(self):
         return self.spelling
 
@@ -436,7 +445,7 @@ class GirCursor:
                 self._add_base(resolver(self.node.attrib['parent']))
 
             for implements in self.node.iterfind(nsgtk('implements')):
-                self._add_base(resolver(implements.attrib['name']))
+                self._add_implements(resolver(implements.attrib['name']))
 
 class GirTree:
     def __init__(self):
