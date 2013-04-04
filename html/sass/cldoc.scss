@@ -70,7 +70,7 @@ $in_group_row_spacing: 40px;
 
 @mixin table-alt {
   tr:nth-child(even) {
-    background-color: #f3f3f3;
+    background-color: #f9f9f9;
   }
 
   tr.selected {
