@@ -434,6 +434,8 @@ class Xml(Generator):
             if child.access == cindex.CXXAccessSpecifier.PRIVATE:
                 continue
 
+            self.refid(child)
+
             if self.is_page(child):
                 chelem = self.node_to_xml_ref(child)
             else:
