@@ -494,6 +494,8 @@ class GirTree:
 
     def parse_class(self, cursor):
         ret = Class(cursor, GirComment(cursor))
+
+        ret.typedef = nodes.Typedef(cursor, None)
         self.parse_struct_children(ret)
 
         return ret
@@ -531,6 +533,8 @@ class GirTree:
             return None
 
         ret = nodes.Struct(cursor, GirComment(cursor))
+        ret.typedef = nodes.Typedef(cursor, None)
+
         self.parse_struct_children(ret)
 
         return ret
