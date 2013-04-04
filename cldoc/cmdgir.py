@@ -344,7 +344,7 @@ class GirCursor:
     def _extract_children(self):
         children = []
 
-        if self.typename in ['function', 'method', 'virtual-method']:
+        if self.typename in ['function', 'method', 'virtual-method', 'constructor']:
             children = self.node.iterfind(nsgtk('parameters') + '/' + nsgtk('parameter'))
         elif self.typename in ['enumeration', 'bitfield']:
             children = self.node.iterfind(nsgtk('member'))
@@ -352,7 +352,7 @@ class GirCursor:
             self.bases = []
 
             def childgen():
-                childtypes = ['function', 'method', 'virtual-method', 'property', 'signal', 'field']
+                childtypes = ['function', 'method', 'constructor', 'virtual-method', 'property', 'signal', 'field']
 
                 for child in self.node:
                     if stripns(child.tag) in childtypes:
@@ -380,7 +380,7 @@ class GirCursor:
 
     @property
     def spelling(self):
-        if self.typename in ['function', 'method', 'member']:
+        if self.typename in ['function', 'method', 'member', 'constructor']:
             n = nsc('identifier')
         elif self.typename in ['parameter', 'field']:
             n = 'name'
@@ -526,9 +526,8 @@ class GirTree:
 
         return nodes.Field(cursor, GirComment(cursor))
 
-    def parse_constructor(self, node):
-        # TODO
-        return None
+    def parse_constructor(self, cursor):
+        return nodes.Function(cursor, GirComment(cursor))
 
     def parse_virtual_method(self, node):
         # TODO
