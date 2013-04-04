@@ -1,5 +1,7 @@
+href = document.location.origin + document.location.pathname
+
 window.cldoc = $.extend($.extend({
-    host: document.location.href.substring(0, document.location.href.lastIndexOf('/')),
+    host: href.substring(0, href.lastIndexOf('/')),
 }, (window.cldoc ? {})), {
     tag: (node) ->
         $.map(node, (e) -> e.tagName.toLowerCase())
