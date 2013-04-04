@@ -77,4 +77,8 @@ class Class(Node):
 
         return Node.visit(self, cursor, citer)
 
+    @property
+    def force_page(self):
+        return True
+
 # vi:ts=4:et

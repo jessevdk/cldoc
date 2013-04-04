@@ -112,6 +112,9 @@ class Xml(Generator):
         f.close()
 
     def is_page(self, node):
+        if node.force_page:
+            return True
+
         if isinstance(node, nodes.Class):
             for child in node.children:
                 if not (isinstance(child, nodes.Field) or \

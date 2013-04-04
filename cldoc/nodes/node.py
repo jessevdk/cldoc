@@ -250,4 +250,8 @@ class Node(object):
     def subclasses():
         return Node._subclasses(Node)
 
+    @property
+    def force_page(self):
+        return False
+
 # vi:ts=4:et

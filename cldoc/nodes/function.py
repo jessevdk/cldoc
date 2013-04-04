@@ -42,6 +42,10 @@ class Argument:
     def qid(self):
         return self.parent.qid + '::' + self.name
 
+    @property
+    def force_page(self):
+        return False
+
 class Function(Node):
     kind = cindex.CursorKind.FUNCTION_DECL
 
