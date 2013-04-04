@@ -543,7 +543,22 @@ VAAAAABJRU5ErkJggg==');
         td.argument_name {
           text-align: left;
           padding-right: 1px;
-          padding-left: 20px;
+        }
+
+        td.argument_type {
+          padding-right: 2px;
+          span.type {
+            display: block;
+
+            span.name {
+              float: left;
+              margin-right: 10px;
+            }
+
+            span.qualifier {
+              float: right;
+            }
+          }
         }
       }
 
