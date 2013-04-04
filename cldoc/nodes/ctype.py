@@ -139,4 +139,16 @@ class Type(Node):
     def qualifier(self):
         return self._qualifier
 
+    @property
+    def qualifier_string(self):
+        ret = ''
+
+        for x in self._qualifier:
+            if x != '*' or (len(ret) != 0 and ret[-1] != '*'):
+                ret += ' '
+
+            ret += x
+
+        return ret
+
 # vi:ts=4:et

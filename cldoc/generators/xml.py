@@ -191,7 +191,7 @@ class Xml(Generator):
             elem.set('name', tp.typename_for(parent))
 
         if len(tp.qualifier) > 0:
-            elem.set('qualifier', " ".join(tp.qualifier))
+            elem.set('qualifier', tp.qualifier_string)
 
         if tp.builtin:
             elem.set('builtin', 'yes')
