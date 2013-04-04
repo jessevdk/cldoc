@@ -29,6 +29,10 @@ class Method(Function):
         self.update_abstract(cursor)
 
     @property
+    def qid(self):
+        return Node.qid.fget(self)
+
+    @property
     def override(self):
         if not self._override is None:
             return self._override

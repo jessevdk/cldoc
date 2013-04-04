@@ -63,6 +63,10 @@ class Function(Node):
             self._arguments.append(Argument(self, child))
 
     @property
+    def qid(self):
+        return self.name
+
+    @property
     def resolve_nodes(self):
         for arg in self._arguments:
             yield arg
