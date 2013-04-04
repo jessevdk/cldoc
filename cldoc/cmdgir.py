@@ -64,6 +64,7 @@ class GirComment(comment.Comment):
     title = re.compile('<title>(.*?)</title>', re.I)
     refsect2 = re.compile('(<refsect2 [^>]*>|</refsect2>)\n?', re.I)
     varref = re.compile('@([a-z][a-z0-9_]*)', re.I)
+    constref = re.compile('%([a-z_][a-z0-9_]*)', re.I)
 
     def __init__(self, cursor):
         doc = cursor.node.find(nsgtk('doc'))
@@ -129,6 +130,7 @@ class GirComment(comment.Comment):
     def subst_format(self, text):
         text = GirComment.hashref.sub(lambda x: '<{0}>'.format(x.group(1)), text)
         text = GirComment.varref.sub(lambda x: '<{0}>'.format(x.group(1)), text)
+        text = GirComment.constref.sub(lambda x: '`{0}`'.format(x.group(1)), text)
         text = GirComment.emph.sub(lambda x: '*{0}*'.format(x.group(1)), text)
         text = GirComment.title.sub(lambda x: '## {0}'.format(x.group(1)), text)
         text = GirComment.refsect2.sub(lambda x: '', text)
