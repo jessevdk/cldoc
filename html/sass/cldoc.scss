@@ -48,6 +48,10 @@ $in_group_row_spacing: 40px;
     padding-right: 0px;
   }
 
+  td:empty {
+    padding-right: 0px;
+  }
+
   tr:last-child td {
     padding-bottom: 0px;
   }
