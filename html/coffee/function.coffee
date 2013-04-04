@@ -60,7 +60,7 @@ class cldoc.Function extends cldoc.Node
 
             argtype = arg.children('type')
 
-            $('<td class="argumen_type"/>').append(new cldoc.Type(argtype).render()).appendTo(row)
+            $('<td class="argument_type"/>').append(new cldoc.Type(argtype).render()).appendTo(row)
 
             name = arg.attr('name')
 
