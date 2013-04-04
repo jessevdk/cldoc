@@ -237,7 +237,12 @@ class cldoc.Page
             return '#' + page + '/' + id
 
     @split_ref: (ref) ->
-        return ref.split('#', 2)
+        [page, id] = ref.split('#', 2)
+
+        if !page
+            page = 'index'
+
+        return [page, id]
 
     @load_ref: (ref) ->
         r = @split_ref(ref)
