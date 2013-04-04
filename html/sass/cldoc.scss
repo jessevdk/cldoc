@@ -456,7 +456,7 @@ VAAAAABJRU5ErkJggg==');
       }
     }
 
-    div.structures, div.classes, div.enumerations {
+    div.enumerations {
       table {
         @include table-items;
         @include inline-doc;
@@ -464,12 +464,16 @@ VAAAAABJRU5ErkJggg==');
       }
     }
 
-    table.category, table.namespace, table.fields, table.variables, table.arguments, table.bases, table.subclasses {
+    table.category, table.namespace, table.fields, table.variables, table.arguments, table.bases, table.subclasses, table.structures, table.gobject_classes, table.classes {
       @include table-items;
       @include inline-doc;
       @include table-alt;
 
       tr.union td {
+        padding-top: 15px;
+      }
+
+      tr.full > td {
         padding-top: 15px;
       }
     }
