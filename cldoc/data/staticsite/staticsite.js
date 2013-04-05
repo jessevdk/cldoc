@@ -35,6 +35,8 @@ var css = null;
 
 for (var i = 0; i < files.length; i++)
 {
+	console.log('Generating static page for ' + files[i]);
+
 	// Load xml file
 	var xmlfile = path.join(xmldir, files[i]);
 	var x = fs.readFileSync(xmlfile, {
