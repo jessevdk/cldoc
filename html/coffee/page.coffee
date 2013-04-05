@@ -92,7 +92,7 @@ class cldoc.SearchDb
         @searchid = 0
         @searchcb = null
 
-        wurl = window.webkitURL ? window
+        wurl = window.webkitURL ? window.URL
 
         blob = new Blob(['worker = ' + cldoc.SearchWorker.toString() + '; worker();'],
                         {type: 'text/javascript'})
