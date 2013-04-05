@@ -93,6 +93,7 @@ $in_group_row_spacing: 40px;
 #cldoc, #cldoc_sidebar_items {
   &::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
   }
 
   &::-webkit-scrollbar-track {
