@@ -4,5 +4,7 @@
 html/styles/cldoc.css
 html/javascript/cldoc.js
 cldoc/data/index.html
+cldoc/data/javascript
+cldoc/data/styles
 MANIFEST
 node_modules
