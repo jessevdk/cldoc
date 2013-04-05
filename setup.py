@@ -34,6 +34,7 @@ coffee_files = [
     'union.coffee',
     'gobjectclass.coffee',
     'gobjectboxed.coffee',
+    'gobjectproperty.coffee',
 ]
 
 class cldoc_generate(Command):

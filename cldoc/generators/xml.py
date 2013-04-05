@@ -283,6 +283,9 @@ class Xml(Generator):
     def variable_to_xml(self, node, elem):
         elem.append(self.type_to_xml(node.type, node.parent))
 
+    def property_to_xml(self, node, elem):
+        elem.append(self.type_to_xml(node.type, node.parent))
+
     def set_access_attribute(self, node, elem):
         if node.access == cindex.CXXAccessSpecifier.PROTECTED:
             elem.set('access', 'protected')

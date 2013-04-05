@@ -61,6 +61,36 @@ class Class(nodes.Class):
     def classname(self):
         return '{http://jessevdk.github.com/cldoc/gobject/1.0}class'
 
+class Property(nodes.Node):
+    def __init__(self, cursor, comment):
+        nodes.Node.__init__(self, cursor, comment)
+
+        self.type = nodes.Type(cursor.type)
+
+    @property
+    def classname(self):
+        return '{http://jessevdk.github.com/cldoc/gobject/1.0}property'
+
+    @property
+    def props(self):
+        ret = nodes.Node.props.fget(self)
+
+        mode = []
+
+        if not ('writable' in self.cursor.node.attrib and self.cursor.node.attrib['writable'] == '1'):
+            mode.append('readonly')
+
+        if 'construct-only' in self.cursor.node.attrib and self.cursor.node.attrib['construct-only'] == '1':
+            mode.append('construct-only')
+
+        if 'construct' in self.cursor.node.attrib and self.cursor.node.attrib['construct'] == '1':
+            mode.append('construct')
+
+        if len(mode) > 0:
+            ret['mode'] = ",".join(mode)
+
+        return ret
+
 class Boxed(nodes.Struct):
     def __init__(self, cursor, comment):
         nodes.Struct.__init__(self, cursor, comment)
@@ -435,7 +465,7 @@ class GirCursor:
             self.implements = []
 
             def childgen():
-                childtypes = ['function', 'method', 'constructor', 'virtual-method', 'property', 'signal', 'field']
+                childtypes = ['function', 'method', 'constructor', 'virtual-method', 'property', 'field']
 
                 for child in self.node:
                     if stripns(child.tag) in childtypes:
@@ -465,7 +495,7 @@ class GirCursor:
     def spelling(self):
         if self.typename in ['function', 'method', 'member', 'constructor']:
             n = nsc('identifier')
-        elif self.typename in ['parameter', 'field']:
+        elif self.typename in ['parameter', 'field', 'property']:
             n = 'name'
         else:
             n = nsc('type')
@@ -623,9 +653,8 @@ class GirTree:
     def parse_method(self, cursor):
         return nodes.Function(cursor, GirComment(cursor))
 
-    def parse_property(self, node):
-        # TODO
-        return None
+    def parse_property(self, cursor):
+        return Property(cursor, GirComment(cursor))
 
     def parse_boxed(self, cursor):
         ret = Boxed(cursor, GirComment(cursor))

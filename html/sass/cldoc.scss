@@ -468,9 +468,28 @@ VAAAAABJRU5ErkJggg==');
       }
     }
 
+    ul.gobject_property_mode {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        float: left;
+      }
+
+      li:after {
+        content: ", ";
+      }
+
+      li:last-child:after {
+        content: "";
+      }
+    }
+
     table.category, table.namespace, table.fields, table.variables,
     table.arguments, table.bases, table.implements, table.subclasses, table.implementedby,
-    table.structures, table.gobject_classes, table.classes, table.gobject_boxed_structures {
+    table.structures, table.gobject_classes, table.classes, table.gobject_boxed_structures,
+    table.gobject_properties {
       @include table-items;
       @include inline-doc;
       @include table-alt;
