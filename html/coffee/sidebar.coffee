@@ -48,7 +48,7 @@ class cldoc.Sidebar
         close.on('click', exitsearch)
 
         input.on('keypress', (e) ->
-            if e.charCode == 13
+            if e.which == 13
                 cldoc.Page.search(input.val())
                 return true
         )
