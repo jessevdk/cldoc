@@ -181,7 +181,7 @@ class GirComment(comment.Comment):
             if doctext != '':
                 text = brieftext + "\n\n" + doctext
             else:
-                text = brieftext
+                text = brieftext.replace("\n", ' ')
 
         comment.Comment.__init__(self, text, None)
 
