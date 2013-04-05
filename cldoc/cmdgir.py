@@ -124,6 +124,16 @@ class GirComment(comment.Comment):
 
                 preat.append('@{0} {1}'.format(param.spelling, paramdoc.replace('\n', ' ')))
 
+            return_node = cursor.node.find(nsgtk('return-value'))
+
+            if not return_node is None and cursor.type.get_result().spelling != 'void':
+                doc = return_node.find(nsgtk('doc'))
+
+                if not doc is None:
+                    postat.append('@return {0}'.format(self.subst_format(doc.text).replace('\n', ' ')))
+                else:
+                    postat.append('@return *documentation missing...*')
+
             if len(cursor.children) > 0:
                 preat.append('')
 
@@ -134,6 +144,9 @@ class GirComment(comment.Comment):
                 brieftext = '*Documentation missing...*'
 
             text = brieftext.replace('\n', ' ').rstrip() + "\n" + "\n".join(preat) + doctext
+
+            if len(postat) != 0:
+                text += '\n\n' + '\n'.join(postat)
         else:
             if doctext != '':
                 text = brieftext + "\n\n" + doctext
