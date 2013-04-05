@@ -494,6 +494,10 @@ VAAAAABJRU5ErkJggg==');
       @include inline-doc;
       @include table-alt;
 
+      .keyword {
+        font-weight: normal;
+      }
+
       tr.union td {
         padding-top: 15px;
       }
