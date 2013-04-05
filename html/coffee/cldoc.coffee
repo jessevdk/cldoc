@@ -1,4 +1,4 @@
-href = document.location.origin + document.location.pathname
+href = document.location.protocol + '//' + document.location.host + document.location.pathname
 
 window.cldoc = $.extend($.extend({
     host: href.substring(0, href.lastIndexOf('/')),
