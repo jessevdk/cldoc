@@ -513,7 +513,10 @@ class cldoc.Page
             parts.push(res.qid.substring(prev, res.qid.length))
 
             a = $('<a/>', {href: @make_internal_ref(res.id)}).html(parts)
-            a.on('click', => @load_ref(res.id); false)
+
+            a.on('click', do (res) =>
+                => @load_ref(res.id)
+            )
 
             $('<tr/>').append($('<td class="keyword"/>').text(res.type))
                       .append($('<td class="identifier"/>').html(a))
