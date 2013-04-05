@@ -61,6 +61,27 @@ class Type(Node):
         return self.tp.kind == cindex.TypeKind.CONSTANTARRAY
 
     @property
+    def is_out(self):
+        if hasattr(self.tp, 'is_out'):
+            return self.tp.is_out
+        else:
+            return False
+
+    @property
+    def transfer_ownership(self):
+        if hasattr(self.tp, 'transfer_ownership'):
+            return self.tp.transfer_ownership
+        else:
+            return 'none'
+
+    @property
+    def allow_none(self):
+        if hasattr(self.tp, 'allow_none'):
+            return self.tp.allow_none
+        else:
+            return False
+
+    @property
     def element_type(self):
         return self._element_type
 

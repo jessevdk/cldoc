@@ -199,6 +199,15 @@ class Xml(Generator):
         if tp.builtin:
             elem.set('builtin', 'yes')
 
+        if tp.is_out:
+            elem.set('out', 'yes')
+
+        if tp.transfer_ownership != 'none':
+            elem.set('transfer-ownership', tp.transfer_ownership)
+
+        if tp.allow_none:
+            elem.set('allow-none', 'yes')
+
         self.add_ref_id(tp.decl, elem)
         return elem
 

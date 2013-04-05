@@ -179,6 +179,10 @@ class GirType:
         self.kind = cindex.TypeKind.UNEXPOSED
         self.const_qualified = False
 
+        self.is_out = False
+        self.transfer_ownership = 'none'
+        self.allow_none = False
+
         aname = nsc('type')
 
         if aname in self.node.attrib:
@@ -194,6 +198,12 @@ class GirType:
 
         if not retval is None:
             self.return_type = GirCursor(retval).type
+
+            if 'transfer-ownership' in retval.attrib:
+                self.return_type.transfer_ownership = retval.attrib['transfer-ownership']
+
+            if 'allow-none' in retval.attrib:
+                self.return_type.allow_none = retval.attrib['allow-none'] == '1'
         else:
             self.return_type = None
 
@@ -300,7 +310,18 @@ class GirCursor:
         t = self.node.find(nsgtk('type'))
 
         if not t is None:
-            return GirType(t)
+            retval = GirType(t)
+
+            if 'direction' in self.node.attrib:
+                retval.is_out = self.node.attrib['direction'] == 'out'
+
+            if 'transfer-ownership' in self.node.attrib and not retval.is_out:
+                retval.transfer_ownership = self.node.attrib['transfer-ownership']
+
+            if 'allow-none' in self.node.attrib:
+                retval.allow_none = self.node.attrib['allow-none'] == '1'
+
+            return retval
 
         va = self.node.find(nsgtk('varargs'))
 
