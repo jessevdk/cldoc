@@ -453,7 +453,7 @@ class cldoc.Page
             cpage = @pages[page]
             data = cpage.xml
 
-            item = $(data[0].getElementById(pageid))
+            item = data.find('#' + pageid)
 
             if item.length != 1
                 continue
