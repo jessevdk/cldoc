@@ -303,6 +303,8 @@ class GirCursor:
         'parameter': cindex.CursorKind.PARM_DECL
     }
 
+    global_gerror_param = None
+
     def __init__(self, node):
         self.node = node
         self.typename = stripns(self.node.tag)
@@ -393,11 +395,39 @@ class GirCursor:
     def _setup_first_param(self, method):
         method.children.insert(0, GirCursor(self._virtual_param))
 
+    def _make_gerror_param(self):
+        if not GirCursor.global_gerror_param is None:
+            return GirCursor.global_gerror_param
+
+        param = ElementTree.Element(nsgtk('parameter'))
+
+        param.attrib['name'] = 'error'
+        param.attrib['transfer-ownership'] = 'none'
+        param.attrib['allow-none'] = '1'
+
+        tp = ElementTree.Element(nsgtk('type'))
+
+        tp.attrib['name'] = 'Error'
+        tp.attrib[nsc('type')] = 'GError **'
+
+        doc = ElementTree.Element(nsgtk('doc'))
+        doc.text = 'a #GError.'
+
+        param.append(doc)
+        param.append(tp)
+
+        GirCursor.global_gerror_param = param
+        return param
+
     def _extract_children(self):
         children = []
 
         if self.typename in ['function', 'method', 'virtual-method', 'constructor']:
-            children = self.node.iterfind(nsgtk('parameters') + '/' + nsgtk('parameter'))
+            children = list(self.node.iterfind(nsgtk('parameters') + '/' + nsgtk('parameter')))
+
+            if 'throws' in self.node.attrib and self.node.attrib['throws'] == '1':
+                children.append(self._make_gerror_param())
+
         elif self.typename in ['enumeration', 'bitfield']:
             children = self.node.iterfind(nsgtk('member'))
         elif self.typename in ['record', 'class', 'interface']:
