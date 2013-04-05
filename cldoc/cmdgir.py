@@ -265,10 +265,24 @@ class GirType:
         if not self.declaration is None:
             return
 
-        aname = nsc('type')
-
         if 'name' in self.node.attrib:
-            self.declaration = resolver(self.node.attrib['name'])
+            name = self.node.attrib['name']
+            self.declaration = resolver(name)
+
+            if self.spelling == '' and not self.declaration is None:
+                self.spelling = self.declaration.spelling
+
+                if self.declaration.typename in ['record', 'class', 'interface']:
+                    self.spelling += ' *'
+                    self.kind = cindex.TypeKind.POINTER
+
+            elif self.spelling == '' and name in GirType.builtins:
+                if name == 'utf8':
+                    self.spelling = 'gchar *'
+                elif name == 'none':
+                    self.spelling = 'void'
+                else:
+                    self.spelling = name
 
 class GirTypePointer(GirType):
     def __init__(self, tp):
