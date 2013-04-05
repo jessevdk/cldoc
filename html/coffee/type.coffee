@@ -4,6 +4,8 @@ class cldoc.Type extends cldoc.Node
 
         @qualifier = @node.attr('qualifier')
         @size = @node.attr('size')
+        @transfer_ownership = @node.attr('transfer-ownership') or 'none'
+        @allow_none = @node.attr('allow-none') == 'yes'
 
         @typeparts = []
 

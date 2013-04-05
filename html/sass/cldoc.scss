@@ -610,12 +610,22 @@ VAAAAABJRU5ErkJggg==');
           font-size: 1em;
         }
 
+        div.doc {
+          display: inline-block;
+        }
+
         tr.return {
           background: transparent;
 
           td {
             padding-top: 15px;
           }
+        }
+
+        span.annotation {
+          padding-left: 10px;
+          font-size: 0.9em;
+          color: $comment_color;
         }
 
         margin-bottom: 10px;

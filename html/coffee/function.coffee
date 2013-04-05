@@ -36,8 +36,8 @@ class cldoc.Function extends cldoc.Node
         if ret.length > 0
             retdiv = $('<div class="return_type"/>').appendTo(decldiv)
 
-            returntype = ret.children('type')
-            retdiv.append(new cldoc.Type(returntype).render())
+            returntype = new cldoc.Type(ret.children('type'))
+            retdiv.append(returntype.render())
 
         table = $('<table class="declaration"/>').appendTo(decldiv)
 
@@ -58,9 +58,10 @@ class cldoc.Function extends cldoc.Node
             arg = $(args[i])
             doc = cldoc.Doc.either(arg)
 
-            argtype = arg.children('type')
+            argtype = new cldoc.Type(arg.children('type'))
 
-            $('<td class="argument_type"/>').append(new cldoc.Type(argtype).render()).appendTo(row)
+            argtypetd = $('<td class="argument_type"/>').appendTo(row)
+            argtype.render().appendTo(argtypetd)
 
             name = arg.attr('name')
 
@@ -72,7 +73,10 @@ class cldoc.Function extends cldoc.Node
             argtr = $('<tr/>').appendTo(argtable)
             argtr.attr('id', arg.attr('id'))
             $('<td/>').text(arg.attr('name')).appendTo(argtr)
-            $('<td/>').html(doc).appendTo(argtr)
+            argttd = $('<td/>').html(doc).appendTo(argtr)
+
+            if argtype.allow_none
+                argttd.append($('<span class="annotation"/>').html('(may be <code>NULL</code>)'))
 
         if args.length == 0
             $('<td colspan="2"/>').appendTo(row)
@@ -82,12 +86,17 @@ class cldoc.Function extends cldoc.Node
         cldoc.Doc.either(@node).appendTo(div)
         argtable.appendTo(div)
 
-        retdoc = cldoc.Doc.either(ret)
-
-        if retdoc.length > 0
+        if returntype and returntype.node.attr('name') != 'void'
             tr = $('<tr class="return"/>').appendTo(argtable)
             $('<td class="keyword">return</td>').appendTo(tr)
-            $('<td/>').append(retdoc).appendTo(tr)
+
+            retdoctd = $('<td/>').appendTo(tr)
+            retdoctd.append(cldoc.Doc.either(ret))
+
+            if returntype.transfer_ownership == 'full'
+                retdoctd.append($('<span class="annotation"/>').text('(owned by caller)'))
+            else if returntype.transfer_ownership == 'container'
+                retdoctd.append($('<span class="annotation"/>').text('(container owned by caller)'))
 
         override = @node.children('override')
 
