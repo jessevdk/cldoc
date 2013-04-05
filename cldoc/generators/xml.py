@@ -187,8 +187,8 @@ class Xml(Generator):
     def type_to_xml(self, tp, parent=None):
         elem = ElementTree.Element('type')
 
-        if tp.is_array:
-            elem.set('size', str(tp.array_size))
+        if tp.is_constant_array:
+            elem.set('size', str(tp.constant_array_size))
             elem.append(self.type_to_xml(tp.element_type, parent))
         else:
             elem.set('name', tp.typename_for(parent))

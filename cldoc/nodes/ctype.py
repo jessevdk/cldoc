@@ -57,7 +57,7 @@ class Type(Node):
         self.extract(tp)
 
     @property
-    def is_array(self):
+    def is_constant_array(self):
         return self.tp.kind == cindex.TypeKind.CONSTANTARRAY
 
     @property
@@ -65,7 +65,7 @@ class Type(Node):
         return self._element_type
 
     @property
-    def array_size(self):
+    def constant_array_size(self):
         return self._array_size
 
     def _full_typename(self, decl):
@@ -117,13 +117,13 @@ class Type(Node):
 
     @property
     def typename(self):
-        if self.is_array:
+        if self.is_constant_array:
             return self._element_type.typename
         else:
             return self._typename
 
     def typename_for(self, node):
-        if self.is_array:
+        if self.is_constant_array:
             return self._element_type.typename_for(node)
 
         if not node or not '::' in self._typename:
