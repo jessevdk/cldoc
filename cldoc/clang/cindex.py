@@ -2020,7 +2020,7 @@ class TranslationUnit(ClangObject):
                                     len(args), unsaved_array,
                                     len(unsaved_files), options)
 
-        if ptr is None:
+        if ptr is None or not bool(ptr):
             raise TranslationUnitLoadError("Error parsing translation unit.")
 
         return cls(ptr, index=index)
