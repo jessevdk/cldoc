@@ -131,6 +131,8 @@ class Type(Node):
             self._builtin = True
         elif tp.kind != cindex.TypeKind.CONSTANTARRAY and hasattr(tp, 'spelling'):
             self._typename = tp.spelling
+        else:
+            self._typename = ''
 
     @property
     def builtin(self):
