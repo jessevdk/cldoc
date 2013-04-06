@@ -12,9 +12,13 @@ class cldoc.Function extends cldoc.Node
 
         isvirt = @node.attr('virtual')
         isprot = @node.attr('access') == 'protected'
+        isstat = @node.attr('static')
 
-        if isvirt || isprot
+        if isvirt || isprot || isstat
             specs = $('<ul class="specifiers"/>').appendTo(decldiv)
+
+            if isstat
+                specs.append($('<li class="static">static</li>'))
 
             if isprot
                 specs.append($('<li class="protected">protected</li>'))
