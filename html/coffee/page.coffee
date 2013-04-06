@@ -453,7 +453,8 @@ class cldoc.Page
             cpage = @pages[page]
             data = cpage.xml
 
-            item = data.find('#' + pageid)
+            pageidesc = pageid.replace(/([:()])/g, '\\$1')
+            item = data.find('#' + pageidesc)
 
             if item.length != 1
                 continue
