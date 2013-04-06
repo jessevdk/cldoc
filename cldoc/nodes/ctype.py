@@ -129,7 +129,7 @@ class Type(Node):
         elif tp.kind in Type.namemap:
             self._typename = Type.namemap[tp.kind]
             self._builtin = True
-        else:
+        elif tp.kind != cindex.TypeKind.CONSTANTARRAY and hasattr(tp, 'spelling'):
             self._typename = tp.spelling
 
     @property
