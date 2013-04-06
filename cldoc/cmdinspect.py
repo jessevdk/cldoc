@@ -30,7 +30,7 @@ def run(args):
     parser.add_argument('files', nargs='*', help='files to parse')
 
     restargs = args[sep + 1:]
-    cxxflags = args[1:sep]
+    cxxflags = args[:sep]
 
     opts = parser.parse_args(restargs)
 
