@@ -29,8 +29,7 @@ class cldoc.Doc extends cldoc.Node
         return text.replace(r, (m) -> "\\" + m)
 
     process_markdown: (text) ->
-        converter = new Showdown.converter()
-        html = converter.makeHtml(text)
+        html = marked(text)
 
         parts = html.split(Doc.magic_separator)
         rethtml = ''
