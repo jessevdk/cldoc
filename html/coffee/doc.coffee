@@ -1,5 +1,5 @@
 class cldoc.Doc extends cldoc.Node
-    @magic_separator = '%~@#~!'
+    @magic_separator = '%~@@~%'
 
     constructor: (@node) ->
         super(@node)
