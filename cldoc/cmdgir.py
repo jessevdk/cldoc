@@ -148,7 +148,7 @@ class GirComment(comment.Comment):
         except:
             pass
 
-        if cursor.typename in ['method', 'function', 'virtual-method']:
+        if cursor.typename in ['method', 'function', 'virtual-method', 'constructor']:
             # Assemble function argument comments and return value comment
             preat = []
             postat = []
