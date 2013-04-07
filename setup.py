@@ -33,6 +33,7 @@ coffee_files = [
     'references.coffee',
     'union.coffee',
     'gobjectclass.coffee',
+    'gobjectinterface.coffee',
     'gobjectboxed.coffee',
     'gobjectproperty.coffee',
 ]
