@@ -224,13 +224,11 @@ $in_group_row_spacing: 40px;
     overflow: auto;
     overflow-y: scroll;
 
-    a.back {
+    div.back {
       .arrow {
         padding-right: 5px;
       }
-    }
 
-    div.back {
       div.name {
         padding-bottom: 5px;
 
@@ -240,7 +238,7 @@ $in_group_row_spacing: 40px;
         }
       }
 
-      a.back {
+      a {
         display: block;
         margin-left: 10px;
       }
