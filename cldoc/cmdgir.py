@@ -817,7 +817,7 @@ class GirTree:
                 if not node is None:
                     self.root.append(node)
 
-                    if isinstance(node, Class):
+                    if isinstance(node, Class) or isinstance(node, Interface):
                         classes[node.qid] = node
 
         for qid in classes:
