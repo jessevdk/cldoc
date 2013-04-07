@@ -118,6 +118,8 @@ class cldoc.Sidebar
 
         items.append($(c))
 
+        cldoc.Page.bind_links(items)
+
         return $('#cldoc_sidebar_items').children()
 
     @load_group: (page, items) ->

@@ -339,12 +339,27 @@ class cldoc.Page
 
         return content
 
+    @bind_links: (container) ->
+        container.find('a').on('click', (e) =>
+            ref = $(e.delegateTarget).attr('href')
+
+            if ref[0] == '#'
+                @load_ref(@make_external_ref(ref))
+                return false
+            else
+                return true
+        )
+
     @load_contents: (page) ->
         content = $('#cldoc #cldoc_content')
         content.children().detach()
 
         @load_description(page, content)
-        content.append($(@load_items(page)))
+
+        items = $(@load_items(page))
+        content.append(items)
+
+        @bind_links(content)
 
         return content.children()
 
