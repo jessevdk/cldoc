@@ -126,12 +126,21 @@ class GirComment(comment.Comment):
 
         try:
             firstdot = text.index('.')
+
+            try:
+                firstnl = text.index("\n")
+            except:
+                firstnl = firstdot
+
+            if firstnl < firstdot:
+                firstdot = firstnl - 1
+
             nextnonsp = firstdot + 1
 
             while nextnonsp < len(text) and text[nextnonsp] != '\n' and not text[nextnonsp].isspace():
                 nextnonsp += 1
 
-            if nextnonsp != len(text) and text[nextnonsp] != '\n':
+            if nextnonsp != len(text):
                 # Replicate brief and non brief...
                 # Insert newline just after .
                 brieftext = text[:firstdot]
