@@ -78,7 +78,7 @@ class cldoc.Node
         @name
 
     @render_container: ->
-        ['<' + @render_container_tag + ' class="' + cldoc.html_escape(@title[1].toLowerCase()) + '">', '</' + @render_container_tag + '>']
+        ['<' + @render_container_tag + ' class="' + cldoc.html_escape(@title[1].toLowerCase().replace(/[ ]/g, '_')) + '">', '</' + @render_container_tag + '>']
 
     render: (container) ->
         null
