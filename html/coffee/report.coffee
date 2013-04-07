@@ -4,8 +4,8 @@ class cldoc.Report extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
-    render_sidebar: (container) ->
-        container.append($('<li/>').append(cldoc.Page.make_link(@ref, @name)))
+    render_sidebar: ->
+        return '<li>' + cldoc.Page.make_link(@ref, @name) + '</li>'
 
     render: (container) ->
 

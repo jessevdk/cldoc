@@ -1,27 +1,27 @@
 class cldoc.ImplementedBy extends cldoc.Node
     @title = ['Implemented By', 'Implemented By']
+    @render_container_tag = 'table'
 
     constructor: (@node) ->
         super(@node)
 
         @access = @node.attr('access')
 
-    @render_container: ->
-        $('<table class="implementedby"/>')
+    render: ->
+        e = cldoc.html_escape
 
-    render: (container) ->
-        row = $('<tr/>').appendTo(container)
-
-        row.attr('id', @id)
+        ret = '<tr id="' + e(@id) + '">'
 
         access = @access
 
         if access == 'public'
             access = ''
 
-        $('<td class="keyword"/>').text(access).appendTo(row)
-        $('<td/>').html(cldoc.Page.make_link(@ref, @name)).appendTo(row)
-        $('<td/>').html(cldoc.Doc.brief(@node)).appendTo(row)
+        ret += '<td class="keyword">' + e(access) + '</td>'
+        ret += '<td>' + cldoc.Page.make_link(@ref, @name) + '</td>'
+        ret += '<td>' + cldoc.Doc.brief(@node) + '</td>'
+
+        return ret + '</tr>'
 
 cldoc.Node.types.implementedby = cldoc.ImplementedBy
 

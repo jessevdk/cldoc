@@ -4,11 +4,8 @@ class cldoc.Enum extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
-    render: (container) ->
-        id = $('<span class="identifier"/>')
-
-        if not cldoc.startswith(@name, '(anonymous')
-            id.text(@name)
+    render: ->
+        e = cldoc.html_escape
 
         isprot = @node.attr('access') == 'protected'
 
@@ -23,41 +20,28 @@ class cldoc.Enum extends cldoc.Node
         if @node.attr('typedef')
             n = 'typedef ' + n
 
-        sp = $('<span class="keyword"/>').text(n)
-        name = $('<div/>').append(sp).append(' ')
+        ret = '<div id="' + e(@id) + '"><span class="keyword">' + e(n) + '</span> '
+        ret += '<span class="identifier">'
 
-        name.attr('id', @id)
+        if not cldoc.startswith(@name, '(anonymous')
+            ret += e(@name)
 
-        name.append(id)
-        container.append(name)
+        ret += '</span></div>'
+        ret += cldoc.Doc.either(@node)
 
-        doc = new cldoc.Doc(@doc).render()
-
-        if doc
-            container.append(doc)
-        else
-            brief = new cldoc.Doc(@doc).render()
-
-            if brief
-                container.append(brief)
-
-        table = $('<table/>')
-        container.append(table)
+        ret += '<table>'
 
         for value in @node.children('enumvalue')
             value = $(value)
-            row = $('<tr/>')
-            row.attr('id', value.attr('id'))
 
-            nm = $('<td class="name identifier"/>').text(value.attr('name'))
+            ret += '<tr id="' + e(value.attr('id')) + '">'
+            ret += '<td class="name identifier">' + e(value.attr('name')) + '</td>'
+            ret += '<td class="value">' + e(value.attr('value')) + '</td>'
+            ret += '<td class="doc">' + cldoc.Doc.either(value) + '</td>'
 
-            row.append(nm)
-            row.append($('<td class="value"/>').text(value.attr('value')))
+            ret += '</tr>'
 
-            doctd = $('<td class="doc"/>').appendTo(row)
-            doctd.append(cldoc.Doc.either(value))
-
-            table.append(row)
+        return ret + '</table>'
 
 cldoc.Node.types.enum = cldoc.Enum
 

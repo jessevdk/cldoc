@@ -488,7 +488,7 @@ VAAAAABJRU5ErkJggg==');
     }
 
     table.category, table.namespace, table.fields, table.variables,
-    table.arguments, table.bases, table.implements, table.subclasses, table.implementedby,
+    table.arguments, table.bases, table.implements, table.subclasses, table.implemented_by,
     table.structures, table.gobject_classes, table.classes, table.gobject_boxed_structures,
     table.gobject_properties {
       @include table-items;

@@ -4,31 +4,28 @@ class cldoc.Category extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
-    render: (container) ->
-        div = $('<div class="item"/>')
-        container.append(div)
+    render: ->
+        ret = '<div class="item">'
 
-        a = cldoc.Page.make_link(@ref, @name)
-        a.attr('id', @id)
-
-        div.append(a)
-        div.append(new cldoc.Doc(@brief).render())
+        ret += cldoc.Page.make_link(@ref, @name, {'id': @id})
+        ret += new cldoc.Doc(@brief).render()
 
         categories = @node.children('category')
 
         if categories.length > 0
-            tb = $('<table class="category"/>')
+            ret += '<table class="category">'
 
             for cat in categories
                 cat = $(cat)
 
-                row = $('<tr/>')
                 a = cldoc.Page.make_link(cat.attr('ref'), cat.attr('name'))
-                row.append($('<td/>').append(a))
-                row.append($('<td class="doc"/>').append(cldoc.Doc.either(cat)))
-                tb.append(row)
+                doc = cldoc.Doc.either(cat)
 
-            div.append(tb)
+                ret += '<tr><td>' + a + '</td><td class="doc">' + doc + '</td></tr>'
+
+            ret += '</table>'
+
+        return ret
 
 cldoc.Node.types.category = cldoc.Category
 

@@ -1,36 +1,45 @@
 class cldoc.References extends cldoc.Node
     @title = ['References', 'References']
+    @render_container_tag = 'table'
 
     constructor: (@node) ->
         super(@node)
 
-    render_sidebar: (container) ->
+    render_sidebar: ->
+        ret = ''
+        e = cldoc.html_escape
+
         for child in @node.children()
             child = $(child)
 
             a = cldoc.Page.make_link(cldoc.Page.current_page + '#ref-' + child.attr('id'), child.attr('name'))
-            $('<li/>').append($('<span class="keyword"/>').text(cldoc.tag(child)[0])).append(' ').append(a).appendTo(container)
+            ret += '<li><span class="keyword">' + e(cldoc.tag(child)[0]) + ' ' + a + '</span></li>'
 
-    @render_container: ->
-        $('<table class="references"/>')
+        return ret
 
-    render: (container) ->
+    render: ->
+        ret = ''
+        e = cldoc.html_escape
+
         for child in @node.children()
             child = $(child)
 
-            kw = $('<span class="keyword"/>').text(cldoc.tag(child)[0]).append('&nbsp;')
-            id = $('<span class="identifier"/>').text(child.attr('id'))
+            kw = '<span class="keyword">' + e(cldoc.tag(child)[0]) + '&nbsp;' + '</span>'
+            id = '<span class="identifier">' + e(child.attr('id')) + '</span>'
 
-            row = $('<tr/>').append($('<td class="title"/>').append(kw).append(id)).appendTo(container)
-            row.attr('id', 'ref-' + child.attr('id'))
+            ret += '<tr id="' + e('ref-' + child.attr('id')) + '"><td class="title">' + kw + id + '</td>'
 
             for loc in child.children('location')
                 loc = $(loc)
 
-                $('<td/>').text(loc.attr('file')).appendTo(row)
-                $('<td/>').text(loc.attr('line') + ':' + loc.attr('column')).appendTo(row)
+                file = e(loc.attr('file'))
+                line = e(loc.attr('line') + ':' + loc.attr('column'))
 
-                row = $('<tr/>').append('<td/>').appendTo(container)
+                ret += '<td>' + file + '</td>'
+                ret += '<td>' + line + '</td>'
+                ret += '</tr><tr><td></td>'
+
+            ret += '</tr>'
 
             for tp in child.children('doctype')
                 tp = $(tp)
@@ -39,12 +48,17 @@ class cldoc.References extends cldoc.Node
                 component = tp.attr('component')
 
                 if component
-                    name = name + '.' + component
+                    name += '.' + component
 
                 refs = ($(x).attr('name') for x in tp.children('ref')).join(', ')
-                row = $('<tr class="missing"/>').append($('<td/>').text(name)).append($('<td/>').text(refs)).append('<td/>').appendTo(container)
 
-            row.addClass('last')
+                ret += '<tr class="missing">'
+                ret += '<td>' + e(name) + '</td>'
+                ret += '<td>' + e(refs) + '</td>'
+                ret += '<td></td>'
+                ret += '</tr>'
+
+        return ret
 
 cldoc.Node.types.references = cldoc.References
 

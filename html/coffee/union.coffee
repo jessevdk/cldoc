@@ -1,27 +1,22 @@
 class cldoc.Union extends cldoc.Node
     @title = ['Union', 'Unions']
+    @render_container_tag = 'table'
 
     constructor: (@node) ->
         super(@node)
 
-    @render_container: ->
-        $('<table class="fields"/>')
-
     sidebar_name: ->
-        $('<span><span class="keyword">union</span></span>').text(@name)
+        e = cldoc.html_escape
+        return '<span><span class="keyword">union</span> ' + e(@name) + '</span>'
 
-    render: (container) ->
-        row = $('<tr class="union"/>').appendTo(container)
-        kw = $('<span class="keyword">union</span>')
-        $('<td/>').append(kw).appendTo(row)
-        $('<td/>').appendTo(row)
+    render: ->
+        ret = '<tr class="union">'
 
-        doctd = $('<td class="doc"/>').appendTo(row)
-        doctd.append(cldoc.Doc.either(@node))
+        ret += '<td><span class="keyword">union</span></td>'
+        ret += '<td></td>'
 
-        ctable = $('<table class="fields union"/>')
-        row = $('<tr/>').appendTo(container)
-        td = $('<td colspan="3"/>').appendTo(row).append(ctable)
+        ret += '<td class="doc">' + cldoc.Doc.either(@node) + '</td>'
+        ret += '</tr><tr><td colspan="3"><table class="fields union">'
 
         # Add also the things contained in the union
         for child in @node.children()
@@ -29,7 +24,9 @@ class cldoc.Union extends cldoc.Node
             tp = cldoc.Page.node_type(child)
 
             if tp
-                new tp(child).render(ctable)
+                ret += new tp(child).render()
+
+        return ret + '</table></td></tr>'
 
 cldoc.Node.types.union = cldoc.Union
 

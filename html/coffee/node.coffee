@@ -12,8 +12,11 @@ class cldoc.Node
         'subclass',
         'implementedby',
         'typedef',
-        'class, classtemplate, gobject\\:class',
-        'struct, gobject\\:boxed',
+        'class, classtemplate',
+        'gobject\\:class',
+        'gobject\\:interface',
+        'gobject\\:boxed',
+        'struct',
         'enum',
         'field, union',
         'variable',
@@ -36,19 +39,22 @@ class cldoc.Node
         'class': 5,
         'classtemplate': 5,
         'gobjectclass': 5,
-        'struct': 6,
-        'gobjectboxed': 6,
-        'enum': 7,
-        'enumvalue': 8,
-        'field': 9,
-        'union': 10,
-        'variable': 11,
-        'gobjectproperty': 11,
-        'constructor': 12,
-        'destructor': 13,
-        'method': 14,
-        'function': 15
+        'gobjectinterface': 6,
+        'struct': 7,
+        'gobjectboxed': 7,
+        'enum': 8,
+        'enumvalue': 9,
+        'field': 10,
+        'union': 11,
+        'variable': 12,
+        'gobjectproperty': 12,
+        'constructor': 13,
+        'destructor': 14,
+        'method': 15,
+        'function': 16
     }
+
+    @render_container_tag = 'div'
 
     constructor: (@node) ->
         if !@node
@@ -72,7 +78,7 @@ class cldoc.Node
         @name
 
     @render_container: ->
-        $('<div/>', {'class': @title[1].toLowerCase()})
+        ['<' + @render_container_tag + ' class="' + cldoc.html_escape(@title[1].toLowerCase()) + '">', '</' + @render_container_tag + '>']
 
     render: (container) ->
         null

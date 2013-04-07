@@ -15,10 +15,11 @@ class cldoc.Coverage extends cldoc.Node
 
         return ret
 
-    render_sidebar_type: (type, container) ->
+    render_sidebar_type: (type) ->
         typename = type.attr('name')
 
         cov = @get_coverage(type)
+        e = cldoc.html_escape
 
         if cov.documented == 0 && cov.undocumented == 0
             return
@@ -26,57 +27,69 @@ class cldoc.Coverage extends cldoc.Node
         tt = cov.documented + ' out of ' + cov.total + ' (' + cov.percentage + '%)'
 
         a = cldoc.Page.make_link(cldoc.Page.current_page + '#' + typename, typename)
-        li = $('<li/>').appendTo(container)
+
+        ret = '<li>'
 
         if cov.undocumented == 0
-            li.append($('<span class="bullet complete"/>').html('&#x2713;'))
+            ret += '<span class="bullet complete">&#x2713;</span>'
         else
-            li.append($('<span class="bullet incomplete"/>').html('&#10007;'))
+            ret += '<span class="bullet incomplete">&#10007;</span>'
 
-        li.append(a).append($('<div class="brief"/>').text(tt))
+        ret += a + '<div class="brief">' + e(tt) + '</div>'
+        return ret + '</li>'
 
-    render_sidebar: (container) ->
+    render_sidebar: ->
         types = @node.children('type')
+        ret = ''
 
         for type in types
-            @render_sidebar_type($(type), container)
+            ret += @render_sidebar_type($(type))
 
-    render_type: (type, container) ->
+        return ret
+
+    render_type: (type) ->
+        ret = ''
+
         typename = type.attr('name')
         cov = @get_coverage(type)
 
         if cov.documented == 0 && cov.undocumented == 0
-            return
+            return ret
 
-        h3 = $('<h3/>').text(typename).append(' (' + cov.percentage + '%)').appendTo(container)
-        h3.attr('id', typename)
+        e = cldoc.html_escape
 
-        t = $('<table class="coverage"/>').appendTo(container)
+        ret += '<h3 id="' + e(typename) + '">' + e(typename + ' (' + cov.percentage + '%)') + '</h3'>
+        ret += '<table class="coverage">'
 
-        $('<tr/>').append($('<td>Documented:</td>')).append($('<td/>').text(cov.documented)).appendTo(t)
-        $('<tr/>').append($('<td>Undocumented:</td>')).append($('<td/>').text(cov.undocumented)).appendTo(t)
+        ret += '<tr><td>Documented:</td><td>' + e(cov.documented) + '</td></tr>'
+        ret += '<tr><td>Undocumented:</td><td>' + e(cov.undocumented) + '</td></tr>'
 
-        t = $('<table class="undocumented"/>').appendTo(container)
+        ret += '</table><table class="undocumented">'
 
         for undoc in type.children('undocumented')
             undoc = $(undoc)
-            row = $('<tr/>').appendTo(t)
 
-            $('<td/>').text(undoc.attr('id')).appendTo(row)
+            ret += '<tr><td>' + e(undoc.attr('id')) + '</td>'
 
             for loc in undoc.children('location')
                 loc = $(loc)
 
-                $('<td/>').text(loc.attr('file')).appendTo(row)
-                $('<td/>').text(loc.attr('line') + ':' + loc.attr('column')).appendTo(row)
+                file = e(loc.attr('file'))
+                line = e(loc.attr('line') + ':' + loc.attr('column'))
 
-                row = $('<tr/>').append('<td/>').appendTo(t)
+                ret += '<td>' + file + '</td><td>' + line + '</td>'
+                ret += '</tr><td></td>'
 
-    render: (container) ->
+        return ret + '</tr></table>'
+
+    render: ->
         types = @node.children('type')
+        ret = ''
 
         for type in types
-            @render_type($(type), container)
+            ret += @render_type($(type))
+
+        return ret
 
 cldoc.Node.types.coverage = cldoc.Coverage
 

@@ -1,24 +1,20 @@
 class cldoc.Variable extends cldoc.Node
     @title = ['Variable', 'Variables']
+    @render_container_tag = 'table'
 
     constructor: (@node) ->
         super(@node)
 
-    @render_container: ->
-        $('<table class="variables"/>')
+    render: ->
+        e = cldoc.html_escape
 
-    render: (container) ->
-        row = $('<tr/>')
+        ret = '<tr id="' + e(@node.attr('id')) + '">'
 
-        row.attr('id', @node.attr('id'))
+        ret += '<td class="variable_name identifier">' + e(@node.attr('name')) + '</td>'
+        ret += '<td class="variable_type">' + new cldoc.Type(@node.children('type')).render() + '</td>'
+        ret += '<td class="doc">' + cldoc.Doc.either(@node) + '</td>'
 
-        row.append($('<td class="variable_name identifier"/>').text(@node.attr('name')))
-        row.append($('<td class="variable_type"/>').append(new cldoc.Type(@node.children('type')).render()))
-
-        doctd = $('<td class="doc"/>').appendTo(row)
-        doctd.append(cldoc.Doc.either(@node))
-
-        container.append(row)
+        return ret + '</tr>'
 
 cldoc.Node.types.variable = cldoc.Variable
 

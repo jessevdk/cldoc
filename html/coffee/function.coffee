@@ -4,120 +4,115 @@ class cldoc.Function extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
-    render: (container) ->
-        div = $('<div class="function"/>').appendTo(container)
+    render: ->
+        e = cldoc.html_escape
 
-        decldiv = $('<div class="declaration"/>').appendTo(div)
-        decldiv.attr('id', @id)
+        ret = '<div class="function">'
+        ret += '<div class="declaration" id="' + e(@id) + '">'
 
         isvirt = @node.attr('virtual')
         isprot = @node.attr('access') == 'protected'
         isstat = @node.attr('static')
 
         if isvirt || isprot || isstat
-            specs = $('<ul class="specifiers"/>').appendTo(decldiv)
+            ret += '<ul class="specifiers">'
 
             if isstat
-                specs.append($('<li class="static">static</li>'))
+                ret += '<li class="static">static</li>'
 
             if isprot
-                specs.append($('<li class="protected">protected</li>'))
+                ret += '<li class="protected">protected</li>'
 
             if isvirt
                 isover = @node.attr('override')
 
                 if isover
-                    specs.append($('<li class="override">override</li>'))
+                    ret += '<li class="override">override</li>'
                 else
-                    specs.append($('<li class="virtual">virtual</li>'))
+                    ret += '<li class="virtual">virtual</li>'
 
                 if @node.attr('abstract')
-                    specs.append($('<li class="abstract">abstract</li>'))
+                    ret += '<li class="abstract">abstract</li>'
+
+            ret += '</ul>'
 
         # Return type
-        ret = @node.children('return')
+        retu = @node.children('return')
+        returntype = null
 
-        if ret.length > 0
-            retdiv = $('<div class="return_type"/>').appendTo(decldiv)
+        if retu.length > 0
+            returntype = new cldoc.Type(retu.children('type'))
+            ret += '<div class="return_type">' + returntype.render() + '</div>'
 
-            returntype = new cldoc.Type(ret.children('type'))
-            retdiv.append(returntype.render())
-
-        table = $('<table class="declaration"/>').appendTo(decldiv)
-
-        row = $('<tr/>').appendTo(table)
-        td = $('<td class="identifier"/>').text(@name).appendTo(row)
-
-        $('<td class="open_paren"/>').text('(').appendTo(row)
+        ret += '<table class="declaration">'
+        ret += '<tr><td class="identifier">' + e(@name) + '</td>'
+        ret += '<td class="open_paren">(</td>'
 
         args = @node.children('argument')
 
-        argtable = $('<table class="arguments"/>')
+        argtable = '<table class="arguments">'
 
         for i in [0..(args.length - 1)] by 1
             if i != 0
-                row = $('<tr/>').appendTo(table)
-                $('<td colspan="2"/>').appendTo(row)
+                ret += '</tr><tr><td colspan="2"></td>'
 
             arg = $(args[i])
-            doc = cldoc.Doc.either(arg)
 
             argtype = new cldoc.Type(arg.children('type'))
-
-            argtypetd = $('<td class="argument_type"/>').appendTo(row)
-            argtype.render().appendTo(argtypetd)
+            ret += '<td class="argument_type">' + argtype.render() + '</td>'
 
             name = arg.attr('name')
 
             if i != args.length - 1
                 name += ','
 
-            $('<td class="argument_name"/>').text(name).appendTo(row)
+            ret += '<td class="argument_name">' + e(name) + '</td>'
 
-            argtr = $('<tr/>').appendTo(argtable)
-            argtr.attr('id', arg.attr('id'))
-            $('<td/>').text(arg.attr('name')).appendTo(argtr)
-            argttd = $('<td/>').html(doc).appendTo(argtr)
+            argtable += '<tr id="' + e(arg.attr('id')) + '">'
+            argtable += '<td>' + e(arg.attr('name')) + '</td>'
+            argtable += '<td>' + cldoc.Doc.either(arg)
 
             if argtype.allow_none
-                argttd.append($('<span class="annotation"/>').html('(may be <code>NULL</code>)'))
+                argtable += '<span class="annotation">(may be <code>NULL</code>)</span>'
 
-        if args.length == 0
-            $('<td colspan="2"/>').appendTo(row)
-
-        $('<td class="close_paren"/>').text(')').appendTo(row)
-
-        cldoc.Doc.either(@node).appendTo(div)
-        argtable.appendTo(div)
+            argtable += '</td></tr>'
 
         if returntype and returntype.node.attr('name') != 'void'
-            tr = $('<tr class="return"/>').appendTo(argtable)
-            $('<td class="keyword">return</td>').appendTo(tr)
-
-            retdoctd = $('<td/>').appendTo(tr)
-            retdoctd.append(cldoc.Doc.either(ret))
+            argtable += '<tr class="return">'
+            argtable += '<td class="keyword">return</td>'
+            argtable += '<td>' + cldoc.Doc.either(retu)
 
             if returntype.transfer_ownership == 'full'
-                retdoctd.append($('<span class="annotation"/>').text('(owned by caller)'))
+                argtable += '<span class="annotation">(owned by caller)</span>'
             else if returntype.transfer_ownership == 'container'
-                retdoctd.append($('<span class="annotation"/>').text('(container owned by caller)'))
+                argtable += '<span class="annotation">(container owned by caller)</span>'
+
+            argtable += '</tr>'
+
+        if args.length == 0
+            ret += '<td colspan="2"></td>'
+
+        ret += '<td class="close_paren">)</td></tr></table></div>'
+        ret += cldoc.Doc.either(@node)
+        ret += argtable + '</table>'
 
         override = @node.children('override')
 
         if override.length > 0
-            overrides = $('<div class="overrides"/>').append($('<span class="title">Overrides: </span>'))
-            div.append(overrides)
+            ret += '<div class="overrides"><span class="title">Overrides: </span>'
 
             for i in [0..override.length-1]
                 ov = $(override[i])
 
                 if i != 0
                     if i == override.length - 1
-                        overrides.append(' and ')
+                        ret += ' and '
                     else
-                        overrides.append(', ')
+                        ret += ', '
 
-                overrides.append(cldoc.Page.make_link(ov.attr('ref'), ov.attr('name')))
+                ret += cldoc.Page.make_link(ov.attr('ref'), ov.attr('name'))
+
+        return ret + '</div>'
 
 cldoc.Node.types.function = cldoc.Function
 

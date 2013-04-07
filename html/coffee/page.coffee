@@ -132,10 +132,7 @@ class cldoc.Page
             cb(@pages[page])
             return
 
-        if page == '(report)'
-            url = 'report.xml'
-        else
-            url = 'xml/' + page + '.xml'
+        url = cldoc.host + '/xml/' + page + '.xml'
 
         $.ajax({
             url: url,
@@ -163,20 +160,20 @@ class cldoc.Page
         else
             @scroll(page, scrollto)
 
-    @know_more: (ref) ->
-        a = @make_link(ref, 'more information on separate page...')
-        a.addClass('know_more')
+    @make_link: (ref, name, attrs = {}) ->
+        e = cldoc.html_escape
 
-        return a
+        r = @make_internal_ref(ref)
+        ret = '<a href="' + e(r) + '"'
 
-    @make_link: (ref, name) ->
-        a = $('<a/>', {href: @make_internal_ref(ref)}).text(name)
-        a.on('click', => @load_ref(ref); false)
+        for k, v of attrs
+            ret += ' ' + k + '="' + e(v) + '"'
 
-        return a
+        return ret + '>' + e(name) + '</a>'
 
     @load_page: (page, scrollto) ->
         @first = @current_page == null
+        start = new Date();
 
         @current_page = page
         cpage = @pages[page]
@@ -192,9 +189,12 @@ class cldoc.Page
             $('#cldoc #cldoc_content').append(html.content)
             cldoc.Sidebar.load_html(html.sidebar)
         else
+            sidebar = cldoc.Sidebar.load(root)
+            content = @load_contents(root)
+
             cpage.html = {
-                sidebar: cldoc.Sidebar.load(root),
-                content: @load_contents(root)
+                sidebar: sidebar,
+                content: content
             }
 
         title = root.attr('name')
@@ -212,6 +212,7 @@ class cldoc.Page
             title = 'Documentation'
 
         document.title = title
+
         @scroll(page, scrollto, true)
 
     @make_external_ref: (page, id) ->
@@ -250,25 +251,26 @@ class cldoc.Page
 
     @make_header: (item) ->
         id = item.attr('id')
+        e = cldoc.html_escape
 
         if id
-            ret = $('<span/>')
+            ret = '<span>'
 
             type = @node_type(item)
 
             if type
-                $('<span class="keyword"/>').text(type.title[0]).appendTo(ret)
+                ret += '<span class="keyword">' + e(type.title[0]) + '</span>'
 
             title = item.attr('title')
 
             if title
-                $('<span/>').text(title).appendTo(ret)
+                ret += '<span>' + e(title) + '</span>'
             else
-                $('<span/>').text(id).appendTo(ret)
+                ret += '<span>' + e(id) + '</span>'
 
             return ret
         else
-            return null
+            return ''
 
     @load_description: (page, content) ->
         doc = cldoc.Doc.either(page)
@@ -295,8 +297,10 @@ class cldoc.Page
 
         return cldoc.Node.types[typename]
 
-    @load_items: (page, content) ->
+    @load_items: (page) ->
         all = page.children()
+        content = ''
+        e = cldoc.html_escape
 
         for group in cldoc.Node.groups
             items = all.filter(group)
@@ -309,11 +313,10 @@ class cldoc.Page
             if !type || type == cldoc.Node.types.report
                 continue
 
-            h2 = $('<h2/>').text(type.title[1])
-            h2.attr('id', type.title[1].toLowerCase())
-            h2.appendTo(content)
+            content += '<h2 id="' + e(type.title[1].toLowerCase()) + '">' + e(type.title[1]) + '</h2>'
 
             container = type.render_container()
+            itemcontents = ''
 
             for item in items
                 item = $(item)
@@ -324,17 +327,24 @@ class cldoc.Page
                     tp = type
 
                 if tp
-                    new tp($(item)).render(container)
+                    ret = new tp($(item)).render()
+
+                    if ret
+                        itemcontents += ret
 
             if container
-                content.append(container)
+                content += container[0] + itemcontents + container[1]
+            else
+                content += itemcontents
+
+        return content
 
     @load_contents: (page) ->
         content = $('#cldoc #cldoc_content')
         content.children().detach()
 
         @load_description(page, content)
-        @load_items(page, content)
+        content.append($(@load_items(page)))
 
         return content.children()
 

@@ -1,5 +1,6 @@
 class cldoc.Implements extends cldoc.Node
     @title = ['Implements', 'Implements']
+    @render_container_tag = 'table'
 
     constructor: (@node) ->
         super(@node)
@@ -10,23 +11,23 @@ class cldoc.Implements extends cldoc.Node
         @name = @type.attr('name')
         @id = @type.attr('ref')
 
-    @render_container: ->
-        $('<table class="implements"/>')
+    render: ->
+        e = cldoc.html_escape
 
-    render: (container) ->
-        type = new cldoc.Type(@type)
-
-        row = $('<tr/>').appendTo(container)
-        row.attr('id', @id)
+        ret = '<tr id="' + e(@id) + '">'
 
         access = @access
 
         if access == 'public'
             access = ''
 
-        $('<td class="keyword"/>').text(access).appendTo(row)
-        $('<td/>').html(type.render()).appendTo(row)
-        $('<td/>').html(cldoc.Doc.brief(@node)).appendTo(row)
+        type = new cldoc.Type(@type)
+
+        ret += '<td class="keyword">' + e(access) + '</td>'
+        ret += '<td>' + type.render() + '</td>'
+        ret += '<td>' + cldoc.Doc.brief(@node) + '</td>'
+
+        return ret + '</tr>'
 
 cldoc.Node.types.implements = cldoc.Implements
 

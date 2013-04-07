@@ -1,5 +1,6 @@
 class cldoc.Struct extends cldoc.Node
     @title = ['Struct', 'Structures']
+    @render_container_tag = 'table'
 
     constructor: (@node) ->
         super(@node)
@@ -9,88 +10,88 @@ class cldoc.Struct extends cldoc.Node
         else
             @keyword = 'struct'
 
-    @render_container: ->
-        return $('<table/>', {'class': @title[1].toLowerCase().replace(' ', '_')})
-
-    render: (container) ->
+    render: ->
         if @ref || @node.children('field, method, function').length == 0
-            @render_short(container)
+            return @render_short()
         else
-            @render_whole(container)
+            return @render_whole()
 
-    render_short: (container) ->
-        row = $('<tr class="short"/>')
+    render_short: ->
+        e = cldoc.html_escape
+
+        ret = '<tr class="short">'
 
         if @ref
             id = cldoc.Page.make_link(@ref, @name)
         else
-            id = $('<span class="identifier"/>').text(@name)
+            id = '<span class="identifier">' + e(@name) + '</span>'
 
-        row.append($('<td/>').html(id))
-        row.append($('<td/>').html(cldoc.Doc.brief(@node)))
+        ret += '<td>' + id + '</td>'
+        ret += '<td>' + cldoc.Doc.brief(@node) + '</td>'
 
-        container.append(row)
+        return ret + '</tr>'
 
-    render_whole: (container) ->
-        item = $('<div class="item"/>')
+    render_whole: ->
+        e = cldoc.html_escape
 
-        id = $('<span class="identifier"/>').text(@name)
-        k = $('<span class="keyword"/>')
+        ret += '<tr class="full"><td colspan="2"><div class="item">'
+
+        id = '<span class="identifier">' + e(@name) + '</span>'
+        k = '<span class="keyword">'
 
         isprot = @node.attr('access') == 'protected'
 
         if isprot
-            k.append('protected ')
+            k += 'protected '
 
-        k.append(@keyword)
+        k += e(@keyword) + '</span>'
 
-        name = $('<div/>').append(k).append(' ')
-        name.attr('id', @id)
-
-        name.append(id)
+        ret += '<div id="' + e(@id) + '">' + k + ' ' + id
 
         templatetypes = @node.children('templatetypeparameter')
 
         if templatetypes.length > 0
-            name.append('&lt;')
+            ret += '&lt;'
 
             for t in templatetypes
                 t = $(t)
-                name.append(t.attr('name'))
 
-            name.append('&gt;')
+                ret += e(t.attr('name'))
 
-        item.append(name)
-        item.append(cldoc.Doc.either(@node))
+            ret += '&gt;'
 
-        @render_fields(item)
-        @render_variables(item)
+        ret += '</div>'
+        ret += cldoc.Doc.either(@node)
 
-        row = $('<tr class="full"/>').append($('<td colspan="2"/>').append(item))
-        container.append(row)
+        ret += @render_fields()
+        ret += @render_variables()
 
-    render_variables: (item) ->
+        return ret + '</div></td></tr>'
+
+    render_variables: ->
         # Add variables
         variables = @node.children('variable')
 
         if variables.length == 0
-            return
+            return ''
 
         container = cldoc.Variable.render_container()
-        item.append(container)
+        itemsc = ''
 
         for variable in variables
-            new cldoc.Variable($(variable)).render(container)
+            itemsc += new cldoc.Variable($(variable)).render()
 
-    render_fields: (item) ->
+        return container[0] + itemsc + container[1]
+
+    render_fields: ->
         # Add fields
-        fields = @node.children('field, union')
+        fields = @node.children('field,union')
 
         if fields.length == 0
-            return
+            return ''
 
         container = cldoc.Field.render_container()
-        item.append(container)
+        itemsc = ''
 
         for field in fields
             field = $(field)
@@ -98,7 +99,9 @@ class cldoc.Struct extends cldoc.Node
             tp = cldoc.Page.node_type(field)
 
             if tp
-                new tp(field).render(container)
+                itemsc += new tp(field).render()
+
+        return container[0] + itemsc + container[1]
 
 cldoc.Node.types.struct = cldoc.Struct
 

@@ -15,7 +15,7 @@ class cldoc.Doc extends cldoc.Node
         if brief
             return brief
 
-        return $()
+        return ''
 
     @brief: (node) ->
         return new Doc(node.children('brief')).render()
@@ -36,7 +36,7 @@ class cldoc.Doc extends cldoc.Node
 
         for i in [0..parts.length-2] by 3
             a = cldoc.Page.make_link(parts[i + 1], parts[i + 2])
-            rethtml += parts[i] + a[0].outerHTML
+            rethtml += parts[i] + a
 
         return rethtml + parts[parts.length - 1]
 
@@ -63,9 +63,10 @@ class cldoc.Doc extends cldoc.Node
 
     render: ->
         if !@node
-            return null
+            return ''
 
-        container = $('<div/>', {'class': cldoc.tag(@node)[0]})
+        e = cldoc.html_escape
+        ret = '<div class="' + e(cldoc.tag(@node)[0]) + '">'
 
         contents = @node.contents()
         astext = ''
@@ -83,29 +84,17 @@ class cldoc.Doc extends cldoc.Node
                 else if tag == 'code'
                     # Do the code!
                     if astext
-                        container.append(@process_markdown(astext))
+                        ret += @process_markdown(astext)
                         astext = ''
 
-                    container.append(@process_code(c))
+                    ret += @process_code(c)
             else
                 astext += $(c).text()
 
         if astext
-            container.append(@process_markdown(astext))
+            ret += @process_markdown(astext)
 
-        # Replace reference links with our custom onclick
-        for a in container.find('a')
-            a = $(a)
-            href = a.attr('href')
-
-            if href[0] == '#'
-                a.on('click', do (href) ->
-                    ->
-                        cldoc.Page.load_ref(cldoc.Page.make_external_ref(href))
-                        false
-                )
-
-        return container
+        return ret + '</div>'
 
 cldoc.Node.types.doc = cldoc.Doc
 

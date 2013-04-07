@@ -4,55 +4,69 @@ class cldoc.Arguments extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
-    render_sidebar_function: (func, container) ->
+    render_sidebar_function: (func) ->
         a = cldoc.Page.make_link(cldoc.Page.current_page + '#' + func.attr('id'), func.attr('name'))
+        return '<li>' + a + '</li>'
 
-        $('<li/>').html(a).appendTo(container)
-
-    render_sidebar: (container) ->
+    render_sidebar: ->
         funcs = @node.children('function')
+        ret = ''
 
         for f in funcs
-            @render_sidebar_function($(f), container)
+            ret += @render_sidebar_function($(f))
 
-    render_function: (func, container) ->
-        row = $('<tr class="title"/>').append($('<td class="identifier"/>').text(func.attr('name'))).appendTo(container)
-        row.attr('id', func.attr('id'))
+        return ret
+
+    render_function: (func) ->
+        e = doc.html_escape
+
+        ret = '<tr class="title"
+                   id="' + e(func.attr('id')) + '">
+                 <td class="identifier">' +
+                   e(func.attr('name')) +
+                '</td>'
 
         for loc in func.children('location')
             loc = $(loc)
 
-            $('<td/>').text(loc.attr('file')).appendTo(row)
-            $('<td/>').text(loc.attr('line') + ':' + loc.attr('column')).appendTo(row)
+            file = e(loc.attr('file'))
+            line = e(loc.attr('line') + ':' + loc.attr('column'))
 
-            row = $('<tr/>').append('<td/>').appendTo(container)
+            ret += '<td>' + file + '</td><td>' + line + '</td>'
+            ret += '</tr><tr><td></td>'
+
+        ret += '</tr>'
 
         undocumented = func.children('undocumented')
 
         if undocumented.length > 0
-            row = $('<tr class="undocumented"/>').append($('<td/>').text('Undocumented arguments:'))
-                      .append($('<td colspan="2"/>').html(($(x).attr('name') for x in undocumented).join(', ')))
-                      .appendTo(container)
+            names = ($(x).attr('name') for x in undocumented).join(', ')
+
+            ret += '<tr class="undocumented"><td>Undocumented arguments:</td>' +
+                   '<td colspan="2">' + e(names) + '</td></tr>'
 
         misspelled = func.children('misspelled')
 
         if misspelled.length > 0
-            row = $('<tr class="misspelled"/>').append($('<td/>').text('Misspelled arguments:'))
-                      .append($('<td colspan="2"/>').html(($(x).attr('name') for x in misspelled).join(', ')))
-                      .appendTo(container)
+            names = ($(x).attr('name') for x in undocumented).join(', ')
+
+            ret += '<tr class="misspelled"><td>Misspelled arguments:</td>' +
+                   '<td colspan="2">' + e(names) + '</td></tr>'
 
         if func.children('undocumented-return')
-            row = $('<tr class="undocumented"/>').append($('<td colspan="3"/>').text('Undocumented return value'))
-                      .appendTo(container)
+            ret += '<tr class="undocumented"><td colspan="3">Undocumented return value</td></tr>'
 
-        row.addClass('last')
+        return ret
 
-    render: (container) ->
+    render: ->
         funcs = @node.children('function')
-        t = $('<table class="function"/>').appendTo(container)
+
+        c = '<table class="function">';
 
         for f in funcs
-            @render_function($(f), t)
+            c += @render_function($(f))
+
+        return c + '</table>'
 
 cldoc.Node.types.arguments = cldoc.Arguments
 
