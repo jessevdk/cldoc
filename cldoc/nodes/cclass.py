@@ -44,7 +44,7 @@ class Class(Node):
             yield b
 
     def resolve_bases(self, mapping):
-        for b in self._all_bases():
+        for b in self.bases:
             tpname = b.type.typename
 
             if tpname in mapping:
