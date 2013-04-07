@@ -230,7 +230,7 @@ class cldoc.Page
         # easily manipulate history and keep urls on one single entry point
 
         if !page
-            return '#'
+            return '#index'
 
         if !id
             return '#' + page.replace('#', '/')
@@ -364,7 +364,10 @@ class cldoc.Page
         return content.children()
 
     @push_nav: (page, scrollto) ->
-        history.pushState({page: page, scrollto: scrollto}, page, @make_internal_ref(page, scrollto))
+        hash = document.location.hash
+        [prevpage, prevscrollto] = @split_ref(@make_external_ref(hash))
+
+        history.pushState({page: prevpage, scrollto: prevscrollto}, page, @make_internal_ref(page, scrollto))
 
     @route: ->
         # Routing
@@ -391,7 +394,7 @@ class cldoc.Page
                 if state.page != @current_page
                     @load(state.page, state.scrollto, false)
                 else
-                    @select(state.scrollto)
+                    @select(state.scrollto, false)
         )
 
         @load(page, scrollto)
