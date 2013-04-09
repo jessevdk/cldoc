@@ -12,32 +12,35 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 import os, subprocess
 
-devnull = open(os.devnull)
-p = subprocess.Popen(['clang++', '-E', '-xc++', '-v', '-'],
-                     stdin=devnull,
-                     stdout=subprocess.PIPE,
-                     stderr=subprocess.PIPE)
-devnull.close()
+def flags(f):
+    devnull = open(os.devnull)
 
-lines = p.communicate()[1].splitlines()
-init = False
-paths = []
+    p = subprocess.Popen(['clang++', '-E', '-xc++'] + f + ['-v', '-'],
+                         stdin=devnull,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
 
-for line in lines:
-    if line.startswith('#include <...>'):
-        init = True
-    elif line.startswith('End of search list.'):
-        init = False
-    elif init:
-        p = line.strip()
+    devnull.close()
 
-        suffix = ' (framework directory)'
+    lines = p.communicate()[1].splitlines()
+    init = False
+    paths = []
 
-        if p.endswith(suffix):
-            p = p[:-len(suffix)]
+    for line in lines:
+        if line.startswith('#include <...>'):
+            init = True
+        elif line.startswith('End of search list.'):
+            init = False
+        elif init:
+            p = line.strip()
 
-        paths.append(p)
+            suffix = ' (framework directory)'
 
-flags = ['-I{0}'.format(x) for x in paths]
+            if p.endswith(suffix):
+                p = p[:-len(suffix)]
 
-__all__ = ['flags']
+            paths.append(p)
+
+    return ['-I{0}'.format(x) for x in paths] + f
+
+# vi:ts=4:et

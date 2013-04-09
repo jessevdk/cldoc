@@ -29,7 +29,7 @@ class Tree:
     def __init__(self, files, flags):
         self.processed = {}
         self.files = [os.path.realpath(f) for f in files]
-        self.flags = flags
+        self.flags = includepaths.flags(flags)
 
         # Sort files on sources, then headers
         self.files.sort(lambda a, b: cmp(self.is_header(a), self.is_header(b)))
@@ -205,7 +205,8 @@ class Tree:
                 continue
 
             print "Processing `%s'" % (os.path.basename(f),)
-            tu = index.parse(f, self.flags + includepaths.flags)
+
+            tu = index.parse(f, self.flags)
 
             if len(tu.diagnostics) != 0:
                 fatal = False
@@ -320,7 +321,7 @@ class Tree:
                 filename = tmpfile.name
                 tmpfile.close()
 
-                tu = index.parse(filename, self.flags + includepaths.flags, options=1)
+                tu = index.parse(filename, self.flags, options=1)
                 tokens = tu.get_tokens(extent=tu.get_extent(filename, (0, os.stat(filename).st_size)))
                 os.unlink(filename)
 
