@@ -481,7 +481,7 @@ class cldoc.Page
         if page == null
             page = @current_page
 
-        e = document.getElementById(scrollto)
+        e = $(document).find('#' + scrollto.replace(/([:() ])/g, '\\$1')).first()
 
         if e
             e = $(e)
@@ -532,7 +532,7 @@ class cldoc.Page
             cpage = @pages[page]
             data = cpage.xml
 
-            pageidesc = pageid.replace(/([:()])/g, '\\$1')
+            pageidesc = pageid.replace(/([:() ])/g, '\\$1')
             item = data.find('#' + pageidesc)
 
             if item.length != 1
