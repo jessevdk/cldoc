@@ -361,20 +361,30 @@ class CommentsDatabase(object):
                 # Empty previous comment
                 comments = []
 
-            comments.append(self.clean(token))
+            cleaned = self.clean(token)
+
+            if not cleaned is None:
+                comments.append(cleaned)
 
             prev = token
             token = iter.next()
 
-        self.extract_one(token, "\n".join(comments))
+        if len(comments) > 0:
+            self.extract_one(token, "\n".join(comments))
 
     def clean(self, token):
         prelen = token.extent.start.column - 1
         comment = token.spelling.strip()
 
         if comment.startswith('//'):
+            if len(comment) > 2 and comment[2] == '-':
+                return None
+
             return comment[2:].strip()
         elif comment.startswith('/*') and comment.endswith('*/'):
+            if comment[2] == '-':
+                return None
+
             lines = comment[2:-2].splitlines()
             retl = []
 
