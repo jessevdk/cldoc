@@ -350,6 +350,56 @@ class cldoc.Page
                 return true
         )
 
+    @load_pagenav: (page, content) ->
+        if @node_type(page) != cldoc.Category
+            return
+
+        pagenav = $('#cldoc_sidebar_pagenav')
+        ul = $('<ol/>')
+
+        h2cnt = 0
+        h2li = null
+        h2ol = null
+        h3cnt = 0
+
+        content.find('h2,h3').each((i, e) =>
+            h = $(e)
+
+            id = h.text()
+
+            ish2 = e.tagName == 'H2'
+
+            if ish2
+                h2cnt += 1
+                t = h2cnt + '. ' + id
+            else
+                h3cnt += 1
+                t = h2cnt + '.' + h3cnt + '. ' + id
+
+            h.text(t)
+            h.attr('id', id)
+
+            a = $('<a/>', href: @make_internal_ref(@current_page, id)).text(t)
+
+            li = $('<li/>').append(a)
+
+            if !ish2 && h2li != null
+                if h2ol == null
+                    h2ol = $('<ol/>').appendTo(h2li)
+
+                h2ol.append(li)
+            else
+                if ish2 && h2li == null
+                    h2li = li
+                    h2ol = null
+
+                li.appendTo(ul)
+        )
+
+        @bind_links(ul)
+
+        pagenav.append(ul)
+
     @load_contents: (page) ->
         content = $('#cldoc #cldoc_content')
         content.children().detach()
@@ -358,8 +408,9 @@ class cldoc.Page
 
         items = $(@load_items(page))
         content.append(items)
-
         @bind_links(content)
+
+        @load_pagenav(page, content)
 
         return content.children()
 

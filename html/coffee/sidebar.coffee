@@ -108,6 +108,8 @@ class cldoc.Sidebar
 
             items.append($(div))
 
+        items.append($('<div id="cldoc_sidebar_pagenav"/>'))
+
         # Take everything that's not a reference (i.e. everything on this page)
         onpage = page.children()
 

@@ -253,14 +253,24 @@ $in_group_row_spacing: 40px;
       color: #333;
     }
 
-    ul {
-      list-style: none;
+    #cldoc_sidebar_pagenav {
+      margin-top: 15px;
+    }
+
+    #cldoc_sidebar_pagenav:empty {
+      margin-top: 0px;
+    }
+
+    ol, ul {
       margin: 0;
       padding: 0;
-
       padding-left: 10px;
       font-size: 0.9em;
       margin-top: 5px;
+    }
+
+    ul {
+      list-style: none;
     }
 
     * {
