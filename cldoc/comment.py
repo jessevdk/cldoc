@@ -335,6 +335,14 @@ class CommentsDatabase(object):
             except StopIteration:
                 break
 
+    def extract_one(self, token, s):
+        # Parse special cldoc:<instruction>() comments for instructions
+        if self.parse_cldoc_instruction(token, s.strip()):
+            return
+
+        comment = Comment(s, token.location)
+        self.comments.insert(comment)
+
     def extract_loop(self, iter):
         token = iter.next()
 
@@ -343,20 +351,22 @@ class CommentsDatabase(object):
             token = iter.next()
 
         comments = []
+        prev = None
 
-        # Concatenate individual comments together
+        # Concatenate individual comments together, but only if they are strictly
+        # adjacent
         while token.kind == cindex.TokenKind.COMMENT:
+            # Check adjacency
+            if not prev is None and prev.extent.end.line + 1 < token.extent.start.line:
+                # Empty previous comment
+                comments = []
+
             comments.append(self.clean(token))
+
+            prev = token
             token = iter.next()
 
-        s = "\n".join(comments)
-
-        # Parse special cldoc:<instruction>() comments for instructions
-        if self.parse_cldoc_instruction(token, s.strip()):
-            return
-
-        comment = Comment(s, token.location)
-        self.comments.insert(comment)
+        self.extract_one(token, "\n".join(comments))
 
     def clean(self, token):
         prelen = token.extent.start.column - 1
