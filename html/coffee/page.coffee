@@ -313,7 +313,7 @@ class cldoc.Page
             if !type || type == cldoc.Node.types.report
                 continue
 
-            content += '<h2 id="' + e(type.title[1].toLowerCase()) + '">' + e(type.title[1]) + '</h2>'
+            content += '<h2 data-cldoc-dynamic="1" id="' + e(type.title[1].toLowerCase()) + '">' + e(type.title[1]) + '</h2>'
 
             container = type.render_container()
             itemcontents = ''
@@ -364,6 +364,9 @@ class cldoc.Page
 
         content.find('h2,h3').each((i, e) =>
             h = $(e)
+
+            if h.attr('data-cldoc-dynamic')
+                return
 
             id = h.text()
 
