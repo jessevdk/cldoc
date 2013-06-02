@@ -514,7 +514,7 @@ class Tree:
                         node = cls(item, None)
                         self.register_node(node, parent)
 
-                elif isinstance(parent, nodes.Typedef):
+                elif isinstance(parent, nodes.Typedef) and isinstance(node, nodes.Struct):
                     # Typedefs are handled a bit specially because what happens
                     # is that clang first exposes an unnamed struct/enum, and
                     # then exposes the typedef, with as a child again the
