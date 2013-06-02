@@ -57,7 +57,7 @@ def run(args):
         sep = args.index('--')
     except ValueError:
         if not '--help' in args:
-            sys.stderr.write('Please use: cldoc inspect [CXXFLAGS] -- [OPTIONS] [FILES]\n')
+            sys.stderr.write('Please use: cldoc generate [CXXFLAGS] -- [OPTIONS] [FILES]\n')
             sys.exit(1)
         else:
             sep = 0
