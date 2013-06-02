@@ -60,7 +60,7 @@ def run(args):
             sys.stderr.write('Please use: cldoc generate [CXXFLAGS] -- [OPTIONS] [FILES]\n')
             sys.exit(1)
         else:
-            sep = 0
+            sep = -1
 
     parser = argparse.ArgumentParser(description='clang based documentation generator.',
                                      usage='%(prog)s generate [CXXFLAGS] -- [OPTIONS] [FILES]')
