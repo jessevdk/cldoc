@@ -87,6 +87,8 @@ class DocumentMerger:
                 sys.exit(1)
 
     def add_categories(self, categories):
+        root = None
+
         for category in categories:
             parts = category.split('::')
 
@@ -116,5 +118,7 @@ class DocumentMerger:
 
                     self.category_to_node[fullname] = s
                     self.all_nodes.append(s)
+
+        return root
 
 # vi:ts=4:et
