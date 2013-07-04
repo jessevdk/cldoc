@@ -21,9 +21,12 @@ except:
 
 from cldoc.clang import cindex
 
+from . import defdict
+
 from . import nodes
 from . import generators
 from . import comment
+from . import documentmerger
 
 def nsgtk(s):
     return '{{{0}}}{1}'.format('http://www.gtk.org/introspection/core/1.0', s)
@@ -564,7 +567,7 @@ class GirCursor:
             for implements in self.node.iterfind(nsgtk('implements')):
                 self._add_implements(resolver(implements.attrib['name']))
 
-class GirTree:
+class GirTree(documentmerger.DocumentMerger):
     def __init__(self):
         self.mapping = {
             'function': self.parse_function,
@@ -585,13 +588,20 @@ class GirTree:
             'prerequisite': None,
         }
 
+        self.category_to_node = defdict.Defdict()
+
         self.root = nodes.Root()
         self.namespaces = {}
         self.processed = {}
         self.map_id_to_cusor = {}
         self.cursor_to_node = {}
         self.exported_namespaces = []
-        self.usr_to_node = {}
+        self.usr_to_node = defdict.Defdict()
+        self.qid_to_node = defdict.Defdict()
+        self.all_nodes = []
+
+        self.usr_to_node[None] = self.root
+        self.qid_to_node[None] = self.root
 
     def match_ref(self, child, name):
         if isinstance(name, basestring):
@@ -716,7 +726,10 @@ class GirTree:
             ret = fn(cursor)
 
             if not ret is None:
+                self.qid_to_node[ret.qid] = ret
                 self.cursor_to_node[cursor] = ret
+                self.all_nodes.append(ret)
+
                 return ret
         else:
             return None
@@ -824,9 +837,6 @@ class GirTree:
             classes[qid].resolve_bases(classes)
 
         self.cross_ref()
-
-    def merge(self, *files):
-        pass
 
 def run(args):
     parser = argparse.ArgumentParser(description='clang based documentation generator.',
