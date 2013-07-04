@@ -126,6 +126,8 @@ def run(args):
     if opts.merge:
         t.merge(*opts.merge)
 
+    t.cross_ref()
+
     run_generate(t, opts)
 
 # vi:ts=4:et
