@@ -117,6 +117,7 @@ class DocumentMerger:
                     root = s
 
                     self.category_to_node[fullname] = s
+                    self.qid_to_node[s.qid] = s
                     self.all_nodes.append(s)
 
         return root
