@@ -568,7 +568,7 @@ class GirCursor:
                 self._add_implements(resolver(implements.attrib['name']))
 
 class GirTree(documentmerger.DocumentMerger):
-    def __init__(self):
+    def __init__(self, category=None):
         self.mapping = {
             'function': self.parse_function,
             'class': self.parse_class,
@@ -602,6 +602,16 @@ class GirTree(documentmerger.DocumentMerger):
 
         self.usr_to_node[None] = self.root
         self.qid_to_node[None] = self.root
+
+        if not category is None:
+            self.category = self.add_categories([category])
+        else:
+            self.category = None
+
+        if not self.category is None:
+            self.root_node = self.category
+        else:
+            self.root_node = self.root
 
     def match_ref(self, child, name):
         if isinstance(name, basestring):
@@ -828,7 +838,7 @@ class GirTree(documentmerger.DocumentMerger):
                 node = self.parse_cursor(cursor)
 
                 if not node is None:
-                    self.root.append(node)
+                    self.root_node.append(node)
 
                     if isinstance(node, Class) or isinstance(node, Interface):
                         classes[node.qid] = node
@@ -860,11 +870,14 @@ def run(args):
     parser.add_argument('--static', default=False, action='store_const', const=True,
                           help='generate a static website (only for when --output is html)')
 
+    parser.add_argument('--category', default=None, metavar='CATEGORY',
+                          help='category in which to place all symbols')
+
     parser.add_argument('files', nargs='+', help='gir files to parse')
 
     opts = parser.parse_args(args)
 
-    t = GirTree()
+    t = GirTree(opts.category)
 
     # Generate artificial tree
     for f in opts.files:
