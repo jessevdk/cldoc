@@ -6,6 +6,9 @@ import nodes
 class DocumentMerger:
     def merge(self, *files):
         for f in files:
+            if os.path.basename(f).startswith('.'):
+                continue
+
             if os.path.isdir(f):
                 self.merge(*[os.path.join(f, x) for x in os.listdir(f)])
             elif f.endswith('.md'):
