@@ -736,7 +736,6 @@ class GirTree(documentmerger.DocumentMerger):
             ret = fn(cursor)
 
             if not ret is None:
-                self.qid_to_node[ret.qid] = ret
                 self.cursor_to_node[cursor] = ret
                 self.all_nodes.append(ret)
 
@@ -847,6 +846,8 @@ class GirTree(documentmerger.DocumentMerger):
             classes[qid].resolve_bases(classes)
 
         self.cross_ref()
+        for node in self.all_nodes:
+            self.qid_to_node[node.qid] = node
 
 def run(args):
     parser = argparse.ArgumentParser(description='clang based documentation generator.',
