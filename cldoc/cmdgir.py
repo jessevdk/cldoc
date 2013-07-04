@@ -845,7 +845,6 @@ class GirTree(documentmerger.DocumentMerger):
         for qid in classes:
             classes[qid].resolve_bases(classes)
 
-        self.cross_ref()
         for node in self.all_nodes:
             self.qid_to_node[node.qid] = node
 
@@ -888,6 +887,8 @@ def run(args):
 
     if opts.merge:
         t.merge(*opts.merge)
+
+    t.cross_ref()
 
     from .cmdgenerate import run_generate
 

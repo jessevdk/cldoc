@@ -181,8 +181,6 @@ class Tree(documentmerger.DocumentMerger):
         for qid in classes:
             classes[qid].resolve_bases(classes)
 
-        # Resolve cross-references in documentation
-        self.cross_ref(self.root)
         self.markup_code(index)
 
     def markup_code(self, index):
@@ -272,7 +270,10 @@ class Tree(documentmerger.DocumentMerger):
         else:
             return ret
 
-    def cross_ref(self, node):
+    def cross_ref(self, node = None):
+        if node is None:
+            node = self.root
+
         if node.comment:
             node.comment.resolve_refs(self.find_ref, node)
 

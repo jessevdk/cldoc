@@ -82,7 +82,6 @@ class DocumentMerger:
 
             if key == 'doc':
                 node.merge_comment(comment.Comment(categories[category], None), override=True)
-                node.comment.resolve_refs(self.find_ref, node)
             else:
                 sys.stderr.write('Unknown type `{0}\' for id `{1}\'\n'.format(key, parts[0]))
                 sys.exit(1)
