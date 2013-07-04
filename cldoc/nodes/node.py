@@ -118,9 +118,13 @@ class Node(object):
             self._comment.brief = m.brief
             self._comment.doc = m.body
 
+    @property
+    def natural_sort_name(self):
+        return [int(text) if text.isdigit() else text.lower() for text in re.split('([0-9]+)', self.name)]
+
     def compare_same(self, other):
         if self.name and other.name:
-            return cmp(self.name.lower(), other.name.lower())
+            return cmp(self.natural_sort_name, other.natural_sort_name)
         else:
             return 0
 
@@ -131,7 +135,7 @@ class Node(object):
             ret = cmp(self.sortid, other.sortid)
 
         if ret == 0:
-            self.compare_same(other)
+            ret = self.compare_same(other)
 
         return ret
 
