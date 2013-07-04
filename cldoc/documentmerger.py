@@ -1,4 +1,4 @@
-import os, glob
+import os
 
 import comment
 import nodes
@@ -7,8 +7,8 @@ class DocumentMerger:
     def merge(self, *files):
         for f in files:
             if os.path.isdir(f):
-                self.merge(*glob.glob(os.path.join(f, '*.md')))
-            else:
+                self.merge(*[os.path.join(f, x) for x in os.listdir(f)])
+            elif f.endswith('.md'):
                 self._merge_file(f)
 
     def _split_categories(self, filename):
