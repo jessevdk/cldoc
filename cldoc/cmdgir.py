@@ -867,6 +867,9 @@ def run(args):
     parser.add_argument('--merge', default=[], metavar='FILES', action='append',
                           help='specify additional description files to merge into the documentation')
 
+    parser.add_argument('--merge-filter', default=None, metavar='FILTER',
+                          help='specify program to pass merged description files through')
+
     parser.add_argument('--static', default=False, action='store_const', const=True,
                           help='generate a static website (only for when --output is html)')
 
@@ -886,7 +889,7 @@ def run(args):
     t.parse()
 
     if opts.merge:
-        t.merge(*opts.merge)
+        t.merge(opts.merge_filter, opts.merge)
 
     t.cross_ref()
 

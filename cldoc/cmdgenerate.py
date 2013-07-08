@@ -83,6 +83,9 @@ def run(args):
     parser.add_argument('--merge', default=[], metavar='FILES', action='append',
                           help='specify additional description files to merge into the documentation')
 
+    parser.add_argument('--merge-filter', default=None, metavar='FILTER',
+                          help='specify program to pass merged description files through')
+
     parser.add_argument('--basedir', default=None, metavar='DIR',
                           help='the project base directory')
 
@@ -124,7 +127,7 @@ def run(args):
     t.process()
 
     if opts.merge:
-        t.merge(*opts.merge)
+        t.merge(opts.merge_filter, opts.merge)
 
     t.cross_ref()
 

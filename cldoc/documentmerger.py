@@ -1,21 +1,21 @@
-import os
+import os, subprocess
 
 import comment
 import nodes
 
 class DocumentMerger:
-    def merge(self, *files):
+    def merge(self, mfilter, files):
         for f in files:
             if os.path.basename(f).startswith('.'):
                 continue
 
             if os.path.isdir(f):
-                self.merge(*[os.path.join(f, x) for x in os.listdir(f)])
+                self.merge(mfilter, [os.path.join(f, x) for x in os.listdir(f)])
             elif f.endswith('.md'):
-                self._merge_file(f)
+                self._merge_file(mfilter, f)
 
-    def _split_categories(self, filename):
-        lines = open(filename).readlines()
+    def _split_categories(self, filename, contents):
+        lines = contents.splitlines()
 
         ret = {}
 
@@ -65,8 +65,17 @@ class DocumentMerger:
 
         return qid
 
-    def _merge_file(self, filename):
-        categories = self._split_categories(filename)
+    def _read_merge_file(self, mfilter, filename):
+        if not mfilter is None:
+            contents = unicode(subprocess.check_output([mfilter, filename]), 'utf-8')
+        else:
+            contents = unicode(open(filename).read(), 'utf-8')
+
+        return contents
+
+    def _merge_file(self, mfilter, filename):
+        contents = self._read_merge_file(mfilter, filename)
+        categories = self._split_categories(filename, contents)
 
         for category in categories:
             parts = category.split('/')
