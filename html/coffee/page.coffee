@@ -214,6 +214,7 @@ class cldoc.Page
         document.title = title
 
         @scroll(page, scrollto, true)
+        $('#cldoc').triggerHandler('page-loaded', [root])
 
     @make_external_ref: (page, id) ->
         if page[0] == '#'
