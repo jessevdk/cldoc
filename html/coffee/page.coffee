@@ -487,7 +487,7 @@ class cldoc.Page
 
         e = $(document).find('#' + scrollto.replace(/([:() ])/g, '\\$1')).first()
 
-        if e
+        if e && e.length > 0
             e = $(e)
             top = e.offset().top - 10
 
