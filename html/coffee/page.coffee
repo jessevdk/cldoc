@@ -258,16 +258,23 @@ class cldoc.Page
             ret = '<span>'
 
             type = @node_type(item)
+            title = item.attr('title')
 
             if type
                 ret += '<span class="keyword">' + e(type.title[0]) + '</span>'
+                obj = new type(item)
 
-            title = item.attr('title')
+                name = obj.full_name_for_display
+            else
+                name = item.attr('name')
 
             if title
                 ret += '<span>' + e(title) + '</span>'
             else
-                ret += '<span>' + e(id) + '</span>'
+                if name
+                    ret += '<span>' + e(name) + '</span>'
+                else
+                    ret += '<span>' + e(id) + '</span>'
 
             return ret
         else

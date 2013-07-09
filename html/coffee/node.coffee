@@ -67,6 +67,7 @@ class cldoc.Node
         @name = @node.attr('name')
         @id = @node.attr('id')
         @ref = @node.attr('ref')
+        @full_name_for_display = null
 
         if @ref && !@id
             @id = @ref.replace('#', '+')

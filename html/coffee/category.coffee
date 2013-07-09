@@ -4,6 +4,8 @@ class cldoc.Category extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
+        @full_name_for_display = @name
+
     render: ->
         ret = '<div class="item">'
 
