@@ -31,7 +31,7 @@ def run_generate(t, opts):
     generator.generate(xmlout)
 
     if opts.type == 'html':
-        generators.Html(t).generate(baseout, opts.static)
+        generators.Html(t).generate(baseout, opts.static, opts.custom_js, opts.custom_css)
 
         if opts.static:
             # Call node to generate the static website at the actual output
@@ -91,6 +91,12 @@ def run(args):
 
     parser.add_argument('--static', default=False, action='store_const', const=True,
                           help='generate a static website (only for when --output is html)')
+
+    parser.add_argument('--custom-js', default=[], metavar='FILES', action='append',
+                          help='specify additional javascript files to be merged into the html (only for when --output is html)')
+
+    parser.add_argument('--custom-css', default=[], metavar='FILES', action='append',
+                          help='specify additional css files to be merged into the html (only for when --output is html)')
 
     parser.add_argument('files', nargs='+', help='files to parse')
 

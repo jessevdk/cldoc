@@ -18,7 +18,7 @@ from .generator import Generator
 from .search import Search
 
 class Html(Generator):
-    def generate(self, output, isstatic):
+    def generate(self, output, isstatic, customjs=[], customcss=[]):
         # Write out json document for search
         self.write_search(output)
 
@@ -33,7 +33,21 @@ class Html(Generator):
             pass
 
         outfile = os.path.join(output, 'index.html')
-        shutil.copyfile(index, outfile)
+
+        jstags = ['<script type="text/javascript" src="{0}"></script>'.format(x) for x in customjs]
+        csstags = ['<link rel="stylesheet" href="{0}" type="text/css" charset="utf-8"/>'.format(x) for x in customcss]
+
+        with open(index) as f:
+            content = f.read()
+
+            templ = '<custom-js></custom-js>'
+            content = content.replace(templ, " ".join(jstags))
+
+            templ = '<custom-css></custom-css>'
+            content = content.replace(templ, " ".join(csstags))
+
+            with open(outfile, 'w') as o:
+                o.write(content)
 
         print('Generated `{0}\''.format(outfile))
 

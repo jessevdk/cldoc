@@ -876,6 +876,12 @@ def run(args):
     parser.add_argument('--category', default=None, metavar='CATEGORY',
                           help='category in which to place all symbols')
 
+    parser.add_argument('--custom-js', default=[], metavar='FILES', action='append',
+                          help='specify additional javascript files to be merged into the html (only for when --output is html)')
+
+    parser.add_argument('--custom-css', default=[], metavar='FILES', action='append',
+                          help='specify additional css files to be merged into the html (only for when --output is html)')
+
     parser.add_argument('files', nargs='+', help='gir files to parse')
 
     opts = parser.parse_args(args)
