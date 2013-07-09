@@ -727,6 +727,11 @@ VAAAAABJRU5ErkJggg==');
     div.description {
       @include inline-doc;
     }
+
+    img[alt*=centered] {
+      display: block;
+      margin: 0 auto;
+    }
   }
 }
 
