@@ -103,7 +103,7 @@ class Comment(object):
             s = Comment.UnresolvedReference.reescape.sub(lambda x: '\\' + x.group(0), s)
             return str.__new__(self, '<' + s + '>')
 
-    redocref = re.compile('(?P<isregex>[$]?)<(?P<ref>operator(?:>>|>|>=)|[^>]+)>')
+    redocref = re.compile('(?P<isregex>[$]?)<(?:\\[(?P<refname>[^\\]]*)\\])?(?P<ref>operator(?:>>|>|>=)|[^>]+)>')
     redoccode = re.compile('^    \\[code\\]\n(?P<code>(?:(?:    .*|)\n)*)', re.M)
 
     def __init__(self, text, location):
@@ -145,16 +145,20 @@ class Comment(object):
                 lastpos = span[1]
 
                 ref = m.group('ref')
+                refname = m.group('refname')
+
+                if not refname:
+                    refname = None
 
                 if len(m.group('isregex')) > 0:
                     ref = re.compile(ref)
 
-                ret.append((prefix, ref))
+                ret.append((prefix, ref, refname))
 
-            ret.append((rdoc[lastpos:], None))
+            ret.append((rdoc[lastpos:], None, None))
 
             if i < len(components) - 1:
-                ret.append((Comment.Example(components[i + 1]), None))
+                ret.append((Comment.Example(components[i + 1]), None, None))
 
         return ret
 
@@ -163,7 +167,7 @@ class Comment(object):
         components = []
 
         for pair in comps:
-            prefix, name = pair
+            prefix, name, refname = pair
             components.append(prefix)
 
             if name is None:
@@ -188,7 +192,7 @@ class Comment(object):
                 nds = newnds
 
             if len(newnds) > 0:
-                components.append(newnds)
+                components.append((newnds, refname))
             else:
                 components.append(Comment.UnresolvedReference(name))
 

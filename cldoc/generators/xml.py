@@ -399,17 +399,24 @@ class Xml(Generator):
 
                 s = ''
 
+                nds = component[0]
+                refname = component[1]
+
                 # Make multiple refs
-                for ci in range(len(component)):
-                    cc = component[ci]
+                for ci in range(len(nds)):
+                    cc = nds[ci]
 
                     last = ElementTree.Element('ref')
-                    last.text = parent.qid_from(cc.qid)
+
+                    if refname:
+                        last.text = refname
+                    else:
+                        last.text = parent.qid_from(cc.qid)
 
                     self.add_ref_node_id(cc, last)
 
-                    if ci != len(component) - 1:
-                        if ci == len(component) - 2:
+                    if ci != len(nds) - 1:
+                        if ci == len(nds) - 2:
                             last.tail = ' and '
                         else:
                             last.tail = ', '
