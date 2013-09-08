@@ -10,7 +10,7 @@ class cldoc.Field extends cldoc.Node
         ret = '<tr id="' + e(@node.attr('id')) + '">'
 
         ret += '<td class="field_name identifier">' + e(@node.attr('name')) + '</td>'
-        ret += '<td class="field_type">' + e(new cldoc.Type(@node.children('type')).render()) + '</td>'
+        ret += '<td class="field_type">' + new cldoc.Type(@node.children('type')).render() + '</td>'
         ret += '<td class="doc">' + cldoc.Doc.either(@node) + '</td>'
 
         return ret + '</tr>'
