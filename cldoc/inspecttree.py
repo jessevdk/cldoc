@@ -122,7 +122,7 @@ def inspect(tree):
 
     print """<html>
 <head>
-<meta name="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type='text/css'>
 div.filename {
 padding: 3px;
