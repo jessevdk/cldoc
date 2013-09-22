@@ -27,7 +27,6 @@ from .method import *
 from .namespace import *
 from .node import *
 from .root import *
-from .templatetype import *
 from .typedef import *
 from .union import *
 from .variable import *
