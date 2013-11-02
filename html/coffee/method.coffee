@@ -1,5 +1,5 @@
 class cldoc.Method extends cldoc.Function
-    @title = ['Method', 'Methods']
+    @title = ['Member Function', 'Member Functions']
 
     constructor: (@node) ->
         super(@node)
