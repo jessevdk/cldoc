@@ -132,7 +132,11 @@ setup(name='cldoc',
       license='GPLv2',
       keywords=['clang', 'c++', 'documentation'],
       packages=['cldoc', 'cldoc.clang', 'cldoc.nodes', 'cldoc.generators'],
-      scripts=['scripts/cldoc'],
+      entry_points = {
+          'console_scripts': [
+              'cldoc = cldoc:run'
+          ]
+      },
       package_data={'cldoc': datafiles},
       cmdclass=cmdclass,
       install_requires=['pyparsing ==1.5.7'])
