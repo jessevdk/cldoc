@@ -15,11 +15,11 @@ clean:
 
 doc:
 	@echo "Generating documentation..."; \
-	cldoc $(CXXFLAGS) -- 		\
+	cldoc generate $(CXXFLAGS) --	\
 		--report 		\
 		--merge docs 		\
 		--output html 		\
 		$(SOURCES) $(HEADERS)
 
 serve:
-	cldoc -- --output html --serve
+	cldoc serve html
