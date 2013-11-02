@@ -371,12 +371,17 @@ class CommentsDatabase(object):
         # Concatenate individual comments together, but only if they are strictly
         # adjacent
         while token.kind == cindex.TokenKind.COMMENT:
+            cleaned = self.clean(token)
+
+            # Process instructions directly, now
+            if not CommentsDatabase.cldoc_instrre.match(cleaned) is None:
+                comments = [cleaned]
+                break
+
             # Check adjacency
             if not prev is None and prev.extent.end.line + 1 < token.extent.start.line:
                 # Empty previous comment
                 comments = []
-
-            cleaned = self.clean(token)
 
             if not cleaned is None:
                 comments.append(cleaned)
@@ -401,6 +406,10 @@ class CommentsDatabase(object):
                 return None
 
             lines = comment[2:-2].splitlines()
+
+            if len(lines) == 1 and len(lines[0]) > 0 and lines[0][0] == ' ':
+                return lines[0][1:].rstrip()
+
             retl = []
 
             for line in lines:
