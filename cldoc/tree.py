@@ -24,7 +24,13 @@ import documentmerger
 
 from cldoc import example
 
-import os, sys, sets, re, glob
+import os, sys, sets, re, glob, platform
+
+if platform.system() == 'Darwin':
+    libclang = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+
+    if os.path.exists(libclang):
+        cindex.Config.set_library_path(os.path.dirname(libclang))
 
 class Tree(documentmerger.DocumentMerger):
     def __init__(self, files, flags):
