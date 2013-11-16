@@ -614,10 +614,10 @@ class GirTree(documentmerger.DocumentMerger):
             self.root_node = self.root
 
     def match_ref(self, child, name):
-        if isinstance(name, basestring):
-            return name == child.name
-        else:
+        if hasattr(name, 'match'):
             return name.match(child.name)
+        else:
+            return name == child.name
 
     def find_ref(self, node, name, goup):
         if node is None:

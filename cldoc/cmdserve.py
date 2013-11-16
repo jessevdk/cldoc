@@ -13,19 +13,28 @@
 from __future__ import absolute_import
 
 import subprocess, threading, time, sys, argparse, os
-import SimpleHTTPServer, SocketServer
 
-class Server(SocketServer.TCPServer):
+try:
+    import socketserver
+except ImportError:
+    import SocketServer as socketserver
+
+try:
+    from http import server as httpserver
+except ImportError:
+    import SimpleHTTPServer as httpserver
+
+class Server(socketserver.TCPServer):
     allow_reuse_address = True
 
 def handler_bind(directory):
-    class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+    class Handler(httpserver.SimpleHTTPRequestHandler):
         def translate_path(self, path):
             while path.startswith('/'):
                 path = path[1:]
 
             path = os.path.join(directory, path)
-            return SimpleHTTPServer.SimpleHTTPRequestHandler.translate_path(self, path)
+            return httpserver.SimpleHTTPRequestHandler.translate_path(self, path)
 
         def log_message(self, format, *args):
             pass

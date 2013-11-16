@@ -144,7 +144,7 @@ class Report:
         cov = ElementTree.Element('coverage')
         root.append(cov)
 
-        for item in pertype.values():
+        for item in list(pertype.values()):
             elem = ElementTree.Element('type')
             elem.set('name', item.name)
             elem.set('documented', str(len(item.documented)))

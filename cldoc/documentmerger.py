@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+
 import os, subprocess
 
-import comment
-import nodes
+from . import comment
+from . import nodes
 
 class DocumentMerger:
     def merge(self, mfilter, files):
@@ -67,9 +69,9 @@ class DocumentMerger:
 
     def _read_merge_file(self, mfilter, filename):
         if not mfilter is None:
-            contents = unicode(subprocess.check_output([mfilter, filename]), 'utf-8')
+            contents = subprocess.check_output([mfilter, filename]).decode('utf-8')
         else:
-            contents = unicode(open(filename).read(), 'utf-8')
+            contents = open(filename).read()
 
         return contents
 

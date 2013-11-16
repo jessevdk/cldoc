@@ -517,7 +517,7 @@ class CursorKind(object):
         """Get the enumeration name of this cursor kind."""
         if self._name_map is None:
             self._name_map = {}
-            for key,value in CursorKind.__dict__.items():
+            for key,value in list(CursorKind.__dict__.items()):
                 if isinstance(value,CursorKind):
                     self._name_map[value] = key
         return self._name_map[self]
@@ -531,7 +531,7 @@ class CursorKind(object):
     @staticmethod
     def get_all_kinds():
         """Return all CursorKind enumeration instances."""
-        return filter(None, CursorKind._kinds)
+        return [_f for _f in CursorKind._kinds if _f]
 
     def is_declaration(self):
         """Test if this is a declaration kind."""
@@ -1397,7 +1397,7 @@ class TypeKind(object):
         """Get the enumeration name of this cursor kind."""
         if self._name_map is None:
             self._name_map = {}
-            for key,value in TypeKind.__dict__.items():
+            for key,value in list(TypeKind.__dict__.items()):
                 if isinstance(value,TypeKind):
                     self._name_map[value] = key
         return self._name_map[self]

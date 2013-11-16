@@ -12,15 +12,17 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -*- coding: utf-8 -*-
 
-from clang import cindex
+from __future__ import absolute_import
+
+from .clang import cindex
 import tempfile
 
-from defdict import Defdict
+from .defdict import Defdict
 
-import comment
-import nodes
-import includepaths
-import documentmerger
+from . import comment
+from . import nodes
+from . import includepaths
+from . import documentmerger
 
 from cldoc import example
 
@@ -97,7 +99,7 @@ class Tree(documentmerger.DocumentMerger):
             if f in self.processed:
                 continue
 
-            print "Processing `%s'" % (os.path.basename(f),)
+            print("Processing `{0}'".format(os.path.basename(f))
 
             tu = index.parse(f, self.flags)
 
@@ -256,7 +258,7 @@ class Tree(documentmerger.DocumentMerger):
                 comps[i] = ex
 
     def match_ref(self, child, name):
-        if isinstance(name, basestring):
+        if isinstance(name, str):
             return name == child.name
         else:
             return name.match(child.name)
@@ -368,7 +370,7 @@ class Tree(documentmerger.DocumentMerger):
 
         while True:
             try:
-                item = citer.next()
+                item = next(citer)
             except StopIteration:
                 return
 

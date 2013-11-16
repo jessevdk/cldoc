@@ -12,7 +12,9 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from clang import cindex
+from __future__ import absolute_import
+
+from .clang import cindex
 import os, sys
 
 def inspect_print_row(a, b, link=None):
@@ -23,7 +25,7 @@ def inspect_print_row(a, b, link=None):
     if link:
         b = "<a href='#" + escape(link) + "'>" + b + "</a>"
 
-    print "<tr><td>%s</td><td>%s</td></tr>" % (escape(str(a)), b)
+    print("<tr><td>{0}</td><td>{1}</td></tr>".format(escape(str(a)), b))
 
 def inspect_print_subtype(name, tp, subtype, indent=1):
     if not subtype or tp == subtype or subtype.kind == cindex.TypeKind.INVALID:
@@ -58,7 +60,7 @@ def inspect_cursor(tree, cursor, indent):
     if not str(cursor.location.file) in tree.files:
         return
 
-    print "<table id='" + escape(cursor.get_usr()) + "' class='cursor' style='margin-left: " + str(indent * 20) + "px;'>"
+    print("<table id='" + escape(cursor.get_usr()) + "' class='cursor' style='margin-left: " + str(indent * 20) + "px;'>")
 
     inspect_print_row('kind', cursor.kind)
     inspect_print_row('  → .is_declaration', cursor.kind.is_declaration())

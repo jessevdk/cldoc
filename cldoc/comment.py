@@ -10,19 +10,22 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from clang import cindex
-from defdict import Defdict
+from __future__ import absolute_import
+
+from .clang import cindex
+from .defdict import Defdict
 from cldoc.struct import Struct
 
 import os, re, sys, bisect
 
-def make_unicode(s):
-    if isinstance(s, unicode):
+def make_utf8(s):
+    if isinstance(s, str):
         return s
-    elif isinstance(s, basestring):
-        return unicode(s, 'utf-8')
+
+    if hasattr(s, 'encode'):
+        return s.encode('utf-8')
     else:
-        return make_unicode(str(s))
+        return str(s)
 
 class Sorted(list):
     def __init__(self, key=None):
@@ -85,16 +88,12 @@ class Comment(object):
         def __init__(self, s):
             self.components = [s]
 
-        def __unicode__(self):
-            return u"".join(self.components)
-
-        def __str__(self):
-            return unicode(self).encode('utf-8')
-
         def __nonzero__(self):
             l = len(self.components)
-
             return l > 0 and (l > 1 or len(self.components[0]) > 0)
+
+        def __bool__(self):
+            return self.__nonzero__()
 
     class UnresolvedReference(str):
         reescape = re.compile('[*_]', re.I)
@@ -123,9 +122,9 @@ class Comment(object):
         if isinstance(val, dict):
             for key in val:
                 if not isinstance(val[key], Comment.String):
-                    val[key] = Comment.String(make_unicode(val[key]))
+                    val[key] = Comment.String(make_utf8(val[key]))
         elif not isinstance(val, Comment.String):
-            val = Comment.String(make_unicode(val))
+            val = Comment.String(make_utf8(val))
 
         self.__dict__[name] = val
 
@@ -163,7 +162,7 @@ class Comment(object):
         return ret
 
     def resolve_refs_for_doc(self, doc, resolver, root):
-        comps = self.redoc_split(make_unicode(doc))
+        comps = self.redoc_split(make_utf8(doc))
         components = []
 
         for pair in comps:
@@ -173,7 +172,7 @@ class Comment(object):
             if name is None:
                 continue
 
-            if isinstance(name, basestring):
+            if isinstance(name, str):
                 names = name.split('::')
             else:
                 names = [name]
@@ -213,7 +212,7 @@ class Comment(object):
             if isinstance(doc, dict):
                 for key in doc:
                     if not isinstance(doc[key], Comment.String):
-                        doc[key] = Comment.String(make_unicode(doc[key]))
+                        doc[key] = Comment.String(make_utf8(doc[key]))
 
                     self.resolve_refs_for_doc(doc[key], resolver, root)
             else:
@@ -359,11 +358,11 @@ class CommentsDatabase(object):
         self.comments.insert(comment)
 
     def extract_loop(self, iter):
-        token = iter.next()
+        token = next(iter)
 
         # Skip until comment found
         while token.kind != cindex.TokenKind.COMMENT:
-            token = iter.next()
+            token = next(iter)
 
         comments = []
         prev = None
@@ -387,7 +386,7 @@ class CommentsDatabase(object):
                 comments.append(cleaned)
 
             prev = token
-            token = iter.next()
+            token = next(iter)
 
         if len(comments) > 0:
             self.extract_one(token, "\n".join(comments))

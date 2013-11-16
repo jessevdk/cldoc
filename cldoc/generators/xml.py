@@ -353,7 +353,7 @@ class Xml(Generator):
         last = None
 
         for component in doc.components:
-            if isinstance(component, basestring):
+            if isinstance(component, str):
                 s += component
             elif isinstance(component, example.Example):
                 # Make highlighting
