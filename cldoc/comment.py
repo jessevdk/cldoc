@@ -342,7 +342,7 @@ class CommentsDatabase(object):
         iterating over all the tokens in the TU, locating the COMMENT tokens and
         finding out to which cursors the comments semantically belong.
         """
-        it = tu.get_tokens(extent=tu.get_extent(filename, (0, os.stat(filename).st_size)))
+        it = tu.get_tokens(extent=tu.get_extent(filename, (0, int(os.stat(filename).st_size))))
 
         while True:
             try:
