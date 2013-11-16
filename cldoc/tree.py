@@ -27,7 +27,7 @@ from cldoc import example
 import os, sys, sets, re, glob, platform
 
 if platform.system() == 'Darwin':
-    libclang = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+    libclang = '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
 
     if os.path.exists(libclang):
         cindex.Config.set_library_path(os.path.dirname(libclang))
