@@ -124,7 +124,7 @@ for dirpath, dirnames, filenames in os.walk(os.path.join(dataprefix, 'data')):
     datafiles += [os.path.join(dirpath[len(dataprefix)+1:], f) for f in filenames]
 
 setup(name='cldoc',
-      version='1.4',
+      version='1.5',
       description='clang based documentation generator for C/C++',
       author='Jesse van den Kieboom',
       author_email='jessevdk@gmail.com',
