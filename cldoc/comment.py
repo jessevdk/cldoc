@@ -374,7 +374,7 @@ class CommentsDatabase(object):
             cleaned = self.clean(token)
 
             # Process instructions directly, now
-            if not CommentsDatabase.cldoc_instrre.match(cleaned) is None:
+            if (not cleaned is None) and (not CommentsDatabase.cldoc_instrre.match(cleaned) is None):
                 comments = [cleaned]
                 break
 
