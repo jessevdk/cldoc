@@ -26,6 +26,10 @@ class Union(Node):
     def is_anonymous(self):
         return not self.cursor.spelling
 
+    @property
+    def bases(self):
+        return []
+
     def compare_same(self, other):
         return cmp(self.sort_index, other.sort_index)
 
