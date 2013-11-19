@@ -5,10 +5,6 @@ class cldoc.Union extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
-    sidebar_name: ->
-        e = cldoc.html_escape
-        return '<span><span class="keyword">union</span> ' + e(@name) + '</span>'
-
     render: ->
         ret = '<tr class="union">'
 
