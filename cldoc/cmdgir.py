@@ -26,6 +26,7 @@ from . import defdict
 from . import nodes
 from . import generators
 from . import comment
+from . import example
 from . import documentmerger
 from . import utf8
 
@@ -114,6 +115,7 @@ class GirComment(comment.Comment):
     refsect2 = re.compile('(<refsect2 [^>]*>|</refsect2>)\n?', re.I)
     varref = re.compile('@([a-z][a-z0-9_]*)', re.I)
     constref = re.compile('%([a-z_][a-z0-9_]*)', re.I)
+    proglisting = re.compile('<informalexample>\s*<programlisting>\s*(.*?)\s*</programlisting>\s*</informalexample>', re.I | re.M)
 
     def __init__(self, cursor):
         doc = cursor.node.find(nsgtk('doc'))
@@ -205,6 +207,7 @@ class GirComment(comment.Comment):
         text = GirComment.emph.sub(lambda x: '*{0}*'.format(x.group(1)), text)
         text = GirComment.title.sub(lambda x: '## {0}'.format(x.group(1)), text)
         text = GirComment.refsect2.sub(lambda x: '', text)
+        text = GirComment.proglisting.sub(lambda x: '    [code]\n    {0}\n'.format(x.group(1).replace('\n', '\n    ')), text)
 
         return text
 
@@ -645,6 +648,8 @@ class GirTree(documentmerger.DocumentMerger):
         for child in node.children:
             self.cross_ref(child)
 
+        self.markup_code()
+
     def parse_function(self, cursor):
         return nodes.Function(cursor, GirComment(cursor))
 
@@ -848,6 +853,30 @@ class GirTree(documentmerger.DocumentMerger):
 
         for node in self.all_nodes:
             self.qid_to_node[node.qid] = node
+
+    def markup_code(self):
+        for node in self.all_nodes:
+            if not node.comment:
+                continue
+
+            if not node.comment.doc:
+                continue
+
+            comps = node.comment.doc.components
+            
+
+            for i in range(len(comps)):
+                component = comps[i]
+
+                if not isinstance(component, comment.Comment.Example):
+                    continue
+
+                text = str(component)
+
+                ex = example.Example()
+                ex.append(text)
+
+                comps[i] = ex
 
 def run(args):
     parser = argparse.ArgumentParser(description='clang based documentation generator.',
