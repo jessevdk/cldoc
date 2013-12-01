@@ -40,10 +40,20 @@ def run_generate(t, opts):
             jsfile = os.path.join(datadir, 'staticsite', 'staticsite.js')
 
             print('Generating static website...')
+            failed = False
 
             try:
-                subprocess.call(['node', jsfile, baseout, opts.output])
-            except OSError:
+                subprocess.call(['nodejs', jsfile, baseout, opts.output])
+            except OSError as e:
+                if e.errno == 2:
+                    try:
+                        subprocess.call(['node', jsfile, baseout, opts.output])
+                    except OSError:
+                        failed = True
+                else:
+                    failed = True
+
+            if failed:
                 sys.stderr.write("\nFailed to call static site generator. The static site generator uses node.js (http://nodejs.org/). Please make sure you have node installed on your system and try again.\n")
 
                 shutil.rmtree(baseout)
