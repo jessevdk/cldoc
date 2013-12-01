@@ -22,7 +22,8 @@ import nodes
 import includepaths
 import documentmerger
 
-from cldoc import example
+from . import example
+from . import utf8
 
 import os, sys, sets, re, glob, platform
 
@@ -256,7 +257,7 @@ class Tree(documentmerger.DocumentMerger):
                 comps[i] = ex
 
     def match_ref(self, child, name):
-        if isinstance(name, basestring):
+        if isinstance(name, utf8.string):
             return name == child.name
         else:
             return name.match(child.name)

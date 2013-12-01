@@ -12,11 +12,13 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from cldoc.struct import Struct
 
+from . import utf8
+
 class Example(list):
     Item = Struct.define('Item', text='', classes=None)
 
     def append(self, text, classes=None):
-        if isinstance(classes, basestring):
+        if isinstance(classes, utf8.string):
             classes = [classes]
 
         list.append(self, Example.Item(text=text, classes=classes))

@@ -12,17 +12,11 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from clang import cindex
 from defdict import Defdict
+
 from cldoc.struct import Struct
+from cldoc import utf8
 
 import os, re, sys, bisect
-
-def make_unicode(s):
-    if isinstance(s, unicode):
-        return s
-    elif isinstance(s, basestring):
-        return unicode(s, 'utf-8')
-    else:
-        return make_unicode(str(s))
 
 class Sorted(list):
     def __init__(self, key=None):
@@ -83,25 +77,31 @@ class Comment(object):
 
     class String(object):
         def __init__(self, s):
-            self.components = [s]
+            self.components = [utf8.utf8(s)]
 
-        def __unicode__(self):
-            return u"".join(self.components)
+        def _utf8(self):
+            return utf8.utf8("").join(self.components)
 
         def __str__(self):
-            return unicode(self).encode('utf-8')
+            return str(self._utf8())
+
+        def __unicode__(self):
+            return unicode(self._utf8())
+
+        def __bytes__(self):
+            return bytes(self._utf8())
 
         def __nonzero__(self):
             l = len(self.components)
 
             return l > 0 and (l > 1 or len(self.components[0]) > 0)
 
-    class UnresolvedReference(str):
+    class UnresolvedReference(utf8.utf8):
         reescape = re.compile('[*_]', re.I)
 
-        def __new__(self, s):
+        def __new__(cls, s):
             s = Comment.UnresolvedReference.reescape.sub(lambda x: '\\' + x.group(0), s)
-            return str.__new__(self, '<' + s + '>')
+            return utf8.utf8.__new__(cls, utf8.utf8('&lt;{0}&gt;').format(utf8.utf8(s)))
 
     redocref = re.compile('(?P<isregex>[$]?)<(?:\\[(?P<refname>[^\\]]*)\\])?(?P<ref>operator(?:>>|>|>=)|[^>]+)>')
     redoccode = re.compile('^    \\[code\\]\n(?P<code>(?:(?:    .*|)\n)*)', re.M)
@@ -123,9 +123,9 @@ class Comment(object):
         if isinstance(val, dict):
             for key in val:
                 if not isinstance(val[key], Comment.String):
-                    val[key] = Comment.String(make_unicode(val[key]))
+                    val[key] = Comment.String(val[key])
         elif not isinstance(val, Comment.String):
-            val = Comment.String(make_unicode(val))
+            val = Comment.String(val)
 
         self.__dict__[name] = val
 
@@ -163,7 +163,7 @@ class Comment(object):
         return ret
 
     def resolve_refs_for_doc(self, doc, resolver, root):
-        comps = self.redoc_split(make_unicode(doc))
+        comps = self.redoc_split(utf8.utf8(doc))
         components = []
 
         for pair in comps:
@@ -173,7 +173,7 @@ class Comment(object):
             if name is None:
                 continue
 
-            if isinstance(name, basestring):
+            if isinstance(name, utf8.string):
                 names = name.split('::')
             else:
                 names = [name]
@@ -213,7 +213,7 @@ class Comment(object):
             if isinstance(doc, dict):
                 for key in doc:
                     if not isinstance(doc[key], Comment.String):
-                        doc[key] = Comment.String(make_unicode(doc[key]))
+                        doc[key] = Comment.String(doc[key])
 
                     self.resolve_refs_for_doc(doc[key], resolver, root)
             else:

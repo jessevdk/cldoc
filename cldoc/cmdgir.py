@@ -27,6 +27,7 @@ from . import nodes
 from . import generators
 from . import comment
 from . import documentmerger
+from . import utf8
 
 def nsgtk(s):
     return '{{{0}}}{1}'.format('http://www.gtk.org/introspection/core/1.0', s)
@@ -614,7 +615,7 @@ class GirTree(documentmerger.DocumentMerger):
             self.root_node = self.root
 
     def match_ref(self, child, name):
-        if isinstance(name, basestring):
+        if isinstance(name, utf8.string):
             return name == child.name
         else:
             return name.match(child.name)

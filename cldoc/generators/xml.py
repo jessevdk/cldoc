@@ -16,6 +16,7 @@ from cldoc.clang import cindex
 from .generator import Generator
 from cldoc import nodes
 from cldoc import example
+from cldoc import utf8
 
 from xml.etree import ElementTree
 import sys, os
@@ -353,7 +354,7 @@ class Xml(Generator):
         last = None
 
         for component in doc.components:
-            if isinstance(component, basestring):
+            if isinstance(component, utf8.string):
                 s += component
             elif isinstance(component, example.Example):
                 # Make highlighting
