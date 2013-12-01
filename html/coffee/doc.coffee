@@ -41,8 +41,8 @@ class cldoc.Doc extends cldoc.Node
         return rethtml + parts[parts.length - 1]
 
     process_code: (code) ->
-        ret = $('<pre/>')
-        container = $('<code/>').appendTo(ret)
+        ret = '<pre><code>'
+        e = cldoc.html_escape
 
         for c in $(code).contents()
             if c.nodeType == document.ELEMENT_NODE
@@ -51,15 +51,13 @@ class cldoc.Doc extends cldoc.Node
                 c = $(c)
 
                 if tag == 'ref'
-                    cldoc.Page.make_link(c.attr('ref'), c.attr('name')).appendTo(container)
+                    ret += cldoc.Page.make_link(c.attr('ref'), c.attr('name'))
                 else
-                    span = $('<span/>').text(c.text()).appendTo(container)
-                    span.addClass(tag)
+                    ret += '<span class="' + e(tag) + '">' + e(c.text()) + '</span>'
             else
-                text = $(c).text()
-                container.append(text)
+                ret += e($(c).text())
 
-        return ret
+        return ret + '</code></pre>'
 
     render: ->
         if !@node
