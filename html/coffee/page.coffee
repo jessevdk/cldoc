@@ -492,7 +492,7 @@ class cldoc.Page
         if page == null
             page = @current_page
 
-        e = $(document).find('#' + scrollto.replace(/([:() ])/g, '\\$1')).first()
+        e = $(document).find('#' + scrollto.replace(/([:() +])/g, '\\$1')).first()
 
         if e && e.length > 0
             e = $(e)

@@ -9,7 +9,11 @@ class cldoc.Base extends cldoc.Node
         @access = @node.attr('access')
 
         @name = @type.attr('name')
-        @id = @type.attr('ref')
+
+        ref = @type.attr('ref')
+
+        if ref
+            @id = ref.replace('#', '+')
 
     render: ->
         e = cldoc.html_escape

@@ -592,7 +592,7 @@ cldoc.Page = (function() {
     if (page === null) {
       page = this.current_page;
     }
-    e = $(document).find('#' + scrollto.replace(/([:() ])/g, '\\$1')).first();
+    e = $(document).find('#' + scrollto.replace(/([:() +])/g, '\\$1')).first();
     if (e && e.length > 0) {
       e = $(e);
       top = e.offset().top - 10;
@@ -1716,12 +1716,16 @@ cldoc.Base = (function(_super) {
   Base.render_container_tag = 'table';
 
   function Base(node) {
+    var ref;
     this.node = node;
     Base.__super__.constructor.call(this, this.node);
     this.type = this.node.children('type');
     this.access = this.node.attr('access');
     this.name = this.type.attr('name');
-    this.id = this.type.attr('ref');
+    ref = this.type.attr('ref');
+    if (ref) {
+      this.id = ref.replace('#', '+');
+    }
   }
 
   Base.prototype.render = function() {
@@ -1753,12 +1757,16 @@ cldoc.Implements = (function(_super) {
   Implements.render_container_tag = 'table';
 
   function Implements(node) {
+    var ref;
     this.node = node;
     Implements.__super__.constructor.call(this, this.node);
     this.type = this.node.children('type');
     this.access = this.node.attr('access');
     this.name = this.type.attr('name');
-    this.id = this.type.attr('ref');
+    ref = this.type.attr('ref');
+    if (ref) {
+      this.id = ref.replace('#', '+');
+    }
   }
 
   Implements.prototype.render = function() {
