@@ -13,6 +13,9 @@
 from cldoc.clang import cindex
 from cldoc.comment import Comment
 from cldoc.comment import Parser
+
+from cldoc import utf8
+
 import re
 
 class Node(object):
@@ -95,6 +98,42 @@ class Node(object):
     def qid_to(self, qid):
         return self.qid_from_to(qid, self.qid)
 
+    def semantic_path_until(self, parent):
+        ret = []
+
+        p = self
+
+        while (not p is None) and p != parent:
+            ret.insert(0, p)
+
+            sp = p.semantic_parent
+            p = p.parent
+
+            while p != sp:
+                if p == parent:
+                    return ret
+
+                p = p.parent
+
+        return ret
+
+    @property
+    def is_unlabeled(self):
+        return False
+
+    def qlbl_from(self, other):
+        p = other.semantic_path_until(self)
+
+        i = 0
+
+        while i < len(p) and p[i].is_unlabeled:
+            i += 1
+
+        return utf8.utf8('::').join(filter(lambda x: x, [q.name for q in p[i:]]))
+
+    def qlbl_to(self, other):
+        return other.qlbl_from(self)
+
     def add_ref(self, cursor):
         self._refs.append(cursor)
         self.add_comment_location(cursor.extent.start)
@@ -174,13 +213,19 @@ class Node(object):
         return ret
 
     @property
+    def semantic_parent(self):
+        parent = self.parent
+
+        while (not parent is None) and parent.is_anonymous:
+            parent = parent.parent
+
+        return parent
+
+    @property
     def qid(self):
         meid = self.name
 
-        parent = self.parent
-
-        while parent and parent.is_anonymous:
-            parent = parent.parent
+        parent = self.semantic_parent
 
         if not parent:
             return meid

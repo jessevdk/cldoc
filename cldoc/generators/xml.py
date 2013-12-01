@@ -412,7 +412,7 @@ class Xml(Generator):
                     if refname:
                         last.text = refname
                     else:
-                        last.text = parent.qid_from(cc.qid)
+                        last.text = parent.qlbl_from(cc)
 
                     self.add_ref_node_id(cc, last)
 

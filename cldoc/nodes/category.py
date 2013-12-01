@@ -22,4 +22,8 @@ class Category(Node):
     def name(self):
         return self._name
 
+    @property
+    def is_unlabeled(self):
+        return True
+
 # vi:ts=4:et

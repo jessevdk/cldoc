@@ -46,6 +46,26 @@ class Argument:
     def force_page(self):
         return False
 
+    def semantic_path_until(self, other):
+        ret = self.parent.semantic_path_until(other)
+        ret.append(self)
+
+        return ret
+
+    def qlbl_from(self, other):
+        return self.parent.qlbl_from(other) + '::' + self.name
+
+    def qlbl_to(self, other):
+        return other.qlbl_from(self)
+
+    @property
+    def semantic_parent(self):
+        return self.parent
+
+    @property
+    def is_unlabeled(self):
+        return False
+
 class Function(Node):
     kind = cindex.CursorKind.FUNCTION_DECL
 
@@ -65,6 +85,15 @@ class Function(Node):
     @property
     def qid(self):
         return self.name
+
+    @property
+    def semantic_parent(self):
+        from namespace import Namespace
+
+        if isinstance(self.parent, Namespace):
+            return self.parent
+        else:
+            return None
 
     @property
     def resolve_nodes(self):

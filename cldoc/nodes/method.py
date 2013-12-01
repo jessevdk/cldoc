@@ -79,6 +79,10 @@ class Method(Function):
 
         return cm
 
+    @property
+    def semantic_parent(self):
+        return Node.semantic_parent.fget(self)
+
     def update_abstract(self, cursor):
         if cursor.is_definition() or cursor.get_definition():
             self.abstract = False
