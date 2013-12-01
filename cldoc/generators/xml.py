@@ -388,7 +388,10 @@ class Xml(Generator):
                         par.text = item.text
                         last = par
 
-                last.tail = s
+                if last == code:
+                    last.text = s
+                else:
+                    last.tail = s
 
                 s = ''
                 last = code
