@@ -56,4 +56,7 @@ class Enum(Node):
         else:
             return Node.name.fget(self)
 
+    def sorted_children(self):
+        return list(self.children)
+
 # vi:ts=4:et
