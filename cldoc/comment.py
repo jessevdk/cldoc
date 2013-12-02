@@ -103,7 +103,7 @@ class Comment(object):
             s = Comment.UnresolvedReference.reescape.sub(lambda x: '\\' + x.group(0), s)
             return utf8.utf8.__new__(cls, utf8.utf8('&lt;{0}&gt;').format(utf8.utf8(s)))
 
-    redocref = re.compile('(?P<isregex>[$]?)<(?:\\[(?P<refname>[^\\]]*)\\])?(?P<ref>operator(?:>>|>|>=)|[^>]+)>')
+    redocref = re.compile('(?P<isregex>[$]?)<(?:\\[(?P<refname>[^\\]]*)\\])?(?P<ref>operator(?:>>|>|>=)|[^>\n]+)>')
     redoccode = re.compile('^    \\[code\\]\n(?P<code>(?:(?:    .*|)\n)*)', re.M)
 
     def __init__(self, text, location):
