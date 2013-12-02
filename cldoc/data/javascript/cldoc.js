@@ -1141,9 +1141,9 @@ cldoc.Doc = (function(_super) {
   };
 
   Doc.prototype.process_code = function(code) {
-    var c, container, ret, span, tag, text, _i, _len, _ref1;
-    ret = $('<pre/>');
-    container = $('<code/>').appendTo(ret);
+    var c, e, ret, tag, _i, _len, _ref1;
+    ret = '<pre><code>';
+    e = cldoc.html_escape;
     _ref1 = $(code).contents();
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
       c = _ref1[_i];
@@ -1151,17 +1151,15 @@ cldoc.Doc = (function(_super) {
         tag = c.tagName.toLowerCase();
         c = $(c);
         if (tag === 'ref') {
-          cldoc.Page.make_link(c.attr('ref'), c.attr('name')).appendTo(container);
+          ret += cldoc.Page.make_link(c.attr('ref'), c.attr('name'));
         } else {
-          span = $('<span/>').text(c.text()).appendTo(container);
-          span.addClass(tag);
+          ret += '<span class="' + e(tag) + '">' + e(c.text()) + '</span>';
         }
       } else {
-        text = $(c).text();
-        container.append(text);
+        ret += e($(c).text());
       }
     }
-    return ret;
+    return ret + '</code></pre>';
   };
 
   Doc.prototype.render = function() {
