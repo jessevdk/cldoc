@@ -1,5 +1,5 @@
 class cldoc.Category extends cldoc.Node
-    @title = ['Category', 'Categories']
+    @title = ['', 'Categories']
 
     constructor: (@node) ->
         super(@node)
