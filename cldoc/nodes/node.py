@@ -126,7 +126,7 @@ class Node(object):
 
         i = 0
 
-        while i < len(p) and p[i].is_unlabeled:
+        while i < (len(p) - 1) and p[i].is_unlabeled:
             i += 1
 
         return utf8.utf8('::').join(filter(lambda x: x, [q.name for q in p[i:]]))
