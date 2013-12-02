@@ -1153,10 +1153,10 @@ cldoc.Doc = (function(_super) {
         if (tag === 'ref') {
           ret += cldoc.Page.make_link(c.attr('ref'), c.attr('name'));
         } else {
-          ret += '<span class="' + e(tag) + '">' + e(c.text()) + '</span>';
+          ret += '<span class="' + e(tag) + '">' + c.text() + '</span>';
         }
       } else {
-        ret += e($(c).text());
+        ret += $(c).text();
       }
     }
     return ret + '</code></pre>';
@@ -1205,7 +1205,7 @@ cldoc.Node.types.doc = cldoc.Doc;
 cldoc.Category = (function(_super) {
   __extends(Category, _super);
 
-  Category.title = ['Category', 'Categories'];
+  Category.title = ['', 'Categories'];
 
   function Category(node) {
     this.node = node;
