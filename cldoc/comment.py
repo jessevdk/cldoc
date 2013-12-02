@@ -80,7 +80,7 @@ class Comment(object):
             self.components = [utf8.utf8(s)]
 
         def _utf8(self):
-            return utf8.utf8("").join(self.components)
+            return utf8.utf8("").join([utf8.utf8(x) for x in self.components])
 
         def __str__(self):
             return str(self._utf8())
