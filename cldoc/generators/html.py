@@ -40,10 +40,10 @@ class Html(Generator):
         with open(index) as f:
             content = f.read()
 
-            templ = '<custom-js></custom-js>'
+            templ = '<meta type="custom-js" />'
             content = content.replace(templ, " ".join(jstags))
 
-            templ = '<custom-css></custom-css>'
+            templ = '<meta type="custom-css" />'
             content = content.replace(templ, " ".join(csstags))
 
             with open(outfile, 'w') as o:
