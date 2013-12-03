@@ -96,6 +96,9 @@ class Comment(object):
 
             return l > 0 and (l > 1 or len(self.components[0]) > 0)
 
+    class MarkdownCode(utf8.utf8):
+        pass
+
     class UnresolvedReference(utf8.utf8):
         reescape = re.compile('[*_]', re.I)
 
@@ -105,6 +108,7 @@ class Comment(object):
 
     redocref = re.compile('(?P<isregex>[$]?)<(?:\\[(?P<refname>[^\\]]*)\\])?(?P<ref>operator(?:>>|>|>=)|[^>\n]+)>')
     redoccode = re.compile('^    \\[code\\]\n(?P<code>(?:(?:    .*|)\n)*)', re.M)
+    redocmcode = re.compile('(^ *(`{3,}|~{3,}).*?\\2)', re.M | re.S)
 
     def __init__(self, text, location):
         self.__dict__['docstrings'] = []
@@ -129,36 +133,55 @@ class Comment(object):
 
         self.__dict__[name] = val
 
+    def redoccode_split(self, doc):
+        # Split on C/C++ code
+        components = Comment.redoccode.split(doc)
+        ret = []
+
+        for i in range(0, len(components), 2):
+            r = Comment.redocmcode.split(components[i])
+
+            for j in range(0, len(r), 3):
+                ret.append(r[j])
+
+                if j < len(r) - 1:
+                    ret.append(Comment.MarkdownCode(r[j + 1]))
+
+            if i < len(components) - 1:
+                ret.append(Comment.Example(components[i + 1]))
+
+        return ret
+
     def redoc_split(self, doc):
         ret = []
 
         # First split examples
-        components = Comment.redoccode.split(doc)
-        for i in range(0, len(components), 2):
-            rdoc = components[i]
-            lastpos = 0
+        components = self.redoccode_split(doc)
 
-            for m in Comment.redocref.finditer(rdoc):
-                span = m.span(0)
+        for c in components:
+            if isinstance(c, Comment.Example) or isinstance(c, Comment.MarkdownCode):
+                ret.append((c, None, None))
+            else:
+                lastpos = 0
 
-                prefix = rdoc[lastpos:span[0]]
-                lastpos = span[1]
+                for m in Comment.redocref.finditer(c):
+                    span = m.span(0)
 
-                ref = m.group('ref')
-                refname = m.group('refname')
+                    prefix = c[lastpos:span[0]]
+                    lastpos = span[1]
 
-                if not refname:
-                    refname = None
+                    ref = m.group('ref')
+                    refname = m.group('refname')
 
-                if len(m.group('isregex')) > 0:
-                    ref = re.compile(ref)
+                    if not refname:
+                        refname = None
 
-                ret.append((prefix, ref, refname))
+                    if len(m.group('isregex')) > 0:
+                        ref = re.compile(ref)
 
-            ret.append((rdoc[lastpos:], None, None))
+                    ret.append((prefix, ref, refname))
 
-            if i < len(components) - 1:
-                ret.append((Comment.Example(components[i + 1]), None, None))
+                ret.append((c[lastpos:], None, None))
 
         return ret
 
