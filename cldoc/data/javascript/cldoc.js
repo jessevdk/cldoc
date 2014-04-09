@@ -1982,7 +1982,7 @@ cldoc.Arguments = (function(_super) {
 
   Arguments.prototype.render_function = function(func) {
     var e, file, line, loc, misspelled, names, ret, undocumented, x, _i, _len, _ref1;
-    e = doc.html_escape;
+    e = cldoc.html_escape;
     ret = '<tr class="title"\
                    id="' + e(func.attr('id')) + '">\
                  <td class="identifier">' + e(func.attr('name')) + '</td>';

@@ -18,7 +18,7 @@ class cldoc.Arguments extends cldoc.Node
         return ret
 
     render_function: (func) ->
-        e = doc.html_escape
+        e = cldoc.html_escape
 
         ret = '<tr class="title"
                    id="' + e(func.attr('id')) + '">
