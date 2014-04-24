@@ -297,12 +297,24 @@ class Tree(documentmerger.DocumentMerger):
 
         return None
 
+    def c_function_is_constructor(self, node):
+        suffixes = ['_new', '_init', '_alloc', '_create']
+
+        for suffix in suffixes:
+            if node.name.endswith(suffix):
+                return True
+
+        return False
+
     def node_on_c_struct(self, node):
         if isinstance(node, nodes.Method) or \
            not isinstance(node, nodes.Function):
             return None
 
-        decl = self.decl_on_c_struct(node, node.return_type)
+        decl = None
+
+        if self.c_function_is_constructor(node):
+            decl = self.decl_on_c_struct(node, node.return_type)
 
         if not decl:
             args = node.arguments
