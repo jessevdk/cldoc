@@ -1,0 +1,25 @@
+@import 'theme';
+
+.hljs-keyword {
+  color: $keyword_color;
+}
+
+.hljs-comment {
+  color: $comment_color;
+}
+
+.hljs-string {
+  color: $string_color;
+}
+
+.hljs-number {
+  color: $number_color;
+}
+
+.hljs-preprocessor {
+  color: $preprocessor_color;
+}
+
+.hljs-stl_container {
+  color: $identifier_color;
+}
