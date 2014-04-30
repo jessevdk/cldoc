@@ -301,8 +301,8 @@ class Tree(documentmerger.DocumentMerger):
         hints = ['new', 'init', 'alloc', 'create']
 
         for hint in hints:
-            if node.name.startswith(hint+"_") or \
-               node.name.endswith("_"+hint):
+            if node.name.startswith(hint + "_") or \
+               node.name.endswith("_" + hint):
                 return True
 
         return False
