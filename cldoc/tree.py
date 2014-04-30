@@ -298,10 +298,11 @@ class Tree(documentmerger.DocumentMerger):
         return None
 
     def c_function_is_constructor(self, node):
-        suffixes = ['_new', '_init', '_alloc', '_create']
+        hints = ['new', 'init', 'alloc', 'create']
 
-        for suffix in suffixes:
-            if node.name.endswith(suffix):
+        for hint in hints:
+            if node.name.startswith(hint + "_") or \
+               node.name.endswith("_" + hint):
                 return True
 
         return False
