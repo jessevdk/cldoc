@@ -1,36 +1,7 @@
 $font: 'ubuntu', 'lucida grande';
 
-$solarized_base03:  #002b36;
-$solarized_base02:  #073642;
-$solarized_base01:  #586E75;
-$solarized_base00:  #657B83;
-$solarized_base0:   #839496;
-$solarized_base1:   #93A1A1;
-$solarized_base2:   #EEE8D5;
-$solarized_base3:   #FDF6E3;
-$solarized_yellow:  #B58900;
-$solarized_orange:  #CB4B16;
-$solarized_red:     #DC322F;
-$solarized_magenta: #D33682;
-$solarized_violet:  #6C71C4;
-$solarized_blue:    #268BD2;
-$solarized_cyan:    #2AA198;
-$solarized_green:   #859900;
-
-$link_color: $solarized_blue;
-$sidebar_bg_color: #eee;
-$sidebar_width: 260px;
-$header_color: #333;
-$selection_color: #ffffab;
-
-$builtin_color: $solarized_yellow;
-$keyword_color: $solarized_orange;
-$identifier_color: $solarized_blue;
-$preprocessor_color: $solarized_violet;
-$comment_color: $solarized_base1;
-
-$scrollbar_bg_color: darken($sidebar_bg_color, 10%);
-$scrollbar_color: darken($sidebar_bg_color, 30%);
+@import 'theme';
+@import 'highlight';
 
 $in_group_row_spacing: 40px;
 

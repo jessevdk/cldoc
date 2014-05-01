@@ -29,6 +29,10 @@ class cldoc.Doc extends cldoc.Node
         return text.replace(r, (m) -> "\\" + m)
 
     process_markdown: (text) ->
+        marked_options = 
+            highlight: (code) ->
+                return hljs.highlightAuto(code).value
+        marked.setOptions(marked_options)
         html = marked(text)
 
         parts = html.split(Doc.magic_separator)
