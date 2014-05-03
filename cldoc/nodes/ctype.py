@@ -149,7 +149,7 @@ class Type(Node):
         if self.is_constant_array:
             return self._element_type.typename_for(node)
 
-        if not node or not '::' in self._typename:
+        if node is None or not '::' in self._typename:
             return self._typename
 
         return node.qid_from(self._typename)
