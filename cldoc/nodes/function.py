@@ -70,7 +70,7 @@ class Function(Node):
     kind = cindex.CursorKind.FUNCTION_DECL
 
     def __init__(self, cursor, comment):
-        Node.__init__(self, cursor, comment)
+        super(Function, self).__init__(cursor, comment)
 
         self._return_type = Type(self.cursor.type.get_result())
 

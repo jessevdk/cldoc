@@ -228,6 +228,47 @@ class Xml(Generator):
         if not node.typedef is None:
             elem.set('typedef', 'yes')
 
+    def template_type_to_xml(self, type, elem):
+        tp = ElementTree.Element('template-type')
+        tp.set('name', type.name)
+
+        if type.is_non_type:
+            tp.append(self.type_to_xml(type.non_type))
+
+            dv = type.default_value
+
+            if not dv is None:
+                tp.set('default', dv)
+        else:
+            dt = type.default_type
+
+            if not dt is None:
+                d = ElementTree.Element('default')
+
+                d.append(self.type_to_xml(dt))
+                tp.append(d)
+
+        elem.append(tp)
+
+    def template_types_to_xml(self, types, elem):
+        if len(types) == 0:
+            return
+
+        tpselem = ElementTree.Element('template-types')
+
+        for t in types:
+            self.template_type_to_xml(t, tpselem)
+
+        elem.append(tpselem)
+
+    def functiontemplate_to_xml(self, node, elem):
+        self.function_to_xml(node, elem)
+        self.template_types_to_xml(node.template_types, elem)
+
+    def methodtemplate_to_xml(self, node, elem):
+        self.method_to_xml(node, elem)
+        self.template_types_to_xml(node.template_types, elem)
+
     def function_to_xml(self, node, elem):
         if not (isinstance(node, nodes.Constructor) or
                 isinstance(node, nodes.Destructor)):
@@ -435,16 +476,23 @@ class Xml(Generator):
         return doce
 
     def call_type_specific(self, node, elem, fn):
-        cls = node.__class__
+        clss = [node.__class__]
 
-        while cls != nodes.Node:
+        while len(clss) > 0:
+            cls = clss[0]
+            clss = clss[1:]
+
+            if cls == nodes.Node:
+                continue
+
             nm = cls.__name__.lower() + '_' + fn
 
             if hasattr(self, nm):
                 getattr(self, nm)(node, elem)
                 break
 
-            cls = cls.__base__
+            if cls != nodes.Node:
+                clss.extend(cls.__bases__)
 
     def node_to_xml(self, node):
         elem = ElementTree.Element(node.classname)
