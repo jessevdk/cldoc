@@ -14,73 +14,17 @@ from node import Node
 from method import Method
 from function import Function
 from ctype import Type
+from templated import Templated
 
 from cldoc.clang import cindex
 
-class TemplateType(object):
-    def __init__(self, node, cursor):
-        self._node = node
-        self._cursor = cursor
-        self._default_type = None
-        self._default_value = None
-
-        if not self.is_non_type:
-            for child in self._cursor.get_children():
-                if child.kind == cindex.CursorKind.TYPE_REF:
-                    self._default_type = Type(child.type)
-                    break
-        else:
-            for child in self._cursor.get_children():
-                if child.kind == cindex.CursorKind.TYPE_REF:
-                    continue
-
-                self._default_value = ''.join([t.spelling for t in child.get_tokens()][:-1])
-                break
-
-    @property
-    def name(self):
-        return self._cursor.spelling
-
-    @property
-    def default_type(self):
-        return self._default_type
-
-    @property
-    def default_value(self):
-        return self._default_value
-
-    @property
-    def is_non_type(self):
-        return self._cursor.kind == cindex.CursorKind.TEMPLATE_NON_TYPE_PARAMETER
-
-    @property
-    def non_type(self):
-        return Type(self._cursor.type)
-
-class FunctionTemplated(object):
-    def __init__(self, cursor, comment):
-        super(FunctionTemplated, self).__init__(cursor, comment)
-
-        self._template_types = []
-
-        for child in cursor.get_children():
-            if child.kind != cindex.CursorKind.TEMPLATE_TYPE_PARAMETER and \
-               child.kind != cindex.CursorKind.TEMPLATE_NON_TYPE_PARAMETER:
-                continue
-
-            self._template_types.append(TemplateType(self, child))
-
-    @property
-    def template_types(self):
-        return self._template_types
-
-class FunctionTemplate(FunctionTemplated, Function):
+class FunctionTemplate(Templated, Function):
     kind = None
 
     def __init__(self, cursor, comment):
         super(FunctionTemplate, self).__init__(cursor, comment)
 
-class MethodTemplate(FunctionTemplated, Method):
+class MethodTemplate(Templated, Method):
     kind = None
 
     def __init__(self, cursor, comment):

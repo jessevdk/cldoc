@@ -26,7 +26,7 @@ class Class(Node):
             self.node = None
 
     def __init__(self, cursor, comment):
-        Node.__init__(self, cursor, comment)
+        super(Class, self).__init__(cursor, comment)
 
         self.process_children = True
         self.current_access = cindex.CXXAccessSpecifier.PRIVATE

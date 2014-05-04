@@ -228,46 +228,17 @@ class Xml(Generator):
         if not node.typedef is None:
             elem.set('typedef', 'yes')
 
-    def template_type_to_xml(self, type, elem):
-        tp = ElementTree.Element('template-type')
-        tp.set('name', type.name)
+    def templatetypeparameter_to_xml(self, node, elem):
+        dt = node.default_type
 
-        if type.is_non_type:
-            tp.append(self.type_to_xml(type.non_type))
+        if not dt is None:
+            d = ElementTree.Element('default')
 
-            dv = type.default_value
+            d.append(self.type_to_xml(dt))
+            elem.append(d)
 
-            if not dv is None:
-                tp.set('default', dv)
-        else:
-            dt = type.default_type
-
-            if not dt is None:
-                d = ElementTree.Element('default')
-
-                d.append(self.type_to_xml(dt))
-                tp.append(d)
-
-        elem.append(tp)
-
-    def template_types_to_xml(self, types, elem):
-        if len(types) == 0:
-            return
-
-        tpselem = ElementTree.Element('template-types')
-
-        for t in types:
-            self.template_type_to_xml(t, tpselem)
-
-        elem.append(tpselem)
-
-    def functiontemplate_to_xml(self, node, elem):
-        self.function_to_xml(node, elem)
-        self.template_types_to_xml(node.template_types, elem)
-
-    def methodtemplate_to_xml(self, node, elem):
-        self.method_to_xml(node, elem)
-        self.template_types_to_xml(node.template_types, elem)
+    def templatenontypeparameter_to_xml(self, node, elem):
+        elem.append(self.type_to_xml(node.type))
 
     def function_to_xml(self, node, elem):
         if not (isinstance(node, nodes.Constructor) or

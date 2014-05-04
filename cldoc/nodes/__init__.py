@@ -30,5 +30,6 @@ from .root import *
 from .typedef import *
 from .union import *
 from .variable import *
+from .templatetypeparameter import *
 
 # vi:ts=4:et

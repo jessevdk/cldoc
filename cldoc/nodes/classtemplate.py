@@ -12,29 +12,15 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from .node import Node
 from .cclass import Class
+from .templated import Templated
 
 from cldoc.clang import cindex
-from cldoc.comment import Comment
-from cldoc.comment import Parser
-import re
 
-class TemplateTypeParameter(Node):
-    kind = cindex.CursorKind.TEMPLATE_TYPE_PARAMETER
-
-    def __init__(self, cursor, comment):
-        Node.__init__(self, cursor, comment)
-
-    def compare_same(self, other):
-        return cmp(self.sort_index, other.sort_index)
-
-class ClassTemplate(Class):
+class ClassTemplate(Class, Templated):
     kind = cindex.CursorKind.CLASS_TEMPLATE
 
     def __init__(self, cursor, comment):
-        Class.__init__(self, cursor, comment)
-
-        self.template_types = {}
-        self.template_type_comments = {}
+        super(ClassTemplate, self).__init__(cursor, comment)
 
         # Check manually if this is actually a struct, so that we set the
         # current access level correctly. I'm not sure there is another
@@ -48,28 +34,5 @@ class ClassTemplate(Class):
                        l[i + 1].spelling == 'struct':
                         self.current_access = cindex.CXXAccessSpecifier.PUBLIC
                 break
-
-    def append(self, child):
-        Node.append(self, child)
-
-        if isinstance(child, TemplateTypeParameter):
-            self.template_types[child.name] = child
-
-            if child.name in self.template_type_comments:
-                child.merge_comment(self.template_type_comments[child.name])
-
-    def parse_comment(self):
-        m = Parser.parse(self._comment.text)
-
-        if len(m.brief) > 0:
-            self._comment.brief = m.brief
-            self._comment.doc = m.body
-
-            for p in m.preparam:
-                cm = Comment(p.description, self._comment.location)
-                self.template_type_comments[p.name] = cm
-
-                if p.name in self.template_types:
-                    self.template_types[p.name].merge_comment(cm)
 
 # vi:ts=4:et
