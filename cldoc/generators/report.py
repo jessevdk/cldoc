@@ -72,7 +72,7 @@ class Report:
             if node.access == cindex.CXXAccessSpecifier.PRIVATE:
                 continue
 
-            if not node.comment:
+            if node.comment is None:
                 continue
 
             # Check documented arguments
@@ -177,7 +177,7 @@ class Report:
         root.append(elem)
 
         for node in self.tree.all_nodes:
-            if not node.comment:
+            if node.comment is None:
                 continue
 
             ee = None

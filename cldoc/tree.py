@@ -192,7 +192,7 @@ class Tree(documentmerger.DocumentMerger):
 
     def markup_code(self, index):
         for node in self.all_nodes:
-            if not node.comment:
+            if node.comment is None:
                 continue
 
             if not node.comment.doc:
@@ -281,7 +281,7 @@ class Tree(documentmerger.DocumentMerger):
         if node is None:
             node = self.root
 
-        if node.comment:
+        if not node.comment is None:
             node.comment.resolve_refs(self.find_ref, node)
 
         for child in node.children:

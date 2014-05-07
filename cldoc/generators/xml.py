@@ -233,7 +233,7 @@ class Xml(Generator):
                 isinstance(node, nodes.Destructor)):
             ret = ElementTree.Element('return')
 
-            if node.comment and hasattr(node.comment, 'returns') and node.comment.returns:
+            if not node.comment is None and hasattr(node.comment, 'returns') and node.comment.returns:
                 ret.append(self.doc_to_xml(node, node.comment.returns))
 
             tp = self.type_to_xml(node.return_type, node.parent)
@@ -246,7 +246,7 @@ class Xml(Generator):
             ret.set('name', arg.name)
             ret.set('id', arg.qid)
 
-            if node.comment and arg.name in node.comment.params:
+            if not node.comment is None and arg.name in node.comment.params:
                 ret.append(self.doc_to_xml(node, node.comment.params[arg.name]))
 
             ret.append(self.type_to_xml(arg.type, node.parent))
@@ -303,7 +303,7 @@ class Xml(Generator):
 
             child.append(self.type_to_xml(base.type, node))
 
-            if base.node and base.node.comment and base.node.comment.brief:
+            if base.node and not base.node.comment is None and base.node.comment.brief:
                 child.append(self.doc_to_xml(base.node, base.node.comment.brief, 'brief'))
 
             elem.append(child)
@@ -317,7 +317,7 @@ class Xml(Generator):
 
             child.set('name', subcls.qid_to(node.qid))
 
-            if subcls.comment and subcls.comment.brief:
+            if not subcls.comment is None and subcls.comment.brief:
                 child.append(self.doc_to_xml(subcls, subcls.comment.brief, 'brief'))
 
             elem.append(child)
@@ -454,10 +454,10 @@ class Xml(Generator):
             if props[prop]:
                 elem.set(prop, props[prop])
 
-        if node.comment and node.comment.brief:
+        if not node.comment is None and node.comment.brief:
             elem.append(self.doc_to_xml(node, node.comment.brief, 'brief'))
 
-        if node.comment and node.comment.doc:
+        if not node.comment is None and node.comment.doc:
             elem.append(self.doc_to_xml(node, node.comment.doc))
 
         self.call_type_specific(node, elem, 'to_xml')
@@ -491,7 +491,7 @@ class Xml(Generator):
         if 'name' in props:
             elem.set('name', props['name'])
 
-        if node.comment and node.comment.brief:
+        if not node.comment is None and node.comment.brief:
             elem.append(self.doc_to_xml(node, node.comment.brief, 'brief'))
 
         self.call_type_specific(node, elem, 'to_xml_ref')
