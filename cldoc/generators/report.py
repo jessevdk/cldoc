@@ -215,7 +215,7 @@ class Report:
                                 ee.append(en)
 
                             er = ElementTree.Element('ref')
-                            er.set('name', component)
+                            er.set('name', component.orig)
                             en.append(er)
 
     def generate(self, filename):
