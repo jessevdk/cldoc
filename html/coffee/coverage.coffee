@@ -58,7 +58,7 @@ class cldoc.Coverage extends cldoc.Node
 
         e = cldoc.html_escape
 
-        ret += '<h3 id="' + e(typename) + '">' + e(typename + ' (' + cov.percentage + '%)') + '</h3'>
+        ret += '<h3 id="' + e(typename) + '">' + e(typename + ' (' + cov.percentage + '%)') + '</h3>'
         ret += '<table class="coverage">'
 
         ret += '<tr><td>Documented:</td><td>' + e(cov.documented) + '</td></tr>'

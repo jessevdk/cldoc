@@ -1935,7 +1935,8 @@ cldoc.Coverage = (function(_super) {
       return ret;
     }
     e = cldoc.html_escape;
-    ret += '<h3 id="' + e(typename) + '">' + e(typename + ' (' + cov.percentage + '%)') + '</h3' > (ret += '<table class="coverage">');
+    ret += '<h3 id="' + e(typename) + '">' + e(typename + ' (' + cov.percentage + '%)') + '</h3>';
+    ret += '<table class="coverage">';
     ret += '<tr><td>Documented:</td><td>' + e(cov.documented) + '</td></tr>';
     ret += '<tr><td>Undocumented:</td><td>' + e(cov.undocumented) + '</td></tr>';
     ret += '</table><table class="undocumented">';
