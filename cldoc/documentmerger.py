@@ -2,9 +2,11 @@ import os, subprocess
 
 import comment
 import nodes
-import sys
+import sys, re
 
 class DocumentMerger:
+    reinclude = re.compile('#<cldoc:include[(]([^)]*)[)]>')
+
     def merge(self, mfilter, files):
         for f in files:
             if os.path.basename(f).startswith('.'):
@@ -23,6 +25,7 @@ class DocumentMerger:
         category = None
         doc = []
         first = False
+        ordered = []
 
         for line in lines:
             prefix = '#<cldoc:'
@@ -41,6 +44,9 @@ class DocumentMerger:
                     sys.exit(1)
 
                 if category:
+                    if not category in ret:
+                        ordered.append(category)
+
                     ret[category] = "\n".join(doc)
 
                 doc = []
@@ -50,12 +56,15 @@ class DocumentMerger:
                 doc.append(line)
 
         if category:
+            if not category in ret:
+                ordered.append(category)
+
             ret[category] = "\n".join(doc)
         elif len(doc) > 0:
             sys.stderr.write('Failed to merge file `{0}\': no #<cldoc:id> specified\n'.format(filename))
             sys.exit(1)
 
-        return ret
+        return [[c, ret[c]] for c in ordered]
 
     def _normalized_qid(self, qid):
         if qid == 'index':
@@ -66,19 +75,31 @@ class DocumentMerger:
 
         return qid
 
+    def _do_include(self, mfilter, filename, relpath):
+        if not os.path.isabs(relpath):
+            relpath = os.path.join(os.path.dirname(filename), relpath)
+
+        return self._read_merge_file(mfilter, relpath)
+
+    def _process_includes(self, mfilter, filename, contents):
+        def repl(m):
+            return self._do_include(mfilter, filename, m.group(1))
+
+        return DocumentMerger.reinclude.sub(repl, contents)
+
     def _read_merge_file(self, mfilter, filename):
         if not mfilter is None:
             contents = unicode(subprocess.check_output([mfilter, filename]), 'utf-8')
         else:
             contents = unicode(open(filename).read(), 'utf-8')
 
-        return contents
+        return self._process_includes(mfilter, filename, contents)
 
     def _merge_file(self, mfilter, filename):
         contents = self._read_merge_file(mfilter, filename)
         categories = self._split_categories(filename, contents)
 
-        for category in categories:
+        for (category, docstr) in categories:
             parts = category.split('/')
 
             qid = self._normalized_qid(parts[0])
@@ -94,7 +115,7 @@ class DocumentMerger:
                 node = self.qid_to_node[qid]
 
             if key == 'doc':
-                node.merge_comment(comment.Comment(categories[category], None), override=True)
+                node.merge_comment(comment.Comment(docstr, None), override=True)
             else:
                 sys.stderr.write('Unknown type `{0}\' for id `{1}\'\n'.format(key, parts[0]))
                 sys.exit(1)
@@ -126,7 +147,10 @@ class DocumentMerger:
                 if not found:
                     s = nodes.Category(part)
 
+
                     root.append(s)
+                    print(root.qid, s.qid)
+
                     root = s
 
                     self.category_to_node[fullname] = s

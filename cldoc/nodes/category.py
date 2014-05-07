@@ -26,4 +26,7 @@ class Category(Node):
     def is_unlabeled(self):
         return True
 
+    def sorted_children(self):
+        return list(self.children)
+
 # vi:ts=4:et
