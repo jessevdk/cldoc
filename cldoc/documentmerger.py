@@ -147,10 +147,7 @@ class DocumentMerger:
                 if not found:
                     s = nodes.Category(part)
 
-
                     root.append(s)
-                    print(root.qid, s.qid)
-
                     root = s
 
                     self.category_to_node[fullname] = s
