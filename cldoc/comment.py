@@ -91,6 +91,16 @@ class Comment(object):
         def __bytes__(self):
             return bytes(self._utf8())
 
+        def __eq__(self, other):
+            if isinstance(other, str):
+                return str(self) == other
+            elif isinstance(other, unicode):
+                return unicode(self) == other
+            elif isinstance(other, bytes):
+                return bytes(self) == other
+            else:
+                return object.__cmp__(self, other)
+
         def __nonzero__(self):
             l = len(self.components)
 
@@ -103,8 +113,11 @@ class Comment(object):
         reescape = re.compile('[*_]', re.I)
 
         def __new__(cls, s):
-            s = Comment.UnresolvedReference.reescape.sub(lambda x: '\\' + x.group(0), s)
-            return utf8.utf8.__new__(cls, utf8.utf8('&lt;{0}&gt;').format(utf8.utf8(s)))
+            ns = Comment.UnresolvedReference.reescape.sub(lambda x: '\\' + x.group(0), s)
+            ret = utf8.utf8.__new__(cls, utf8.utf8('&lt;{0}&gt;').format(utf8.utf8(ns)))
+
+            ret.orig = s
+            return ret
 
     redocref = re.compile('(?P<isregex>[$]?)<(?:\\[(?P<refname>[^\\]]*)\\])?(?P<ref>operator(?:>>|>|>=)|[^>\n]+)>')
     redoccode = re.compile('^    \\[code\\]\n(?P<code>(?:(?:    .*|)\n)*)', re.M)
@@ -132,6 +145,9 @@ class Comment(object):
             val = Comment.String(val)
 
         self.__dict__[name] = val
+
+    def __nonzero__(self):
+        return (bool(self.brief) and not (self.brief == u'*documentation missing...*')) or (bool(self.doc) and not (self.doc == u'*documentation missing...*'))
 
     def redoccode_split(self, doc):
         # Split on C/C++ code

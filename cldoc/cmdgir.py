@@ -186,7 +186,7 @@ class GirComment(comment.Comment):
                     preat.append('')
 
             if brieftext == '':
-                brieftext = '*Documentation missing...*'
+                brieftext = '*documentation missing...*'
 
             text = brieftext.replace('\n', ' ').rstrip() + "\n" + "\n".join(preat) + doctext
 
@@ -541,6 +541,14 @@ class GirCursor:
         else:
             return None
 
+    @property
+    def extent(self):
+        return None
+
+    @property
+    def location(self):
+        return None
+
     def get_children(self):
         return self.children
 
@@ -863,7 +871,7 @@ class GirTree(documentmerger.DocumentMerger):
                 continue
 
             comps = node.comment.doc.components
-            
+
 
             for i in range(len(comps)):
                 component = comps[i]

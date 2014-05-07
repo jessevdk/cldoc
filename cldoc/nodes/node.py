@@ -144,7 +144,10 @@ class Node(object):
     @property
     def comment_locations(self):
         if self.cursor:
-            yield self.cursor.extent.start
+            ext = self.cursor.extent
+
+            if not ext is None:
+                yield ext.start
 
         for loc in self._comment_locations:
             yield loc

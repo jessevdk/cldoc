@@ -86,6 +86,9 @@ class Report:
                 argnames[name] = False
 
             for k in cm.params:
+                if self._is_undocumented_comment(cm.params[k]):
+                    continue
+
                 if k in argnames:
                     argnames[k] = True
                 else:
@@ -96,6 +99,8 @@ class Report:
                     notdocumented.append(k)
 
             if node.return_type.typename != 'void' and not hasattr(cm, 'returns'):
+                missingret = True
+            elif hasattr(cm, 'returns') and self._is_undocumented_comment(cm.returns):
                 missingret = True
             else:
                 missingret = False
@@ -124,6 +129,9 @@ class Report:
 
                 elem.append(e)
 
+    def _is_undocumented_comment(self, cm):
+        return not bool(cm)
+
     def coverage(self, root):
         pertype = {}
 
@@ -136,7 +144,7 @@ class Report:
             if not cname in pertype:
                 pertype[cname] = Report.Coverage(name=cname.lower())
 
-            if node.comment:
+            if not self._is_undocumented_comment(node.comment):
                 pertype[cname].documented.append(node)
             else:
                 pertype[cname].undocumented.append(node)
