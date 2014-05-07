@@ -2,6 +2,7 @@ import os, subprocess
 
 import comment
 import nodes
+import sys
 
 class DocumentMerger:
     def merge(self, mfilter, files):
