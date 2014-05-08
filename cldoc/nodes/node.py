@@ -101,6 +101,9 @@ class Node(object):
     def semantic_path_until(self, parent):
         ret = []
 
+        if parent == self:
+            return [self]
+
         p = self
 
         while (not p is None) and p != parent:
