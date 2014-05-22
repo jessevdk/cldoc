@@ -359,6 +359,11 @@ class GirCursor:
         self.bases = None
         self.implements = None
 
+        if 'introspectable' in node.attrib:
+            self.introspectable = (node.attrib['introspectable'] != '0')
+        else:
+            self.introspectable = True
+
         self.type = self._extract_type()
         self.kind = self._extract_kind()
 
@@ -744,6 +749,9 @@ class GirTree(documentmerger.DocumentMerger):
         pass
 
     def parse_cursor(self, cursor):
+        if not cursor.introspectable:
+            return None
+
         fn = self.mapping[cursor.typename]
 
         if not fn is None:
