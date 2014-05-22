@@ -12,19 +12,25 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from .node import Node
 from .cclass import Class
+from .cstruct import Struct
 from .templated import Templated
 
 from cldoc.clang import cindex
 
-class ClassTemplate(Class, Templated):
-    kind = cindex.CursorKind.CLASS_TEMPLATE
+class StructTemplate(Struct, Templated):
+    def __init__(self, cursor, comment):
+        super(StructTemplate, self).__init__(cursor, comment)
 
+class ClassTemplate(Class, Templated):
     def __init__(self, cursor, comment):
         super(ClassTemplate, self).__init__(cursor, comment)
 
-        # Check manually if this is actually a struct, so that we set the
-        # current access level correctly. I'm not sure there is another
-        # way to do this right now
+class ClassTemplatePlexer(Node):
+    kind = cindex.CursorKind.CLASS_TEMPLATE
+
+    def __new__(cls, cursor, comment):
+        # Check manually if this is actually a struct, so that we instantiate
+        # the right thing. I'm not sure there is another way to do this right now
         l = list(cursor.get_tokens())
 
         for i in range(len(l)):
@@ -32,7 +38,9 @@ class ClassTemplate(Class, Templated):
                 if i < len(l) - 2:
                     if l[i + 1].kind == cindex.TokenKind.KEYWORD and \
                        l[i + 1].spelling == 'struct':
-                        self.current_access = cindex.CXXAccessSpecifier.PUBLIC
+                        return StructTemplate(cursor, comment)
                 break
+
+        return ClassTemplate(cursor, comment)
 
 # vi:ts=4:et
