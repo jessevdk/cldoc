@@ -22,7 +22,7 @@ class Class(Node):
         def __init__(self, cursor, access=cindex.CXXAccessSpecifier.PUBLIC):
             self.cursor = cursor
             self.access = access
-            self.type = Type(cursor.type)
+            self.type = Type(cursor.type, cursor=cursor)
             self.node = None
 
     def __init__(self, cursor, comment):
@@ -71,7 +71,7 @@ class Class(Node):
                     yield child
 
     def append(self, child):
-        Node.append(self, child)
+        super(Class, self).append(child)
 
         if isinstance(child, Method):
             self.name_to_method[child.name] = child
