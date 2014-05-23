@@ -1,3 +1,9 @@
+cldoc.Mixin = (base, mixins...) ->
+    for mixin in mixins by -1
+        base = mixin(base)
+
+    base
+
 class cldoc.Node
     @types = {}
 
@@ -7,6 +13,7 @@ class cldoc.Node
         'references',
         'category',
         'namespace',
+        'templatetypeparameter, templatenontypeparameter',
         'base',
         'implements',
         'subclass',
@@ -16,42 +23,47 @@ class cldoc.Node
         'gobject\\:class',
         'gobject\\:interface',
         'gobject\\:boxed',
-        'struct',
+        'struct, structtemplate',
         'enum',
         'field, union',
         'variable',
         'gobject\\:property',
         'constructor',
         'destructor',
-        'method',
-        'function',
+        'method, methodtemplate',
+        'function, functiontemplate',
         'report'
     ]
 
     @order = {
         'category': 0,
         'namespace': 1,
-        'base': 2,
-        'implements': 2,
-        'subclass': 3,
-        'implementedby': 3,
-        'typedef': 4,
-        'class': 5,
-        'classtemplate': 5,
-        'gobjectclass': 5,
-        'gobjectinterface': 6,
-        'struct': 7,
-        'gobjectboxed': 7,
-        'enum': 8,
-        'enumvalue': 9,
-        'field': 10,
-        'union': 11,
-        'variable': 12,
-        'gobjectproperty': 12,
-        'constructor': 13,
-        'destructor': 14,
-        'method': 15,
-        'function': 16
+        'templatetypeparameter': 2,
+        'templatenontypeparameter': 2,
+        'base': 3,
+        'implements': 3,
+        'subclass': 4,
+        'implementedby': 4,
+        'typedef': 5,
+        'class': 6,
+        'classtemplate': 6,
+        'gobjectclass': 6,
+        'gobjectinterface': 7,
+        'struct': 8,
+        'structtemplate': 8,
+        'gobjectboxed': 8,
+        'enum': 9,
+        'enumvalue': 10,
+        'field': 11,
+        'union': 12,
+        'variable': 13,
+        'gobjectproperty': 13,
+        'constructor': 14,
+        'destructor': 15,
+        'method': 16,
+        'methodtemplate': 16,
+        'function': 17,
+        'functiontemplate': 17
     }
 
     @render_container_tag = 'div'
@@ -67,7 +79,6 @@ class cldoc.Node
         @name = @node.attr('name')
         @id = @node.attr('id')
         @ref = @node.attr('ref')
-        @full_name_for_display = null
 
         if @ref && !@id
             @id = @ref.replace('#', '+')
@@ -75,13 +86,16 @@ class cldoc.Node
         @brief = node.children('brief').first()
         @doc = node.children('doc').first()
 
+    full_name_for_display: ->
+        null
+
     sidebar_name: ->
         @name
 
     @render_container: ->
         ['<' + @render_container_tag + ' class="' + cldoc.html_escape(@title[1].toLowerCase().replace(/[ ]/g, '_')) + '">', '</' + @render_container_tag + '>']
 
-    render: (container) ->
+    render: ->
         null
 
 # vi:ts=4:et

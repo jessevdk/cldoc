@@ -496,6 +496,13 @@ class Xml(Generator):
 
         return elem
 
+    def templated_to_xml_ref(self, node, element):
+        for child in node.sorted_children():
+            if not (isinstance(child, nodes.TemplateTypeParameter) or isinstance(child, nodes.TemplateNonTypeParameter)):
+                continue
+
+            element.append(self.node_to_xml(child))
+
     def generate_page(self, node):
         elem = self.node_to_xml(node)
         self.write_xml(elem, node.qid + '.xml')

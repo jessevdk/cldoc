@@ -25,6 +25,11 @@ class Templated(Node):
 
         self.process_children = True
 
+    @property
+    def template_type_names(self):
+        for t in self._template_types:
+            yield t
+
     def sorted_children(self):
         return list(self.children)
 
@@ -34,22 +39,24 @@ class Templated(Node):
             self._template_types[child.name] = child
 
             if child.name in self._template_type_comments:
+                if hasattr(self._comment, 'params') and (child.name in self._comment.params):
+                    del self._comment.params[child.name]
+
                 child.merge_comment(self._template_type_comments[child.name])
 
         super(Templated, self).append(child)
 
     def parse_comment(self):
-        m = Parser.parse(self._comment.text)
+        super(Templated, self).parse_comment()
 
-        if len(m.brief) > 0:
-            self._comment.brief = m.brief
-            self._comment.doc = m.body
+        for p in self._parsed_comment.preparam:
+            cm = Comment(p.description, self._comment.location)
+            self._template_type_comments[p.name] = cm
 
-            for p in m.preparam:
-                cm = Comment(p.description, self._comment.location)
-                self._template_type_comments[p.name] = cm
+            if p.name in self._template_types:
+                if hasattr(self._comment, 'params') and (p.name in self._comment.params):
+                    del self._comment.params[p.name]
 
-                if p.name in self._template_types:
-                    self._template_types[p.name].merge_comment(cm)
+                self._template_types[p.name].merge_comment(cm)
 
 # vi:ts=4:et

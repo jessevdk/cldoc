@@ -8,6 +8,7 @@ class cldoc.Type extends cldoc.Node
         @allow_none = @node.attr('allow-none') == 'yes'
 
         @typeparts = []
+        @typeparts_text = []
 
         subtype = @node.children('type')
         e = cldoc.html_escape
@@ -15,6 +16,7 @@ class cldoc.Type extends cldoc.Node
         if subtype.length > 0
             @subtype = new Type(subtype)
             @typeparts = @typeparts.concat(@subtype.typeparts)
+            @typeparts_text = @typeparts_text.contact(@subtype.typeparts_text)
 
         if @name
             if @node.attr('builtin')
@@ -30,15 +32,21 @@ class cldoc.Type extends cldoc.Node
                 name = '<span class="name ' + builtincls + '">' + e(@name) + '</span>'
 
             @typeparts.push(name)
+            @typeparts_text.push(@name)
 
         if @qualifier
             qc = e(@qualifier).replace(/const/g, '<span class="keyword">const</span>')
             q = '<span class="qualifier"> ' + qc  + '</span>'
 
             @typeparts.push('<span class="qualifier">' + q + '</span>')
+            @typeparts_text.push(@qualifier)
 
         if @size
             @typeparts.push('<span class="array_size">' + '[' + @size + ']' + '</span>')
+            @typeparts_text.push('[' + @size + ']')
+
+    as_text: ->
+        @typeparts_text.join('')
 
     render: ->
         ret = '<span class="type">'

@@ -45,7 +45,7 @@ class Type(Node):
         cindex.TypeKind.NULLPTR: 'float',
     }
 
-    def __init__(self, tp):
+    def __init__(self, tp, cursor=None):
         Node.__init__(self, None, None)
 
         self.tp = tp
@@ -53,6 +53,7 @@ class Type(Node):
         self._qualifier = []
         self._declared = None
         self._builtin = False
+        self._cursor = cursor
 
         self.extract(tp)
 
@@ -131,6 +132,8 @@ class Type(Node):
             self._builtin = True
         elif tp.kind != cindex.TypeKind.CONSTANTARRAY and hasattr(tp, 'spelling'):
             self._typename = tp.spelling
+        elif (not self._cursor is None):
+            self._typename = self._cursor.displayname
         else:
             self._typename = ''
 

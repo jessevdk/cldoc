@@ -264,7 +264,7 @@ class cldoc.Page
                 ret += '<span class="keyword">' + e(type.title[0]) + '</span>'
                 obj = new type(item)
 
-                name = obj.full_name_for_display
+                name = obj.full_name_for_display()
             else
                 name = item.attr('name')
 

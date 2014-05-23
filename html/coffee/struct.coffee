@@ -11,10 +11,13 @@ class cldoc.Struct extends cldoc.Node
             @keyword = 'struct'
 
     render: ->
-        if @ref || @node.children('field, method, function').length == 0
+        if @ref || @node.children('field, method, function, methodtemplate, functiontemplate').length == 0
             return @render_short()
         else
             return @render_whole()
+
+    identifier_for_display: ->
+        @name
 
     render_short: ->
         e = cldoc.html_escape
@@ -22,9 +25,9 @@ class cldoc.Struct extends cldoc.Node
         ret = '<tr class="short">'
 
         if @ref
-            id = cldoc.Page.make_link(@ref, @name)
+            id = cldoc.Page.make_link(@ref, @identifier_for_display())
         else
-            id = '<span class="identifier">' + e(@name) + '</span>'
+            id = '<span class="identifier">' + e(@identifier_for_display()) + '</span>'
 
         ret += '<td>' + id + '</td>'
         ret += '<td>' + cldoc.Doc.brief(@node) + '</td>'
@@ -36,7 +39,9 @@ class cldoc.Struct extends cldoc.Node
 
         ret += '<tr class="full"><td colspan="2"><div class="item">'
 
-        id = '<span class="identifier">' + e(@name) + '</span>'
+        identifier = @identifier_for_display()
+
+        id = '<span class="identifier">' + e(identifier) + '</span>'
         k = '<span class="keyword">'
 
         isprot = @node.attr('access') == 'protected'
@@ -46,21 +51,7 @@ class cldoc.Struct extends cldoc.Node
 
         k += e(@keyword) + '</span>'
 
-        ret += '<div id="' + e(@id) + '">' + k + ' ' + id
-
-        templatetypes = @node.children('templatetypeparameter')
-
-        if templatetypes.length > 0
-            ret += '&lt;'
-
-            for t in templatetypes
-                t = $(t)
-
-                ret += e(t.attr('name'))
-
-            ret += '&gt;'
-
-        ret += '</div>'
+        ret += '<div id="' + e(identifier) + '">' + k + ' ' + id + '</div>'
         ret += cldoc.Doc.either(@node)
 
         ret += @render_fields()

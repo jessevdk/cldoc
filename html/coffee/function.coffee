@@ -4,6 +4,32 @@ class cldoc.Function extends cldoc.Node
     constructor: (@node) ->
         super(@node)
 
+    identifier_for_display: ->
+        @name
+
+    render_arguments: ->
+        args = @node.children('argument')
+        ret = '<table class="arguments">'
+
+        e = cldoc.html_escape
+
+        for i in [0..(args.length - 1)] by 1
+            arg = $(args[i])
+            argtype = new cldoc.Type(arg.children('type'))
+
+            ret += '<tr id="' + e(arg.attr('id')) + '">'
+            ret += '<td>' + e(arg.attr('name')) + '</td>'
+            ret += '<td>' + cldoc.Doc.either(arg)
+
+            if argtype.allow_none
+                ret += '<span class="annotation">(may be <code>NULL</code>)</span>'
+
+            ret += '</td></tr>'
+
+        ret += '</table>'
+
+        return ret
+
     render: ->
         e = cldoc.html_escape
 
@@ -45,12 +71,10 @@ class cldoc.Function extends cldoc.Node
             ret += '<div class="return_type">' + returntype.render() + '</div>'
 
         ret += '<table class="declaration">'
-        ret += '<tr><td class="identifier">' + e(@name) + '</td>'
+        ret += '<tr><td class="identifier">' + e(@identifier_for_display()) + '</td>'
         ret += '<td class="open_paren">(</td>'
 
         args = @node.children('argument')
-
-        argtable = '<table class="arguments">'
 
         for i in [0..(args.length - 1)] by 1
             if i != 0
@@ -67,15 +91,6 @@ class cldoc.Function extends cldoc.Node
                 name += ','
 
             ret += '<td class="argument_name">' + e(name) + '</td>'
-
-            argtable += '<tr id="' + e(arg.attr('id')) + '">'
-            argtable += '<td>' + e(arg.attr('name')) + '</td>'
-            argtable += '<td>' + cldoc.Doc.either(arg)
-
-            if argtype.allow_none
-                argtable += '<span class="annotation">(may be <code>NULL</code>)</span>'
-
-            argtable += '</td></tr>'
 
         if returntype and returntype.node.attr('name') != 'void'
             argtable += '<tr class="return">'
@@ -94,7 +109,8 @@ class cldoc.Function extends cldoc.Node
 
         ret += '<td class="close_paren">)</td></tr></table></div>'
         ret += cldoc.Doc.either(@node)
-        ret += argtable + '</table>'
+
+        ret += @render_arguments()
 
         override = @node.children('override')
 

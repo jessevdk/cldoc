@@ -20,6 +20,6 @@ class Variable(Node):
     def __init__(self, cursor, comment):
         Node.__init__(self, cursor, comment)
 
-        self.type = Type(cursor.type)
+        self.type = Type(cursor.type, cursor=cursor)
 
 # vi:ts=4:et

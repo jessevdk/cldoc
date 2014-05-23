@@ -22,7 +22,6 @@ window.cldoc = $.extend($.extend({
 
         ret.tick = (s) ->
             end = new Date()
-            console.log(s, (end - ret.start) / 1000)
             ret.start = end
 
         return ret

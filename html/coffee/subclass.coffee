@@ -20,6 +20,9 @@ class cldoc.Subclass extends cldoc.Node
         ret += '<td class="keyword">' + e(access) + '</td>'
         ret += '<td>' + cldoc.Page.make_link(@ref, @name) + '</td>'
         ret += '<td>' + cldoc.Doc.brief(@node) + '</td>'
+        ret += '</tr>'
+
+        return ret
 
 cldoc.Node.types.subclass = cldoc.Subclass
 

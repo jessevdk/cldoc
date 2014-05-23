@@ -21,11 +21,11 @@ class Typedef(Node):
         Node.__init__(self, cursor, comment)
 
         self.process_children = True
-        self.type = Type(self.cursor.type.get_canonical())
+        self.type = Type(self.cursor.type.get_canonical(), cursor=self.cursor)
 
     def visit(self, cursor, citer):
         if cursor.kind == cindex.CursorKind.TYPE_REF:
-            self.type = Type(cursor.type)
+            self.type = Type(cursor.type, cursor=cursor)
 
         return []
 

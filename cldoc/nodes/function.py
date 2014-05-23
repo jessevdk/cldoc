@@ -22,8 +22,16 @@ class Argument:
     def __init__(self, func, cursor):
         self.cursor = cursor
         self.parent = func
+        self._type = None
 
-        self._type = Type(self.cursor.type)
+        for child in cursor.get_children():
+            if child.kind == cindex.CursorKind.TYPE_REF:
+                self._type = Type(self.cursor.type, cursor=child)
+                break
+
+        if self._type is None:
+            self._type = Type(self.cursor.type)
+
         self._refid = None
 
     @property
@@ -73,7 +81,6 @@ class Function(Node):
         super(Function, self).__init__(cursor, comment)
 
         self._return_type = Type(self.cursor.type.get_result())
-
         self._arguments = []
 
         for child in cursor.get_children():
@@ -106,19 +113,15 @@ class Function(Node):
             yield k.name
 
     def parse_comment(self):
-        m = Parser.parse(self._comment.text)
+        super(Function, self).parse_comment()
         self._comment.params = {}
 
-        if len(m.brief) > 0:
-            self._comment.brief = m.brief
-            self._comment.doc = m.body
+        for pre in self._parsed_comment.preparam:
+            self._comment.params[pre.name] = pre.description
 
-            for pre in m.preparam:
-                self._comment.params[pre.name] = pre.description
-
-            for post in m.postparam:
-                if post.name == 'return':
-                    self._comment.returns = post.description
+        for post in self._parsed_comment.postparam:
+            if post.name == 'return':
+                self._comment.returns = post.description
 
     @property
     def return_type(self):

@@ -157,11 +157,11 @@ class Node(object):
 
     def parse_comment(self):
         # Just extract brief and doc
-        m = Parser.parse(self._comment.text)
+        self._parsed_comment = Parser.parse(self._comment.text)
 
-        if len(m.brief) > 0:
-            self._comment.brief = m.brief
-            self._comment.doc = m.body
+        if len(self._parsed_comment.brief) > 0:
+            self._comment.brief = self._parsed_comment.brief
+            self._comment.doc = self._parsed_comment.body
 
     @property
     def natural_sort_name(self):

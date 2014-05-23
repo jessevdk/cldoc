@@ -448,7 +448,7 @@ class Tree(documentmerger.DocumentMerger):
                         for node in ret:
                             self.register_node(node, par)
 
-                ignoretop = [cindex.CursorKind.TYPE_REF]
+                ignoretop = [cindex.CursorKind.TYPE_REF, cindex.CursorKind.PARM_DECL]
 
                 if (not par or ret is None) and not item.kind in ignoretop:
                     sys.stderr.write("Unhandled cursor: %s\n" % (item.kind))

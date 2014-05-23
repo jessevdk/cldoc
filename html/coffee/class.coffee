@@ -7,6 +7,5 @@ class cldoc.Class extends cldoc.Struct
         @keyword = 'class'
 
 cldoc.Node.types['class'] = cldoc.Class
-cldoc.Node.types.classtemplate = cldoc.Class
 
 # vi:ts=4:et
