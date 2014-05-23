@@ -1682,9 +1682,14 @@ cldoc.Function = (function(_super) {
   };
 
   Function.prototype.render_arguments = function() {
-    var arg, args, argtype, e, i, ret, _i, _ref1;
+    var arg, args, argtype, e, i, ret, retu, returntype, _i, _ref1;
     args = this.node.children('argument');
     ret = '<table class="arguments">';
+    retu = this.node.children('return');
+    returntype = null;
+    if (retu.length > 0) {
+      returntype = new cldoc.Type(retu.children('type'));
+    }
     e = cldoc.html_escape;
     for (i = _i = 0, _ref1 = args.length - 1; _i <= _ref1; i = _i += 1) {
       arg = $(args[i]);
@@ -1696,6 +1701,17 @@ cldoc.Function = (function(_super) {
         ret += '<span class="annotation">(may be <code>NULL</code>)</span>';
       }
       ret += '</td></tr>';
+    }
+    if (returntype && returntype.node.attr('name') !== 'void') {
+      ret += '<tr class="return">';
+      ret += '<td class="keyword">return</td>';
+      ret += '<td>' + cldoc.Doc.either(retu);
+      if (returntype.transfer_ownership === 'full') {
+        ret += '<span class="annotation">(owned by caller)</span>';
+      } else if (returntype.transfer_ownership === 'container') {
+        ret += '<span class="annotation">(container owned by caller)</span>';
+      }
+      ret += '</tr>';
     }
     ret += '</table>';
     return ret;
@@ -1752,17 +1768,6 @@ cldoc.Function = (function(_super) {
         name += ',';
       }
       ret += '<td class="argument_name">' + e(name) + '</td>';
-    }
-    if (returntype && returntype.node.attr('name') !== 'void') {
-      argtable += '<tr class="return">';
-      argtable += '<td class="keyword">return</td>';
-      argtable += '<td>' + cldoc.Doc.either(retu);
-      if (returntype.transfer_ownership === 'full') {
-        argtable += '<span class="annotation">(owned by caller)</span>';
-      } else if (returntype.transfer_ownership === 'container') {
-        argtable += '<span class="annotation">(container owned by caller)</span>';
-      }
-      argtable += '</tr>';
     }
     if (args.length === 0) {
       ret += '<td colspan="2"></td>';

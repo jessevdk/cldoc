@@ -11,6 +11,13 @@ class cldoc.Function extends cldoc.Node
         args = @node.children('argument')
         ret = '<table class="arguments">'
 
+        # Return type
+        retu = @node.children('return')
+        returntype = null
+
+        if retu.length > 0
+            returntype = new cldoc.Type(retu.children('type'))
+
         e = cldoc.html_escape
 
         for i in [0..(args.length - 1)] by 1
@@ -25,6 +32,18 @@ class cldoc.Function extends cldoc.Node
                 ret += '<span class="annotation">(may be <code>NULL</code>)</span>'
 
             ret += '</td></tr>'
+
+        if returntype and returntype.node.attr('name') != 'void'
+            ret += '<tr class="return">'
+            ret += '<td class="keyword">return</td>'
+            ret += '<td>' + cldoc.Doc.either(retu)
+
+            if returntype.transfer_ownership == 'full'
+                ret += '<span class="annotation">(owned by caller)</span>'
+            else if returntype.transfer_ownership == 'container'
+                ret += '<span class="annotation">(container owned by caller)</span>'
+
+            ret += '</tr>'
 
         ret += '</table>'
 
@@ -91,18 +110,6 @@ class cldoc.Function extends cldoc.Node
                 name += ','
 
             ret += '<td class="argument_name">' + e(name) + '</td>'
-
-        if returntype and returntype.node.attr('name') != 'void'
-            argtable += '<tr class="return">'
-            argtable += '<td class="keyword">return</td>'
-            argtable += '<td>' + cldoc.Doc.either(retu)
-
-            if returntype.transfer_ownership == 'full'
-                argtable += '<span class="annotation">(owned by caller)</span>'
-            else if returntype.transfer_ownership == 'container'
-                argtable += '<span class="annotation">(container owned by caller)</span>'
-
-            argtable += '</tr>'
 
         if args.length == 0
             ret += '<td colspan="2"></td>'
