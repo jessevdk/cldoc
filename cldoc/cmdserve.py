@@ -20,6 +20,13 @@ class Server(SocketServer.TCPServer):
 
 def handler_bind(directory):
     class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+        def end_headers(self):
+            self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
+
+            SimpleHTTPServer.SimpleHTTPRequestHandler.end_headers(self)
+
         def translate_path(self, path):
             while path.startswith('/'):
                 path = path[1:]
