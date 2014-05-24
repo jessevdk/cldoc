@@ -178,7 +178,15 @@ symbol that it's documenting:
 
 The `symbol` is the C++ identifier (for example `transport` to document the
 `transport` namespace). A file can contain more than one section so you don't
-have to write separate files for each symbol.
+have to write separate files for each symbol. The special symbol name `index`
+can be used to add a description to the main documentation index page.
+
+Merged markdown files can include other files by using the special
+
+    #<cldoc:include(filepath)>
+
+instruction, which includes the file specified at `filepath` (relative to the
+currently being parsed file).
 
 Externally documented symbols which cannot be resolved when generating the
 documentation, will automatically create a category with the symbol as the name.
