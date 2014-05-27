@@ -7,7 +7,12 @@ set(HEADERS transport/bicycle.hh transport/mountainbike.hh transport/racingbike.
 include_directories("${PROJECT_SOURCE_DIR}")
 add_library(transport ${SOURCES})
 
-find_program(CLDOC cldoc)
+set(CLDOC "" CACHE STRING "User specified '/path/to/cldoc'")
+if(CLDOC STREQUAL "")
+	find_program(CLDOC cldoc)
+elseif(NOT EXISTS ${CLDOC})
+	message(FATAL_ERROR "CLDOC was set to '${CLDOC}' but does not exist")
+endif()
 
 if(NOT DOCS_OUTPUT_DIR)
 	set(DOCS_OUTPUT_DIR "gendocs" CACHE STRING "Generated documentation output directory" FORCE)
