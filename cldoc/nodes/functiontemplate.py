@@ -30,7 +30,7 @@ class MethodTemplate(Templated, Method):
     def __init__(self, cursor, comment):
         super(MethodTemplate, self).__init__(cursor, comment)
 
-class FunctionPlexer(Node):
+class FunctionTemplatePlexer(Node):
     kind = cindex.CursorKind.FUNCTION_TEMPLATE
 
     def __new__(cls, cursor, comment):
