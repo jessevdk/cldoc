@@ -18,10 +18,14 @@ from .templated import Templated
 from cldoc.clang import cindex
 
 class StructTemplate(Struct, Templated):
+    kind = None
+
     def __init__(self, cursor, comment):
         super(StructTemplate, self).__init__(cursor, comment)
 
 class ClassTemplate(Class, Templated):
+    kind = None
+
     def __init__(self, cursor, comment):
         super(ClassTemplate, self).__init__(cursor, comment)
 
