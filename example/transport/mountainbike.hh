@@ -28,6 +28,28 @@ namespace transport
 		 *         false otherwise.
 		 */
 		bool SetSuspension(double stiffness);
+
+		/* Change the break type.
+		 * @BreakType the break type.
+		 * @breakType the type of the break.
+		 *
+		 * ChangesBreak changes the type of break fitted to the bike.
+		 * The method will return false if the break type could not be
+		 * fitted.
+		 *
+		 * @return true if the break was adjusted successfully.
+		 *         false otherise
+		 */
+		template <typename BreakType>
+		bool ChangeBreak(BreakType breakType)
+		{
+			if (breakType)
+			{
+				return true;
+			}
+
+			return false;
+		}
 	};
 }
 
