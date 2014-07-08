@@ -2,7 +2,7 @@
 <class id="A" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
   <method id="A::f" name="f">
     <brief>A function of A.</brief>
-    <doc>A longer description of f.
+    <doc>A longer description of f. Use <ref ref="A#A::f::a">a</ref> to pass <ref ref="A#A">A</ref>.
 
 </doc>
     <return>

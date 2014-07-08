@@ -57,12 +57,18 @@ class Argument:
         return False
 
     def semantic_path_until(self, other):
-        ret = self.parent.semantic_path_until(other)
-        ret.append(self)
+        if other == self.parent:
+            ret = []
+        else:
+            ret = self.parent.semantic_path_until(other)
 
+        ret.append(self)
         return ret
 
     def qlbl_from(self, other):
+        if other == self.parent:
+            return self.name
+
         return self.parent.qlbl_from(other) + '::' + self.name
 
     def qlbl_to(self, other):
