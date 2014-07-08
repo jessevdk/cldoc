@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<classtemplate id="A" interface="true" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <brief> The class A.</brief>
+  <doc>A longer description of A.
+</doc>
+  <templatetypeparameter id="A::T" name="T">
+    <brief>the template parameter T.</brief>
+  </templatetypeparameter>
+  <methodtemplate abstract="yes" id="A::a" name="a">
+    <brief>The a function.</brief>
+    <doc>The long description of a.
+
+</doc>
+    <return>
+      <doc>the value.</doc>
+      <type builtin="yes" name="int" />
+    </return>
+    <argument id="A::a::tt" name="tt">
+      <type name="TT" />
+    </argument>
+    <templatetypeparameter id="A::a::TT" name="TT">
+      <brief>the TT template.</brief>
+    </templatetypeparameter>
+  </methodtemplate>
+</classtemplate>

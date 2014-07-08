@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <classtemplate name="A" ref="A#A">
+    <brief> The class A.</brief>
+    <templatetypeparameter id="A::T" name="T">
+      <brief>the template parameter T.</brief>
+    </templatetypeparameter>
+  </classtemplate>
+</index>
