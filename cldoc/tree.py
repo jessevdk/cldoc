@@ -98,16 +98,16 @@ class Tree(documentmerger.DocumentMerger):
         nodes from the generated AST
         """
 
-        index = cindex.Index.create()
+        self.index = cindex.Index.create()
         self.headers = {}
 
         for f in self.files:
             if f in self.processed:
                 continue
 
-            print "Processing `%s'" % (os.path.basename(f),)
+            print('Processing {0}'.format(os.path.basename(f)))
 
-            tu = index.parse(f, self.flags)
+            tu = self.index.parse(f, self.flags)
 
             if len(tu.diagnostics) != 0:
                 fatal = False
@@ -194,8 +194,6 @@ class Tree(documentmerger.DocumentMerger):
         # Resolve bases and subclasses
         for qid in classes:
             classes[qid].resolve_bases(classes)
-
-        self.markup_code(index)
 
     def markup_code(self, index):
         for node in self.all_nodes:
@@ -284,15 +282,16 @@ class Tree(documentmerger.DocumentMerger):
         else:
             return ret
 
-    def cross_ref(self, node = None):
-        if node is None:
-            node = self.root
-
+    def cross_ref_node(self, node):
         if not node.comment is None:
             node.comment.resolve_refs(self.find_ref, node)
 
         for child in node.children:
-            self.cross_ref(child)
+            self.cross_ref_node(child)
+
+    def cross_ref(self):
+        self.cross_ref_node(self.root)
+        self.markup_code(self.index)
 
     def decl_on_c_struct(self, node, tp):
         n = self.cursor_to_node[tp.decl]
