@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="A::B" name="B" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <brief>Class B.</brief>
+  <doc>Class B in namespace A.
+</doc>
+</class>

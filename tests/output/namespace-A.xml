@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<namespace id="A" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <brief> The namespace A.</brief>
+  <doc>Longer description of namespace A.
+</doc>
+  <class name="B" ref="A::B#A::B">
+    <brief>Class B.</brief>
+  </class>
+  <enum anonymous="yes" id="A::E" name="E">
+    <brief>Enum E.</brief>
+    <doc>Enum E in namespace A.
+</doc>
+    <enumvalue id="A::E::E_1" name="E_1" value="0">
+      <brief>E_1 value.</brief>
+    </enumvalue>
+    <enumvalue id="A::E::E_2" name="E_2" value="1">
+      <brief>E_2 value.</brief>
+    </enumvalue>
+  </enum>
+  <function id="A::b" name="b">
+    <brief>Function b.</brief>
+    <doc>Function b in namespace A.
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </function>
+</namespace>

@@ -11,6 +11,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from node import Node
+from .namespace import Namespace
 from cldoc.clang import cindex
 from ctype import Type
 from cldoc.comment import Comment
@@ -91,7 +92,10 @@ class Function(Node):
 
     @property
     def qid(self):
-        return self.name
+        if not isinstance(self.semantic_parent, Namespace):
+            return self.name
+        else:
+            return Node.qid.fget(self)
 
     @property
     def semantic_parent(self):
