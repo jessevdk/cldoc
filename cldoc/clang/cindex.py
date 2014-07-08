@@ -1428,6 +1428,20 @@ class Cursor(Structure):
         """
         return conf.lib.clang_getFieldDeclBitWidth(self)
 
+    @property
+    def specialized_cursor_template(self):
+        """
+        Retrieve the specialized cursor template.
+        """
+        return conf.lib.clang_getSpecializedCursorTemplate(self)
+
+    @property
+    def template_cursor_kind(self):
+        """
+        Retrieve the template cursor kind.
+        """
+        return conf.lib.clang_getTemplateCursorKind(self)
+
     @staticmethod
     def from_result(res, fn, args):
         assert isinstance(res, Cursor)
