@@ -3,6 +3,13 @@ SETUP = $(PYTHON) setup.py
 COFFEE = node_modules/.bin/coffee
 INLINER = node_modules/.bin/inliner
 SASS = gems/.bin/sass
+UNAME = $(shell uname)
+
+ifeq ($(UNAME),Darwin)
+OPEN = open
+else
+OPEN = xdg-open
+endif
 
 all:
 
@@ -29,5 +36,8 @@ install:
 
 tests:
 	$(PYTHON) tests/regression.py
+
+test-coverage:
+	(cd tests && coverage run regression.py && coverage html) && $(OPEN) tests/htmlcov/index.html
 
 .PHONY: all deps generate install tests
