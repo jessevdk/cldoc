@@ -1,6 +1,12 @@
 #!/bin/bash
 
-for i in *.{hh,h}; do
+if [ -z "$1" ]; then
+	headers=*.{hh,h}
+else
+	headers="$@"
+fi
+
+for i in $headers; do
 	if [ ! -f $i ]; then
 		continue;
 	fi
