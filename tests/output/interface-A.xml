@@ -5,6 +5,7 @@ The class A.
 
 A longer description of A.
 </doc>
+  <subclass access="public" name="Impl" ref="Impl#Impl" />
   <method abstract="yes" id="A::a" name="a" virtual="yes">
     <brief>An abstract a.</brief>
     <doc>A longer description of abstract a.

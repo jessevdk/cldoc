@@ -12,3 +12,15 @@ public:
 	 */
 	virtual void a() = 0;
 };
+
+/*
+ * The Impl class.
+ *
+ * The implementation class.
+ */
+class Impl : public A
+{
+public:
+	// @inherit
+	virtual void a() {}
+};

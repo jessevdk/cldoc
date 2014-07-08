@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="Impl" name="Impl" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <doc>
+The Impl class.
+
+The implementation class.
+</doc>
+  <base access="public">
+    <type name="A" ref="A#A" />
+  </base>
+  <method id="Impl::a" name="a" override="yes" virtual="yes">
+    <brief>An abstract a.</brief>
+    <doc>A longer description of abstract a.
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="A::a" ref="A#A::a" />
+  </method>
+</class>
