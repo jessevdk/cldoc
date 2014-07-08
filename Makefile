@@ -27,4 +27,7 @@ generate: deps
 install:
 	$(SETUP) install --user
 
-.PHONY: all deps generate install
+tests:
+	$(PYTHON) tests/regression.py
+
+.PHONY: all deps generate install tests

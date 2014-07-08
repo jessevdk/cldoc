@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<struct id="A" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <brief> The struct A.</brief>
+  <doc>A longer description of A.
+</doc>
+</struct>

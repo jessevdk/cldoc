@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="A" interface="true" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <doc>
+The class A.
+
+A longer description of A.
+</doc>
+  <method abstract="yes" id="A::a" name="a" virtual="yes">
+    <brief>An abstract a.</brief>
+    <doc>A longer description of abstract a.
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+</class>

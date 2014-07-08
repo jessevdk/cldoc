@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <enum anonymous="yes" id="A" name="A">
+    <brief> The enum A.</brief>
+    <doc>The enum A longer description.
+</doc>
+    <enumvalue id="A_1" name="A_1" value="0">
+      <brief>The A_1 value</brief>
+    </enumvalue>
+    <enumvalue id="A_2" name="A_2" value="1">
+      <brief>The A_2 value</brief>
+    </enumvalue>
+  </enum>
+</index>

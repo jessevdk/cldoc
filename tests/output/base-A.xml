@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="A" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <doc>
+The class A.
+
+A longer description of A.
+</doc>
+  <base access="public">
+    <type name="Base" ref="Base#Base" />
+  </base>
+  <method id="A::b" name="b" override="yes" virtual="yes">
+    <brief>A b method.</brief>
+    <doc>The b method description.
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <override name="Base::b" ref="Base#Base::b" />
+  </method>
+</class>

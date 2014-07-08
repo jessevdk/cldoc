@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="A" interface="true" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <method abstract="yes" id="A::f" name="f" virtual="yes">
+    <brief>A function of A.</brief>
+    <doc>A longer description of f.
+
+</doc>
+    <return>
+      <type builtin="yes" name="int" />
+    </return>
+    <argument id="A::f::a" name="a">
+      <doc>the argument.</doc>
+      <type name="A" qualifier="*" ref="A#A" />
+    </argument>
+  </method>
+</class>

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+for i in *.{hh,h}; do
+	if [ ! -f $i ]; then
+		continue;
+	fi
+
+	name=${i%.hh}
+	name=${name%.h}
+
+	files="$i"
+
+	if [ -f "$name.cc" ]; then
+		files="$files $name.cc"
+	fi
+
+	if [ -f "$name.c" ]; then
+		files="$files $name.c"
+	fi
+
+	cldoc generate -- --output html $files
+
+	for x in html/xml/*.xml; do
+		cp $x ../output/$name-${x#html/xml/}
+	done
+
+	rm -rf html
+done

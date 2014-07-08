@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="A" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <destructor id="A::~A" name="~A">
+    <brief>Destructor.</brief>
+    <doc>The destructor of A.
+</doc>
+  </destructor>
+</class>

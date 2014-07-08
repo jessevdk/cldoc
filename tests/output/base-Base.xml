@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<class id="Base" interface="true" name="Base" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <subclass access="public" name="A" ref="A#A" />
+  <method abstract="yes" id="Base::b" name="b" virtual="yes">
+    <brief>A b method.</brief>
+    <doc>The b method description.
+</doc>
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+  </method>
+</class>
