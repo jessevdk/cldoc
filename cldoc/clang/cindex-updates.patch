@@ -1,5 +1,5 @@
 diff --git b/cldoc/clang/cindex.py a/cldoc/clang/cindex.py
-index edd3e70..cecf935 100644
+index 5e162c0..69ce2d7 100644
 --- b/cldoc/clang/cindex.py
 +++ a/cldoc/clang/cindex.py
 @@ -1,3 +1,15 @@
@@ -78,7 +78,7 @@ index edd3e70..cecf935 100644
      @property
      def semantic_parent(self):
          """Return the semantic parent for this cursor."""
-@@ -1421,6 +1456,10 @@ TypeKind.FUNCTIONNOPROTO = TypeKind(110)
+@@ -1427,6 +1462,10 @@ TypeKind.FUNCTIONNOPROTO = TypeKind(110)
  TypeKind.FUNCTIONPROTO = TypeKind(111)
  TypeKind.CONSTANTARRAY = TypeKind(112)
  TypeKind.VECTOR = TypeKind(113)
@@ -89,7 +89,7 @@ index edd3e70..cecf935 100644
  
  class Type(Structure):
      """
-@@ -1849,6 +1888,33 @@ class Index(ClangObject):
+@@ -1856,6 +1895,33 @@ class Index(ClangObject):
          return TranslationUnit.from_source(path, args, unsaved_files, options,
                                             self)
  
@@ -123,52 +123,7 @@ index edd3e70..cecf935 100644
  class TranslationUnit(ClangObject):
      """Represents a source code translation unit.
  
-@@ -2445,44 +2511,6 @@ functionList = [
-   ("clang_annotateTokens",
-    [TranslationUnit, POINTER(Token), c_uint, POINTER(Cursor)]),
- 
--  ("clang_CompilationDatabase_dispose",
--   [c_object_p]),
--
--  ("clang_CompilationDatabase_fromDirectory",
--   [c_char_p, POINTER(c_uint)],
--   c_object_p,
--   CompilationDatabase.from_result),
--
--  ("clang_CompilationDatabase_getCompileCommands",
--   [c_object_p, c_char_p],
--   c_object_p,
--   CompileCommands.from_result),
--
--  ("clang_CompileCommands_dispose",
--   [c_object_p]),
--
--  ("clang_CompileCommands_getCommand",
--   [c_object_p, c_uint],
--   c_object_p),
--
--  ("clang_CompileCommands_getSize",
--   [c_object_p],
--   c_uint),
--
--  ("clang_CompileCommand_getArg",
--   [c_object_p, c_uint],
--   _CXString,
--   _CXString.from_result),
--
--  ("clang_CompileCommand_getDirectory",
--   [c_object_p],
--   _CXString,
--   _CXString.from_result),
--
--  ("clang_CompileCommand_getNumArgs",
--   [c_object_p],
--   c_uint),
--
-   ("clang_codeCompleteAt",
-    [TranslationUnit, c_char_p, c_int, c_int, c_void_p, c_int, c_int],
-    POINTER(CCRStructure)),
-@@ -2524,6 +2552,15 @@ functionList = [
+@@ -2531,6 +2597,15 @@ functionList = [
    ("clang_disposeDiagnostic",
     [Diagnostic]),
  
@@ -184,18 +139,7 @@ index edd3e70..cecf935 100644
    ("clang_disposeIndex",
     [Index]),
  
-@@ -2580,10 +2617,6 @@ functionList = [
-    [c_void_p],
-    c_int),
- 
--  ("clang_getCompletionBriefComment",
--   [c_void_p],
--   _CXString),
--
-   ("clang_getCompletionChunkCompletionString",
-    [c_void_p, c_int],
-    c_object_p),
-@@ -3036,7 +3069,7 @@ class Config:
+@@ -3052,7 +3127,7 @@ class Config:
              raise Exception("library file must be set before before using " \
                              "any other functionalities in libclang.")
  
@@ -204,7 +148,7 @@ index edd3e70..cecf935 100644
  
      @staticmethod
      def set_compatibility_check(check_status):
-@@ -3108,7 +3141,7 @@ class Config:
+@@ -3124,7 +3199,7 @@ class Config:
          return True
  
  def register_enumerations():
