@@ -39,7 +39,8 @@ def create_test(name, files, ofiles):
             exp = objectify.parse(open(f))
             exp = etree.tostring(exp, pretty_print=True)
 
-            self.assertMultiLineEqual(exp, got)
+            self.maxDiff = None
+            self.assertMultiLineEqual(got, exp)
 
         fs.fs.clear()
 
