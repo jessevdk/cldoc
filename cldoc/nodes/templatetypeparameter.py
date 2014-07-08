@@ -12,6 +12,7 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from .node import Node
 from .ctype import Type
+
 from cldoc.clang import cindex
 
 class TemplateTypeParameter(Node):

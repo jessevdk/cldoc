@@ -12,8 +12,10 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from .node import Node
 from .templatetypeparameter import TemplateTypeParameter, TemplateNonTypeParameter
+
 from cldoc.comment import Comment
 from cldoc.comment import Parser
+
 import re
 
 class Templated(Node):
