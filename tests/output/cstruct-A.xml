@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<struct id="A" name="A" typedef="yes" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <field id="A::I" name="I">
+    <type builtin="yes" name="int" />
+  </field>
+  <field id="A::F" name="F">
+    <type builtin="yes" name="float" />
+  </field>
+  <function id="a_f" name="a_f">
+    <return>
+      <type builtin="yes" name="float" />
+    </return>
+    <argument id="a_f::a" name="a">
+      <type name="A" qualifier="*" ref="A#A" />
+    </argument>
+  </function>
+  <function id="a_free" name="a_free">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="a_free::a" name="a">
+      <type name="A" qualifier="*" ref="A#A" />
+    </argument>
+  </function>
+  <function id="a_i" name="a_i">
+    <return>
+      <type builtin="yes" name="int" />
+    </return>
+    <argument id="a_i::a" name="a">
+      <type name="A" qualifier="*" ref="A#A" />
+    </argument>
+  </function>
+  <function id="a_new" name="a_new">
+    <return>
+      <type name="A" qualifier="*" ref="A#A" />
+    </return>
+  </function>
+</struct>

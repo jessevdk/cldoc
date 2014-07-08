@@ -24,7 +24,7 @@ class Struct(Class):
 
     @property
     def is_anonymous(self):
-        return not Class.name.fget(self)
+        return not Class.name.fget(self) and self.typedef is None
 
     @property
     def comment(self):
