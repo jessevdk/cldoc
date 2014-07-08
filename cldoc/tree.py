@@ -27,11 +27,18 @@ from . import utf8
 
 import os, sys, sets, re, glob, platform
 
+from ctypes.util import find_library
+
 if platform.system() == 'Darwin':
     libclang = '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
 
     if os.path.exists(libclang):
         cindex.Config.set_library_path(os.path.dirname(libclang))
+else:
+    lname = find_library('clang')
+
+    if not lname is None:
+        cindex.Config.set_library_file(lname)
 
 class Tree(documentmerger.DocumentMerger):
     def __init__(self, files, flags):
