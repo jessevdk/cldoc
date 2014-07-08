@@ -4,8 +4,8 @@ This is an import of the python bindings for libclang taken from the
 `bindings/python/clang` directory of the
 [clang](https://github.com/llvm-mirror/clang) repository.
 
-The files are taken from commit 52bb2a06361d1d0d51809a2ac06e270e8cf05a9e
-(SVN commit 179984), with the modifications listed in
+The files are taken from commit 8c099d9b04f0b3025e713f76b42a50f3a67d404f
+(SVN commit 193725), with the modifications listed in
 `cldoc/clang/cindex-updates.patch`.
 
 To apply the cldoc changes, run:
