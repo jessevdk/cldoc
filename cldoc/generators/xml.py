@@ -21,13 +21,15 @@ from cldoc import utf8
 from xml.etree import ElementTree
 import sys, os
 
+from cldoc import fs
+
 class Xml(Generator):
     def generate(self, outdir):
         if not outdir:
             outdir = 'xml'
 
         try:
-            os.makedirs(outdir)
+            fs.fs.makedirs(outdir)
         except OSError:
             pass
 
@@ -107,7 +109,7 @@ class Xml(Generator):
 
         self.indent(tree.getroot())
 
-        f = open(os.path.join(self.outdir, fname), 'w')
+        f = fs.fs.open(os.path.join(self.outdir, fname), 'w')
         tree.write(f, encoding='utf-8', xml_declaration=True)
 
         f.close()

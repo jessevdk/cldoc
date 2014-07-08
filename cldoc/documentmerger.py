@@ -4,6 +4,8 @@ import comment
 import nodes
 import sys, re
 
+from . import fs
+
 class DocumentMerger:
     reinclude = re.compile('#<cldoc:include[(]([^)]*)[)]>')
 
@@ -91,7 +93,7 @@ class DocumentMerger:
         if not mfilter is None:
             contents = unicode(subprocess.check_output([mfilter, filename]), 'utf-8')
         else:
-            contents = unicode(open(filename).read(), 'utf-8')
+            contents = unicode(fs.fs.open(filename).read(), 'utf-8')
 
         return self._process_includes(mfilter, filename, contents)
 

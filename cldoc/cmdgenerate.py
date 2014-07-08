@@ -14,6 +14,8 @@ from __future__ import absolute_import
 
 import sys, os, argparse, tempfile, subprocess, shutil
 
+from . import fs
+
 def run_generate(t, opts):
     if opts.type != 'html' and opts.type != 'xml':
         return
@@ -23,7 +25,7 @@ def run_generate(t, opts):
     generator = generators.Xml(t, opts)
 
     if opts.type == 'html' and opts.static:
-        baseout = tempfile.mkdtemp()
+        baseout = fs.fs.mkdtemp()
     else:
         baseout = opts.output
 
@@ -60,7 +62,6 @@ def run_generate(t, opts):
                 sys.exit(1)
 
             shutil.rmtree(baseout)
-
 
 def run(args):
     try:

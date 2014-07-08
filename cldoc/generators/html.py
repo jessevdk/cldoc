@@ -17,6 +17,8 @@ import inspect, os, shutil, json
 from .generator import Generator
 from .search import Search
 
+from cldoc import fs
+
 class Html(Generator):
     def generate(self, output, isstatic, customjs=[], customcss=[]):
         # Write out json document for search
@@ -28,7 +30,7 @@ class Html(Generator):
         index = os.path.join(datadir, 'index.html')
 
         try:
-            os.makedirs(datadir)
+            fs.fs.makedirs(datadir)
         except:
             pass
 
@@ -37,7 +39,7 @@ class Html(Generator):
         jstags = ['<script type="text/javascript" src="{0}"></script>'.format(x) for x in customjs]
         csstags = ['<link rel="stylesheet" href="{0}" type="text/css" charset="utf-8"/>'.format(x) for x in customcss]
 
-        with open(index) as f:
+        with fs.fs.open(index) as f:
             content = f.read()
 
             templ = '<meta type="custom-js" />'
@@ -46,7 +48,7 @@ class Html(Generator):
             templ = '<meta type="custom-css" />'
             content = content.replace(templ, " ".join(csstags))
 
-            with open(outfile, 'w') as o:
+            with fs.fs.open(outfile, 'w') as o:
                 o.write(content)
 
         print('Generated `{0}\''.format(outfile))
