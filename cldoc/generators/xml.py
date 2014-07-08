@@ -111,6 +111,7 @@ class Xml(Generator):
 
         f = fs.fs.open(os.path.join(self.outdir, fname), 'w')
         tree.write(f, encoding='utf-8', xml_declaration=True)
+        f.write('\n')
 
         f.close()
 
