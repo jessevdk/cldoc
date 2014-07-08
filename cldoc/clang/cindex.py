@@ -3069,7 +3069,7 @@ class Config:
             raise Exception("library file must be set before before using " \
                             "any other functionalities in libclang.")
 
-        Config.library_file = path
+        Config.library_file = file
 
     @staticmethod
     def set_compatibility_check(check_status):
