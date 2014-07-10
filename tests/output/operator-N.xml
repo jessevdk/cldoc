@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<namespace id="N" name="N" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <struct name="A" ref="N::A#N::A" />
+</namespace>

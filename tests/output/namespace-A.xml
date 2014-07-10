@@ -10,10 +10,10 @@
     <brief>Enum E.</brief>
     <doc>Enum E in namespace A.
 </doc>
-    <enumvalue id="A::E::E_1" name="E_1" value="0">
+    <enumvalue id="A::E_1" name="E_1" value="0">
       <brief>E_1 value.</brief>
     </enumvalue>
-    <enumvalue id="A::E::E_2" name="E_2" value="1">
+    <enumvalue id="A::E_2" name="E_2" value="1">
       <brief>E_2 value.</brief>
     </enumvalue>
   </enum>

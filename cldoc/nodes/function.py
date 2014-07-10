@@ -98,20 +98,15 @@ class Function(Node):
             self._arguments.append(Argument(self, child))
 
     @property
-    def qid(self):
-        if not isinstance(self.semantic_parent, Namespace):
-            return self.name
-        else:
-            return Node.qid.fget(self)
-
-    @property
     def semantic_parent(self):
         from namespace import Namespace
 
-        if isinstance(self.parent, Namespace):
-            return self.parent
-        else:
-            return None
+        parent = self.parent
+
+        while not parent is None and not isinstance(parent, Namespace):
+            parent = parent.parent
+
+        return parent
 
     @property
     def resolve_nodes(self):

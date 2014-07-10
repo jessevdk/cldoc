@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<struct id="N::A" interface="true" name="A" xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <method abstract="yes" id="N::A::operator&lt;" name="operator&lt;">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="N::A::operator&lt;::other" name="other">
+      <type name="A" qualifier=" const &amp;" ref="N::A#N::A" />
+    </argument>
+  </method>
+  <function id="N::operator==" name="operator==">
+    <return>
+      <type builtin="yes" name="bool" />
+    </return>
+    <argument id="N::operator==::a" name="a">
+      <type name="A" qualifier=" const &amp;" ref="N::A#N::A" />
+    </argument>
+    <argument id="N::operator==::b" name="b">
+      <type name="A" qualifier=" const &amp;" ref="N::A#N::A" />
+    </argument>
+  </function>
+</struct>

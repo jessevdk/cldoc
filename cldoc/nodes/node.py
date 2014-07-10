@@ -236,7 +236,7 @@ class Node(object):
         if not parent:
             return meid
         else:
-            q = self.parent.qid
+            q = parent.qid
 
             if not q:
                 return meid
