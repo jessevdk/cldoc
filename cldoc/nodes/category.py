@@ -27,6 +27,19 @@ class Category(Node):
         return True
 
     def sorted_children(self):
-        return list(self.children)
+        schildren = list(Node.sorted_children(self))
+
+        # Keep categories in order though
+        c = [x for x in self.children if isinstance(x, Category)]
+        c.reverse()
+
+        if len(c) == 0:
+            return schildren
+
+        for i in range(0, len(schildren)):
+            if isinstance(schildren[i], Category):
+                schildren[i] = c.pop()
+
+        return schildren
 
 # vi:ts=4:et
