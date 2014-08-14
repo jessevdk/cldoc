@@ -22,23 +22,19 @@ class Root(Node):
         return True
 
     def sorted_children(self):
-        schildren = Node.sorted_children(self)
+        schildren = list(Node.sorted_children(self))
 
         # Keep categories in order though
         c = [x for x in self.children if isinstance(x, Category)]
+        c.reverse()
 
         if len(c) == 0:
             return schildren
 
-        start = -1
-        end = len(schildren)
-
         for i in range(0, len(schildren)):
-            if start == -1 and isinstance(schildren[i], Category):
-                start = i
-            elif start != -1 and not isinstance(schildren[i], Category):
-                end = i
+            if isinstance(schildren[i], Category):
+                schildren[i] = c.pop()
 
-        return schildren[:start] + c + schildren[end:]
+        return schildren
 
 # vi:ts=4:et
