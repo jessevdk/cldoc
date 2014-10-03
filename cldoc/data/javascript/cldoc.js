@@ -45,6 +45,7 @@ window.cldoc = $.extend($.extend({
 });
 
 $(document).ready(function() {
+  cldoc.Doc.init();
   cldoc.Sidebar.init();
   return cldoc.Page.route();
 });
@@ -1135,6 +1136,21 @@ cldoc.Doc = (function(_super) {
   __extends(Doc, _super);
 
   Doc.magic_separator = '%~@@~%';
+
+  Doc.init = function() {
+    var origproto;
+    origproto = marked.InlineLexer.prototype.outputLink;
+    return marked.InlineLexer.prototype.outputLink = function(cap, link) {
+      var orighref, ret;
+      orighref = link.href;
+      if (link.href.match(/^[a-z]+:/) === null && link.href[0] !== '/') {
+        link.href = cldoc.host + '/' + link.href;
+      }
+      ret = origproto.call(this, cap, link);
+      link.href = orighref;
+      return ret;
+    };
+  };
 
   function Doc(node) {
     this.node = node;

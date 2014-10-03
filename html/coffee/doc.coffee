@@ -1,6 +1,20 @@
 class cldoc.Doc extends cldoc.Node
     @magic_separator = '%~@@~%'
 
+    @init: ->
+        origproto = marked.InlineLexer.prototype.outputLink
+
+        marked.InlineLexer.prototype.outputLink = (cap, link) ->
+            orighref = link.href
+
+            if link.href.match(/^[a-z]+:/) == null && link.href[0] != '/'
+                link.href = cldoc.host + '/' + link.href
+
+            ret = origproto.call(this, cap, link)
+            link.href = orighref
+
+            return ret
+
     constructor: (@node) ->
         super(@node)
 
