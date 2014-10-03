@@ -61,7 +61,7 @@ $in_group_row_spacing: 40px;
   }
 }
 
-#cldoc, #cldoc_sidebar_items {
+#cldoc, #cldoc #cldoc_sidebar_items {
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -83,6 +83,8 @@ $in_group_row_spacing: 40px;
     &::-webkit-scrollbar-track, &::-webkit-scrollbar-thumb {
       background-color: $sidebar_bg_color;
     }
+
+    overflow-y: hidden;
   }
 }
 
