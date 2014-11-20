@@ -19,14 +19,14 @@ command arguments and are the C++ headers and sources of your project.
 The following are the main options used for generating documentation. See
 `cldoc generate --help` for all options.
 
-* --output: the output directoy to write the generated files
-* --type: the type of output to generate. The default is `html`. If you want
+* \-\-output: the output directoy to write the generated files
+* \-\-type: the type of output to generate. The default is `html`. If you want
   to generate only the `xml` description use `xml` instead.
-* --basedir: the project base directory. This is only used currently to determine
+* \-\-basedir: the project base directory. This is only used currently to determine
   relative paths for display in the report.
-* --merge: the directory in which to find .md files to merge
-* --static: generate files which can be served statically
-* --report: add a documentation coverage report to the website. Use this to
+* \-\-merge: the directory in which to find .md files to merge
+* \-\-static: generate files which can be served statically
+* \-\-report: add a documentation coverage report to the website. Use this to
   include a coverage report section in the generated website.
 
 ## Merging external documentation
