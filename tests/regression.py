@@ -11,8 +11,7 @@ from cldoc import cmdgenerate
 from cldoc import fs
 import glob, os
 
-from lxml import objectify
-from lxml import etree
+from xml import etree
 
 fs.fs = fs.Virtual
 
@@ -33,11 +32,8 @@ def create_test(name, files, ofiles):
 
             gf = fs.fs.open(os.path.join('xml', 'xml', xmlname))
 
-            got = objectify.parse(gf)
-            got = etree.tostring(got, pretty_print=True)
-
-            exp = objectify.parse(open(f))
-            exp = etree.tostring(exp, pretty_print=True)
+            got = gf.read()
+            exp = open(f).read()
 
             self.maxDiff = None
             self.assertMultiLineEqual(got, exp)
