@@ -5,7 +5,10 @@ try:
     def makeutf8(s):
         if not isinstance(s, unicode):
             if hasattr(s, '__unicode__'):
-                return unicode(s)
+                if isinstance(s, str) or isinstance(s, buffer):
+                    return unicode(s, 'utf-8')
+                else:
+                    return unicode(s)
 
             return str(s).decode('utf-8')
 
@@ -25,8 +28,8 @@ except:
 string = basecls
 
 class utf8(string):
-    def __init__(self, s):
-        super(utf8, self).__init__(makeutf8(s))
+    def __new__(cls, s):
+        return super(utf8, cls).__new__(cls, makeutf8(s))
 
     def __str__(self):
         if not isinstance(self, str):
