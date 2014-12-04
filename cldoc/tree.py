@@ -35,10 +35,19 @@ if platform.system() == 'Darwin':
     if os.path.exists(libclang):
         cindex.Config.set_library_path(os.path.dirname(libclang))
 else:
-    lname = find_library('clang')
+    versions = [None, '3.5', '3.4', '3.3', '3.2']
 
-    if not lname is None:
-        cindex.Config.set_library_file(lname)
+    for v in versions:
+        name = 'clang'
+
+        if not v is None:
+            name += '-' + v
+
+        lname = find_library(name)
+
+        if not lname is None:
+            cindex.Config.set_library_file(lname)
+            break
 
 class Tree(documentmerger.DocumentMerger):
     def __init__(self, files, flags):
