@@ -83,8 +83,8 @@ class cldoc.Node
         if @ref && !@id
             @id = @ref.replace('#', '+')
 
-        @brief = node.children('brief').first()
-        @doc = node.children('doc').first()
+        @brief = @node.children('brief').first()
+        @doc = @node.children('doc').first()
 
     full_name_for_display: ->
         null
