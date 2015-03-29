@@ -10,15 +10,26 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-import os, subprocess
+import os, subprocess, sys
 
 def flags(f):
     devnull = open(os.devnull)
 
-    p = subprocess.Popen(['clang++', '-E', '-xc++'] + f + ['-v', '-'],
-                         stdin=devnull,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
+    try:
+        p = subprocess.Popen(['clang++', '-E', '-xc++'] + f + ['-v', '-'],
+                             stdin=devnull,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+    except OSError as e:
+        sys.stderr.write("\nFatal: Failed to run clang++ to obtain system include headers, please install clang++ to use cldoc\n")
+
+        message = str(e)
+
+        if message:
+            sys.stderr.write("  Error message: " + message + "\n")
+
+        sys.stderr.write("\n")
+        sys.exit(1)
 
     devnull.close()
 
