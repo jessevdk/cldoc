@@ -30,10 +30,15 @@ import os, sys, sets, re, glob, platform
 from ctypes.util import find_library
 
 if platform.system() == 'Darwin':
-    libclang = '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
+    libclangs = [
+        '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib',
+        '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
+    ]
 
-    if os.path.exists(libclang):
-        cindex.Config.set_library_path(os.path.dirname(libclang))
+    for libclang in libclangs:
+        if os.path.exists(libclang):
+            cindex.Config.set_library_path(os.path.dirname(libclang))
+            break
 else:
     versions = [None, '3.5', '3.4', '3.3', '3.2']
 
