@@ -56,7 +56,14 @@ def run_generate(t, opts):
                     failed = True
 
             if failed:
-                sys.stderr.write("\nFailed to call static site generator. The static site generator uses node.js (http://nodejs.org/). Please make sure you have node installed on your system and try again.\n")
+                sys.stderr.write("\nFatal: Failed to call static site generator. The static site generator uses node.js (http://nodejs.org/). Please make sure you have node installed on your system and try again.\n")
+
+                message = str(e.message)
+
+                if message:
+                    sys.stderr.write("  Error message: " + message + "\n")
+
+                sys.stderr.write("\n")
 
                 shutil.rmtree(baseout)
                 sys.exit(1)
