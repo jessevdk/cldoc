@@ -35,10 +35,19 @@ if platform.system() == 'Darwin':
         '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
     ]
 
+    found = False
+
     for libclang in libclangs:
         if os.path.exists(libclang):
             cindex.Config.set_library_path(os.path.dirname(libclang))
+            found = True
             break
+
+    if not found:
+        lname = find_library("clang")
+
+        if not lname is None:
+            cindex.Config.set_library_file(lname)
 else:
     versions = [None, '3.5', '3.4', '3.3', '3.2']
 
@@ -53,6 +62,14 @@ else:
         if not lname is None:
             cindex.Config.set_library_file(lname)
             break
+
+testconf = cindex.Config()
+
+try:
+    testconf.get_cindex_library()
+except cindex.LibclangError as e:
+    sys.stderr.write("\nFatal: Failed to locate libclang library. cldoc depends on libclang for parsing sources, please make sure you have libclang installed.\n" + str(e) + "\n\n")
+    sys.exit(1)
 
 class Tree(documentmerger.DocumentMerger):
     def __init__(self, files, flags):
