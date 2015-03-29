@@ -57,7 +57,11 @@ else:
 class Tree(documentmerger.DocumentMerger):
     def __init__(self, files, flags):
         self.processed = {}
-        self.files = [os.path.realpath(f) for f in files]
+        self.files, ok = self.expand_sources([os.path.realpath(f) for f in files])
+
+        if not ok:
+            sys.exit(1)
+
         self.flags = includepaths.flags(flags)
 
         # Sort files on sources, then headers
@@ -90,6 +94,32 @@ class Tree(documentmerger.DocumentMerger):
 
         self.qid_to_node[None] = self.root
         self.usr_to_node[None] = self.root
+
+    def filter_source(self, path):
+        return path.endswith('.c') or path.endswith('.cpp') or path.endswith('.h') or path.endswith('.cc') or path.endswith('.hh') or path.endswith('.hpp')
+
+    def expand_sources(self, sources, filter=None):
+        ret = []
+        ok = True
+
+        for source in sources:
+            if not filter is None and not filter(source):
+                continue
+
+            if os.path.isdir(source):
+                retdir, okdir = self.expand_sources([os.path.join(source, x) for x in os.listdir(source)], self.filter_source)
+
+                if not okdir:
+                    ok = False
+
+                ret += retdir
+            elif not os.path.exists(source):
+                sys.stderr.write("The specified source `" + source + "` could not be found\n")
+                ok = False
+            else:
+                ret.append(source)
+
+        return (ret, ok)
 
     def is_header(self, filename):
         return filename.endswith('.hh') or filename.endswith('.hpp') or filename.endswith('.h')
