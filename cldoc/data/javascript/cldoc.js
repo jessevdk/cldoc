@@ -216,7 +216,7 @@ cldoc.Page = (function() {
       cb(this.pages[page]);
       return;
     }
-    url = cldoc.host + '/xml/' + page + '.xml';
+    url = cldoc.host + '/xml/' + page.replace(/::/g, '.') + '.xml';
     return $.ajax({
       url: url,
       cache: false,

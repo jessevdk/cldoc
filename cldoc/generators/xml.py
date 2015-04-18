@@ -508,7 +508,7 @@ class Xml(Generator):
 
     def generate_page(self, node):
         elem = self.node_to_xml(node)
-        self.write_xml(elem, node.qid + '.xml')
+        self.write_xml(elem, node.qid.replace('::', '.') + '.xml')
 
     def node_to_xml_ref(self, node):
         elem = ElementTree.Element(node.classname)

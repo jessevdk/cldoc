@@ -132,7 +132,7 @@ class cldoc.Page
             cb(@pages[page])
             return
 
-        url = cldoc.host + '/xml/' + page + '.xml'
+        url = cldoc.host + '/xml/' + page.replace(/::/g, '.') + '.xml'
 
         $.ajax({
             url: url,
