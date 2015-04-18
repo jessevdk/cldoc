@@ -14,7 +14,7 @@ from __future__ import absolute_import
 
 import sys, os, argparse, tempfile, subprocess, shutil
 
-from . import fs
+from . import fs, staticsite
 
 def run_generate(t, opts):
     if opts.type != 'html' and opts.type != 'xml':
@@ -36,39 +36,7 @@ def run_generate(t, opts):
         generators.Html(t).generate(baseout, opts.static, opts.custom_js, opts.custom_css)
 
         if opts.static:
-            # Call node to generate the static website at the actual output
-            # directory
-            datadir = os.path.join(os.path.dirname(__file__), 'data')
-            jsfile = os.path.join(datadir, 'staticsite', 'staticsite.js')
-
-            print('Generating static website...')
-            failed = False
-
-            try:
-                subprocess.call(['nodejs', jsfile, baseout, opts.output])
-            except OSError as e:
-                if e.errno == 2:
-                    try:
-                        subprocess.call(['node', jsfile, baseout, opts.output])
-                    except OSError:
-                        failed = True
-                else:
-                    failed = True
-
-            if failed:
-                sys.stderr.write("\nFatal: Failed to call static site generator. The static site generator uses node.js (http://nodejs.org/). Please make sure you have node installed on your system and try again.\n")
-
-                message = str(e.message)
-
-                if message:
-                    sys.stderr.write("  Error message: " + message + "\n")
-
-                sys.stderr.write("\n")
-
-                shutil.rmtree(baseout)
-                sys.exit(1)
-
-            shutil.rmtree(baseout)
+            staticsite.generate(baseout, opts)
 
 def run(args):
     try:
