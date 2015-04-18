@@ -45,7 +45,7 @@ for (var i = 0; i < files.length; i++)
 
 	var xmldoc = (new xmldom.DOMParser()).parseFromString(x);
 
-	var doc = jsdom.jsdom(indexhtml, null, {
+	var doc = jsdom.jsdom(indexhtml, {
 		features: {
 			FetchExternalResources: ['script'],
 			ProcessExternalResources: ["script"],
@@ -63,7 +63,7 @@ for (var i = 0; i < files.length; i++)
 		process.exit(1);
 	}
 
-	var window = doc.createWindow();
+	var window = doc.defaultView;
 	var $ = window.jQuery;
 
 
@@ -142,7 +142,7 @@ for (var i = 0; i < files.length; i++)
 	$('head').append(link);
 
 	// Write resulting html to <name>.html
-	fs.writeFileSync(path.join(outdir, name + '.html'), doc.doctype + doc.innerHTML);
+	fs.writeFileSync(path.join(outdir, name + '.html'), jsdom.serializeDocument(doc));
 }
 
 // Write css to styles/cldoc.css
