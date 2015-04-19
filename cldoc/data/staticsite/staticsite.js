@@ -81,7 +81,7 @@ for (var i = 0; i < files.length; i++)
 	$('a').each(function (i, a) {
 		a = $(a);
 
-		var href = a.attr('href');
+		var href = a.attr('href').replace(/::/g, '.');
 
 		if (href.length == 0 || href[0] != '#')
 		{
