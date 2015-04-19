@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <function id="sort_ints" name="sort_ints">
+    <return>
+      <type builtin="yes" name="void" />
+    </return>
+    <argument id="sort_ints::comparator" name="comparator">
+      <type class="function" qualifier="*">
+        <result>
+          <type builtin="yes" name="int" />
+        </result>
+        <arguments>
+          <type builtin="yes" name="int" />
+          <type builtin="yes" name="int" />
+        </arguments>
+      </type>
+    </argument>
+  </function>
+</index>
