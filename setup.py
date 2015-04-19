@@ -70,10 +70,20 @@ class cldoc_generate(Command):
             except:
                 pass
 
-        args = [self.coffee, '--bare', '--join', 'html/javascript/cldoc.js', '--compile']
-        files = ['html/coffee/' + x for x in coffee_files]
+        args = [self.coffee, '--bare', '--stdio', '--compile']
 
-        subprocess.call(args + files)
+        sp = subprocess.Popen(args, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+
+        for f in coffee_files:
+            with open(os.path.join('html', 'coffee', f)) as ff:
+                sp.stdin.write(ff.read())
+
+        sp.stdin.close()
+
+        with open('html/javascript/cldoc.js', 'w') as out:
+            out.write(sp.stdout.read())
+
+        sp.wait()
 
         for js in glob.glob('html/javascript/*.js'):
             shutil.copyfile(js, 'cldoc/data/javascript/' + os.path.basename(js))
