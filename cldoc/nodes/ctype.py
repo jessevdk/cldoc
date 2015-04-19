@@ -55,12 +55,25 @@ class Type(Node):
         self._declared = None
         self._builtin = False
         self._cursor = cursor
+        self._kind = tp.kind
 
         self.extract(tp)
 
     @property
+    def is_function(self):
+        return self._kind == cindex.TypeKind.FUNCTIONPROTO
+
+    @property
+    def function_arguments(self):
+        return self._arguments
+
+    @property
+    def function_result(self):
+        return self._result
+
+    @property
     def is_constant_array(self):
-        return self.tp.kind == cindex.TypeKind.CONSTANTARRAY
+        return self._kind == cindex.TypeKind.CONSTANTARRAY
 
     @property
     def is_out(self):
@@ -132,6 +145,13 @@ class Type(Node):
             self._typename = Type.namemap[tp.kind]
             self._builtin = True
         elif tp.kind != cindex.TypeKind.CONSTANTARRAY and hasattr(tp, 'spelling'):
+            canon = tp.get_canonical()
+
+            if canon.kind == cindex.TypeKind.FUNCTIONPROTO:
+                self._kind = canon.kind
+                self._result = Type(canon.get_result())
+                self._arguments = [Type(arg) for arg in canon.argument_types()]
+
             self._typename = tp.spelling
         elif (not self._cursor is None):
             self._typename = self._cursor.displayname

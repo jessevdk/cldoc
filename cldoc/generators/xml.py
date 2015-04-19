@@ -193,7 +193,20 @@ class Xml(Generator):
 
         if tp.is_constant_array:
             elem.set('size', str(tp.constant_array_size))
+            elem.set('class', 'array')
             elem.append(self.type_to_xml(tp.element_type, parent))
+        elif tp.is_function:
+            elem.set('class', 'function')
+
+            result = ElementTree.Element('result')
+            result.append(self.type_to_xml(tp.function_result, parent))
+            elem.append(result)
+
+            args = ElementTree.Element('arguments')
+            elem.append(args)
+
+            for arg in tp.function_arguments:
+                args.append(self.type_to_xml(arg, parent))
         else:
             elem.set('name', tp.typename_for(parent))
 

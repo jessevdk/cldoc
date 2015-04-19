@@ -549,8 +549,21 @@ $in_group_row_spacing: 40px;
               margin-right: 10px;
             }
 
+            span.function-arguments > span.sub-type > span.name:last-child {
+              margin-right: 0;
+            }
+
+            span.plain, span.function-qualified, span.sub-type {
+              float: left;
+            }
+
             span.qualifier {
               float: right;
+            }
+
+            span.function-qualified span.qualifier,
+            span.function-qualified span.plain {
+              float: none;
             }
           }
         }
