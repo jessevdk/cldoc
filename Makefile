@@ -1,7 +1,7 @@
 PYTHON = python
 SETUP = $(PYTHON) setup.py
 COFFEE = node_modules/.bin/coffee
-INLINER = node_modules/.bin/inliner
+INLINER = node_modules/inline-source
 SASS = gems/.bin/sass
 UNAME = $(shell uname)
 
@@ -13,15 +13,15 @@ endif
 
 all:
 
-deps: $(COFFEE) $(INLINER) $(SASS)
+deps: $(COFFEE) $(INLINE_SOURCE) $(SASS)
 
 $(COFFEE):
 	@echo "Installing coffee"; \
 	npm install coffee-script
 
-$(INLINER):
-	@echo "Installing inliner"; \
-	npm install inliner
+$(INLINE_SOURCE):
+	@echo "Installing inline-source"; \
+	npm install inline-source
 
 $(SASS):
 	@echo "Installing sass"; \
@@ -29,7 +29,7 @@ $(SASS):
 	gem install --user-install -b gems -n gems/.bin --no-ri --no-rdoc sass
 
 generate: deps
-	$(SETUP) generate --coffee=$(COFFEE) --inliner=$(INLINER) --sass=$(SASS)
+	$(SETUP) generate --coffee=$(COFFEE) --inline=scripts/inline --sass=$(SASS)
 
 install:
 	$(SETUP) install --user

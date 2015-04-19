@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+var inline = require('inline-source')
+  , fs = require('fs')
+  , path = require('path')
+  , htmlpath = path.resolve(process.argv[2]);
+
+process.stdout.write(inline(htmlpath, {
+  compress: true,
+  swallowErrors: false
+}));

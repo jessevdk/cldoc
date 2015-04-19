@@ -50,13 +50,13 @@ class cldoc_generate(Command):
     user_options = [
         ('coffee=', None, 'path to coffeescript compiler'),
         ('sass=', None, 'path to sass compiler'),
-        ('inliner=', None, 'path to inliner')
+        ('inline=', None, 'path to inline')
     ]
 
     def initialize_options(self):
         self.coffee = 'coffee'
         self.sass = 'sass'
-        self.inliner = 'inliner'
+        self.inline = 'scripts/inline'
 
     def finalize_options(self):
         pass
@@ -95,14 +95,14 @@ class cldoc_generate(Command):
         for css in glob.glob('html/styles/*.css'):
             shutil.copyfile(css, 'cldoc/data/styles/' + os.path.basename(css))
 
-    def run_inliner(self):
-        if self.inliner == '':
+    def run_inline(self):
+        if self.inline == '':
             shutil.copyfile('html/index.html', 'cldoc/data/index.html')
             return
 
-        print('running {0}'.format(self.inliner))
+        print('running {0}'.format(self.inline))
 
-        args = [self.inliner, 'html/index.html']
+        args = [self.inline, 'html/index.html']
 
         try:
             os.makedirs('cldoc/data')
@@ -117,7 +117,7 @@ class cldoc_generate(Command):
     def run(self):
         self.run_coffee()
         self.run_sass()
-        self.run_inliner()
+        self.run_inline()
 
 cmdclass = {
     'generate': cldoc_generate
