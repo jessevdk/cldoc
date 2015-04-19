@@ -1851,6 +1851,7 @@ cldoc.Function = (function(superClass) {
         }
         ret += cldoc.Page.make_link(ov.attr('ref'), ov.attr('name'));
       }
+      ret += '</div>';
     }
     return ret + '</div>';
   };

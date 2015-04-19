@@ -135,6 +135,8 @@ class cldoc.Function extends cldoc.Node
 
                 ret += cldoc.Page.make_link(ov.attr('ref'), ov.attr('name'))
 
+            ret += '</div>'
+
         return ret + '</div>'
 
 cldoc.Node.types.function = cldoc.Function
