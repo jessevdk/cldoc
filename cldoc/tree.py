@@ -31,8 +31,8 @@ from ctypes.util import find_library
 
 if platform.system() == 'Darwin':
     libclangs = [
-        '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib',
-        '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
+        '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib',
+        '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
     ]
 
     found = False
