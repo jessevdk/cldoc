@@ -21,15 +21,13 @@ class Typedef(Node):
     def __init__(self, cursor, comment):
         Node.__init__(self, cursor, comment)
 
-        self.process_children = True
-        self.type = Type(self.cursor.type.get_canonical(), cursor=self.cursor)
+        children = [child for child in cursor.get_children()]
 
-    def visit(self, cursor, citer):
-        if cursor.kind == cindex.CursorKind.TYPE_REF:
-            self.type = Type(cursor.type, cursor=cursor)
-
-        return []
-
-
+        if len(children) == 1 and children[0].kind == cindex.CursorKind.TYPE_REF:
+            tcursor = children[0]
+            self.type = Type(tcursor.type, tcursor)
+        else:
+            self.process_children = True
+            self.type = Type(self.cursor.type.get_canonical(), cursor=self.cursor)
 
 # vi:ts=4:et
