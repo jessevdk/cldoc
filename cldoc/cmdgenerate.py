@@ -15,6 +15,7 @@ from __future__ import absolute_import
 import sys, os, argparse, tempfile, subprocess, shutil
 
 from . import fs, staticsite
+from . import log
 
 def run_generate(t, opts):
     if opts.type != 'html' and opts.type != 'xml':
@@ -53,6 +54,9 @@ def run(args):
 
     parser.add_argument('--quiet', default=False, action='store_const', const=True,
                         help='be quiet about it')
+
+    parser.add_argument('--loglevel', default='error', metavar='LEVEL',
+                        help='specify the logevel (error, warning, info)')
 
     parser.add_argument('--report', default=False,
                           action='store_const', const=True, help='report documentation coverage and errors')
@@ -93,6 +97,8 @@ def run(args):
 
     if opts.quiet:
         sys.stdout = open(os.devnull, 'w')
+
+    log.setLevel(opts.loglevel)
 
     from . import tree
 

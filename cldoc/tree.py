@@ -24,6 +24,7 @@ import documentmerger
 
 from . import example
 from . import utf8
+from . import log
 
 import os, sys, sets, re, glob, platform
 
@@ -518,6 +519,6 @@ class Tree(documentmerger.DocumentMerger):
                 ignoretop = [cindex.CursorKind.TYPE_REF, cindex.CursorKind.PARM_DECL]
 
                 if (not par or ret is None) and not item.kind in ignoretop:
-                    sys.stderr.write("Unhandled cursor: %s\n" % (item.kind))
+                    log.warning("Unhandled cursor: %s", item.kind)
 
 # vi:ts=4:et
