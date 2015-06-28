@@ -484,7 +484,7 @@ class Tree(documentmerger.DocumentMerger):
                 # see if we already have a node for this thing
                 node = self.usr_to_node[item.get_usr()]
 
-                if not node:
+                if not node or node.cursor != item:
                     # Only register new nodes if they are exposed.
                     if self.cursor_is_exposed(item):
                         node = cls(item, None)
