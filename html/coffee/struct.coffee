@@ -37,7 +37,7 @@ class cldoc.Struct extends cldoc.Node
     render_whole: ->
         e = cldoc.html_escape
 
-        ret += '<tr class="full"><td colspan="2"><div class="item">'
+        ret = '<tr class="full"><td colspan="2"><div class="item">'
 
         identifier = @identifier_for_display()
 
@@ -51,7 +51,10 @@ class cldoc.Struct extends cldoc.Node
 
         k += e(@keyword) + '</span>'
 
-        ret += '<div id="' + e(identifier) + '">' + k + ' ' + id + '</div>'
+        if @node.attr('anonymous') != 'yes'
+            k += ' ' + id
+
+        ret += '<div id="' + e(identifier) + '">' + k + '</div>'
         ret += cldoc.Doc.either(@node)
 
         ret += @render_fields()
