@@ -5,7 +5,15 @@ var inline = require('inline-source')
   , path = require('path')
   , htmlpath = path.resolve(process.argv[2]);
 
-process.stdout.write(inline(htmlpath, {
+inline(htmlpath, {
   compress: true,
-  swallowErrors: false
-}));
+  swallowErrors: false,
+  rootpath: path.dirname(htmlpath)
+}, function(err, html) {
+  if (err) {
+  	process.stderr.write("Error: " + err + "\n");
+  	process.exit(1);
+  } else {
+  	process.stdout.write(html);
+  }
+});
