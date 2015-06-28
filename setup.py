@@ -2,7 +2,7 @@
 
 from setuptools import setup, Command
 
-import subprocess, os, shutil, glob
+import subprocess, os, shutil, glob, sys
 
 coffee_files = [
     'cldoc.coffee',
@@ -72,7 +72,11 @@ class cldoc_generate(Command):
 
         args = [self.coffee, '--bare', '--stdio', '--compile']
 
-        sp = subprocess.Popen(args, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        try:
+            sp = subprocess.Popen(args, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        except Exception as e:
+            sys.stderr.write("Failed to run coffee (please make sure it is installed)\n")
+            sys.exit(1)
 
         for f in coffee_files:
             with open(os.path.join('html', 'coffee', f)) as ff:
