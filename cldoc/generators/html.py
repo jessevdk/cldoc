@@ -51,6 +51,10 @@ class Html(Generator):
             with fs.fs.open(outfile, 'w') as o:
                 o.write(content)
 
+        if os.environ["CLDOC_DEV"]:
+            fs.fs.copytree(os.path.join(datadir, "javascript"), os.path.join(output, "javascript"))
+            fs.fs.copytree(os.path.join(datadir, "styles"), os.path.join(output, "styles"))
+
         print('Generated `{0}\''.format(outfile))
 
     def write_search(self, output):

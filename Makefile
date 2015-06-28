@@ -13,15 +13,13 @@ endif
 
 all:
 
-deps: $(COFFEE) $(INLINE_SOURCE) $(SASS)
-
-$(COFFEE):
-	@echo "Installing coffee"; \
-	npm install "coffee-script@1.9.2"
-
 $(INLINE_SOURCE):
-	@echo "Installing inline-source"; \
-	npm install "inline-source@4.0.1"
+	npm install
+
+# Fake chain to inline-source since they both install using a single npm install
+$(COFFEE): $(INLINE_SOURCE)
+
+deps: $(COFFEE) $(INLINE_SOURCE) $(SASS)
 
 $(SASS):
 	@echo "Installing sass"; \
@@ -39,5 +37,8 @@ tests:
 
 test-coverage:
 	(cd tests && coverage run regression.py && coverage html) && $(OPEN) tests/htmlcov/index.html
+
+dev:
+	$(PYTHON) setup.py generate --coffee=$(COFFEE) --sass=$(SASS) --inline=""
 
 .PHONY: all deps generate install tests

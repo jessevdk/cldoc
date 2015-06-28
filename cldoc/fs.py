@@ -12,7 +12,7 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from __future__ import absolute_import
 
-import os, tempfile
+import os, tempfile, shutil
 
 from StringIO import StringIO
 
@@ -32,6 +32,10 @@ class System:
     @staticmethod
     def clear():
         pass
+
+    @staticmethod
+    def copytree(*args):
+        shutil.copytree(*args)
 
 class Virtual:
     class NeverCloseIO(StringIO):
@@ -82,6 +86,10 @@ class Virtual:
     @staticmethod
     def clear():
         Virtual.files = {}
+
+    @staticmethod
+    def copytree(*args):
+        pass
 
 fs = System
 
