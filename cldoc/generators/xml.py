@@ -119,6 +119,9 @@ class Xml(Generator):
         if node.force_page:
             return True
 
+        if isinstance(node, nodes.Struct) and node.is_anonymous:
+            return False
+
         if isinstance(node, nodes.Class):
             for child in node.children:
                 if not (isinstance(child, nodes.Field) or \

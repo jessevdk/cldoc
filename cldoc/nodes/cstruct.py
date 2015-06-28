@@ -44,4 +44,8 @@ class Struct(Class):
         else:
             return Class.name.fget(self)
 
+    @property
+    def force_page(self):
+        return not self.is_anonymous
+
 # vi:ts=4:et
