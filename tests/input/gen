@@ -24,7 +24,7 @@ for i in $headers; do
 		files="$files $name.c"
 	fi
 
-	cldoc generate -- --output html $files
+	$(dirname "$0")/../../scripts/cldoc-dev generate -- --output html $files
 
 	for x in html/xml/*.xml; do
 		cp $x ../output/$name-${x#html/xml/}
