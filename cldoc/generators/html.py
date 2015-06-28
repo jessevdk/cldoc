@@ -52,7 +52,10 @@ class Html(Generator):
                 o.write(content)
 
         if os.environ["CLDOC_DEV"]:
+            fs.fs.rmtree(os.path.join(output, "javascript"), True)
             fs.fs.copytree(os.path.join(datadir, "javascript"), os.path.join(output, "javascript"))
+
+            fs.fs.rmtree(os.path.join(output, "styles"), True)
             fs.fs.copytree(os.path.join(datadir, "styles"), os.path.join(output, "styles"))
 
         print('Generated `{0}\''.format(outfile))

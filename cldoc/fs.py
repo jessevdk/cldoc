@@ -37,6 +37,10 @@ class System:
     def copytree(*args):
         shutil.copytree(*args)
 
+    @staticmethod
+    def rmtree(*args):
+        shutil.rmtree(*args)
+
 class Virtual:
     class NeverCloseIO(StringIO):
         def close(self):
@@ -89,6 +93,10 @@ class Virtual:
 
     @staticmethod
     def copytree(*args):
+        pass
+
+    @staticmethod
+    def rmtree(*args):
         pass
 
 fs = System
