@@ -74,9 +74,8 @@ class Html(Generator):
             )
 
         outfile = os.path.join(output, 'search.json')
-        f = file(outfile, 'w')
-        f.write(json.dumps({'records': records, 'suffixes': search.db}))
-        f.close()
 
+        with fs.fs.open(outfile, 'w') as f:
+            f.write(json.dumps({'records': records, 'suffixes': search.db}))
 
 # vi:ts=4:et
