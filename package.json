@@ -1,0 +1,9 @@
+{
+  "description": "cldoc generate dependencies",
+  "version": "1.0.0",
+  "repository": "https://github.com/jessevdk/cldoc",
+  "dependencies": {
+    "coffee-script": "^1.9.2",
+    "inline-source": "^4.0.1"
+  }
+}
