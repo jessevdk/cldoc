@@ -5,3 +5,5 @@ html/styles/cldoc.css
 html/javascript/cldoc.js
 MANIFEST
 node_modules
+cldoc.egg-info
+gems
