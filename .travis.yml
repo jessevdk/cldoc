@@ -1,5 +1,8 @@
 language: python
 
+python:
+  - "2.7"
+
 install:
   - (cd cldoc-static && npm install)
   - pip install .
