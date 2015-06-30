@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <union id="A" name="A">
+    <doc>
+The union A.
+
+A longer description of A.
+</doc>
+  </union>
+</index>

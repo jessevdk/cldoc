@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Documentation</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div id="cldoc_sidebar_pagenav"></div>
+            <div class="subtitle">Unions</div>
+            <ul>
+                <li><a href="#A">A<span class="counter"></span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h2 data-cldoc-dynamic="1" id="unions">Unions</h2>
+        <table class="unions">
+            <tbody>
+                <tr class="union">
+                    <td><span class="keyword">union</span></td>
+                    <td></td>
+                    <td class="doc">
+                        <div class="doc">
+                            <p>The union A.</p>
+                            <p>A longer description of A.</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div class="doc">
+                            <p>The union A.</p>
+                            <p>A longer description of A.</p>
+                        </div>
+                        <table class="fields union">
+                            <tbody>
+                                <tr class="full">
+                                    <td colspan="2">
+                                        <div class="item">
+                                            <div id="(anonymous::1)"><span class="keyword">struct</span></div>
+                                            <table class="fields">
+                                                <tbody>
+                                                    <tr id="A::a">
+                                                        <td class="field_name identifier">a</td>
+                                                        <td class="field_type"><span class="type"><span class="name builtin">float</span></span>
+                                                        </td>
+                                                        <td class="doc">
+                                                            <div class="brief">
+                                                                <p>The a field.</p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="A::b">
+                                                        <td class="field_name identifier">b</td>
+                                                        <td class="field_type"><span class="type"><span class="name builtin">float</span></span>
+                                                        </td>
+                                                        <td class="doc">
+                                                            <div class="brief">
+                                                                <p>The b field.</p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="full">
+                                    <td colspan="2">
+                                        <div class="item">
+                                            <div id="(anonymous::2)"><span class="keyword">struct</span></div>
+                                            <table class="fields">
+                                                <tbody>
+                                                    <tr id="A::x">
+                                                        <td class="field_name identifier">x</td>
+                                                        <td class="field_type"><span class="type"><span class="name builtin">float</span></span>
+                                                        </td>
+                                                        <td class="doc">
+                                                            <div class="brief">
+                                                                <p>The x field.</p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="A::y">
+                                                        <td class="field_name identifier">y</td>
+                                                        <td class="field_type"><span class="type"><span class="name builtin">float</span></span>
+                                                        </td>
+                                                        <td class="doc">
+                                                            <div class="brief">
+                                                                <p>The y field.</p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
+<!-- vi:ts=2:et -->

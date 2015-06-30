@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Documentation</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div id="cldoc_sidebar_pagenav"></div>
+            <div class="subtitle">Unions</div>
+            <ul>
+                <li><a href="#A">A<span class="counter"></span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h2 data-cldoc-dynamic="1" id="unions">Unions</h2>
+        <table class="unions">
+            <tbody>
+                <tr class="union">
+                    <td><span class="keyword">union</span></td>
+                    <td></td>
+                    <td class="doc">
+                        <div class="doc">
+                            <p>The union A.</p>
+                            <p>A longer description of A.</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div class="doc">
+                            <p>The union A.</p>
+                            <p>A longer description of A.</p>
+                        </div>
+                        <table class="fields union"></table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
+<!-- vi:ts=2:et -->

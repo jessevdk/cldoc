@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <union id="A" name="A">
+    <doc>
+The union A.
+
+A longer description of A.
+</doc>
+    <struct anonymous="yes" id="A::(anonymous::1)" name="(anonymous::1)">
+      <field id="A::a" name="a">
+        <brief>The a field.</brief>
+        <type builtin="yes" name="float" />
+      </field>
+      <field id="A::b" name="b">
+        <brief>The b field.</brief>
+        <type builtin="yes" name="float" />
+      </field>
+    </struct>
+    <struct anonymous="yes" id="A::(anonymous::2)" name="(anonymous::2)">
+      <field id="A::x" name="x">
+        <brief>The x field.</brief>
+        <type builtin="yes" name="float" />
+      </field>
+      <field id="A::y" name="y">
+        <brief>The y field.</brief>
+        <type builtin="yes" name="float" />
+      </field>
+    </struct>
+  </union>
+</index>
