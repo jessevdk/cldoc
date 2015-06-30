@@ -12,7 +12,7 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from __future__ import absolute_import
 
-import os, tempfile, shutil
+import os, tempfile, shutil, random
 
 from StringIO import StringIO
 
@@ -81,8 +81,17 @@ class Virtual:
 
     @staticmethod
     def mkdtemp():
+        def randname(n):
+            alpha = "abcdefhijklmnopqrstuvwxyz"
+            ret = ""
+
+            for i in range(n):
+                ret += alpha[random.randrange(0, len(alpha))]
+
+            return ret
+
         while True:
-            n = os.tmpnam()
+            n = os.path.join("/", "tmp", randname(8))
 
             if not n in Virtual.files:
                 return n
