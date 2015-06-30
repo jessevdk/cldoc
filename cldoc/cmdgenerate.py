@@ -80,7 +80,7 @@ def run(args):
                           help='the project base directory')
 
     parser.add_argument('--static', default=False, action='store_const', const=True,
-                          help='generate a static website (only for when --output is html)')
+                          help='generate a static website (only for when --output is html, requires globally installed cldoc-static via npm)')
 
     parser.add_argument('--custom-js', default=[], metavar='FILES', action='append',
                           help='specify additional javascript files to be merged into the html (only for when --output is html)')

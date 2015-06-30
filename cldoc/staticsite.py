@@ -1,52 +1,35 @@
 import shutil, subprocess, os, sys
 
-def check():
+def check_node():
     with open(os.devnull) as devnull:
         try:
-            subprocess.call(['nodejs', '-v'], stdout=devnull)
+            subprocess.call(['node', '-v'], stdout=devnull)
         except OSError as e:
             if e.errno == 2:
                 try:
-                    subprocess.call(['node', '-v'], stdout=devnull)
+                    subprocess.call(['nodejs', '-v'], stdout=devnull)
                 except OSError:
                     return (False, e)
 
-                return (True, 'node')
+                return (True, 'nodejs')
             else:
                 return (False, e)
 
-        return (True, 'nodejs')
-
-def check_dependency(node, dependency):
-    with open(os.devnull) as devnull:
-        try:
-            sp = subprocess.Popen([node, '-e', 'require("' + dependency + '")'], stdout=devnull, stderr=devnull)
-            return sp.wait() == 0
-        except:
-            return False
-
-def check_dependencies(node):
-    dependencies = ['jsdom', 'xmldom']
-    missing = False
-
-    for dependency in dependencies:
-        if not check_dependency(node, dependency):
-            sys.stderr.write("Missing node dependency: " + dependency + "\n")
-            missing = True
-
-    if missing:
-        sys.stderr.write("\nPlease install missing dependencies using npm\n")
-
-    return not missing
+        return (True, 'node')
 
 def generate(baseout, opts):
     # Call node to generate the static website at the actual output
     # directory
     datadir = os.path.join(os.path.dirname(__file__), 'data')
-    jsfile = os.path.join(datadir, 'staticsite', 'staticsite.js')
+
+    if 'CLDOC_DEV' in os.environ:
+        jsfile = os.path.join(os.path.dirname(__file__), '..', 'cldoc-static', 'lib', 'cldoc-static-run.js')
+    else:
+        jsfile = 'cldoc-static'
 
     print('Generating static website...')
-    ok, obj = check()
+
+    ok, obj = check_node()
 
     if not ok:
         sys.stderr.write("\nFatal: Failed to call static site generator. The static site generator uses node.js (http://nodejs.org/). Please make sure you have node installed on your system and try again.\n")
@@ -61,8 +44,14 @@ def generate(baseout, opts):
         shutil.rmtree(baseout)
         sys.exit(1)
 
-    if not check_dependencies(obj):
-        sys.exit(1)
+    if opts.quiet:
+        stdout = open(os.devnull, 'w')
+    else:
+        stdout = None
 
-    subprocess.call([obj, jsfile, baseout, opts.output])
+    try:
+        subprocess.call([jsfile, baseout, opts.output], stdout=stdout)
+    except OSError as e:
+        sys.stderr.write("Failed to run " + jsfile + ", did you install cldoc-static using npm?\n")
+
     shutil.rmtree(baseout)

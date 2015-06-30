@@ -1,0 +1,31 @@
+{
+  "name": "cldoc-static",
+  "version": "1.7.1",
+  "description": "cldoc static site generator",
+  "bin": {
+    "cldoc-static": "./lib/cldoc-static-run.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jessevdk/cldoc.git"
+  },
+  "keywords": [
+    "cldoc",
+    "static",
+    "site"
+  ],
+  "author": {
+    "name": "Jesse van den Kieboom",
+    "email": "jessevdk@gmail.com"
+  },
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/jessevdk/cldoc/issues"
+  },
+  "homepage": "https://github.com/jessevdk/cldoc#readme",
+  "dependencies": {
+    "js-beautify": "^1.5.10",
+    "jsdom": "^3.1.2",
+    "xmldom": "^0.1.19"
+  }
+}
