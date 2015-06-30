@@ -2,6 +2,7 @@ language: python
 
 install:
   - (cd cldoc-static && npm install)
+  - pip install .
 
 script:
   - make tests
