@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Documentation</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div id="cldoc_sidebar_pagenav"></div>
+            <div class="subtitle">Functions</div>
+            <ul>
+                <li><a href="#sort_ints">sort_ints<span class="counter"></span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h2 data-cldoc-dynamic="1" id="functions">Functions</h2>
+        <div class="functions">
+            <div class="function">
+                <div class="declaration" id="sort_ints">
+                    <div class="return_type"><span class="type"><span class="name builtin">void</span></span>
+                    </div>
+                    <table class="declaration">
+                        <tbody>
+                            <tr>
+                                <td class="identifier">sort_ints</td>
+                                <td class="open_paren">(</td>
+                                <td class="argument_type"><span class="type"><span class="function-type"><span class="sub-type"><span class="sub-type"><span class="name builtin">int</span></span>
+                                    </span><span class="function-qualified"><span class="plain">(</span><span class="qualifier"> *</span><span class="plain">)</span></span><span class="function-arguments"><span class="plain">(</span><span class="sub-type"><span class="name builtin">int</span></span>
+                                    <span
+                                    class="plain">, </span><span class="sub-type"><span class="name builtin">int</span></span><span class="plain">)</span></span>
+                                        </span>
+                                        </span>
+                                </td>
+                                <td class="argument_name">comparator</td>
+                                <td class="close_paren">)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <table class="arguments">
+                    <tbody>
+                        <tr id="sort_ints::comparator">
+                            <td>comparator</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<!-- vi:ts=2:et -->

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Documentation</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div id="cldoc_sidebar_pagenav"></div>
+            <div class="subtitle">Enumerations</div>
+            <ul>
+                <li><a href="#A">A<span class="counter"></span></a>
+                    <div class="brief">
+                        <p> The enum A.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h2 data-cldoc-dynamic="1" id="enumerations">Enumerations</h2>
+        <div class="enumerations">
+            <div id="A"><span class="keyword">enum</span> <span class="identifier">A</span></div>
+            <div class="doc">
+                <p>The enum A longer description.</p>
+            </div>
+            <table>
+                <tbody>
+                    <tr id="A_1">
+                        <td class="name identifier">A_1</td>
+                        <td class="value">0</td>
+                        <td class="doc">
+                            <div class="brief">
+                                <p>The A_1 value</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="A_2">
+                        <td class="name identifier">A_2</td>
+                        <td class="value">1</td>
+                        <td class="doc">
+                            <div class="brief">
+                                <p>The A_2 value</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<!-- vi:ts=2:et -->

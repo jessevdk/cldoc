@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>A</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div class="back">
+                <div class="name"><span><span class="keyword">Class</span><span>A&lt;T&gt;</span></span>
+                </div><a href="index.html"><span class="arrow">↵</span> <span>Index</span></a></div>
+            <div id="cldoc_sidebar_pagenav"></div>
+            <div class="subtitle">Template Parameters</div>
+            <ul>
+                <li><a href="#A.T">T<span class="counter"></span></a>
+                    <div class="brief">
+                        <p>the template parameter T.</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="subtitle">Member Functions</div>
+            <ul>
+                <li><a href="#A.a">a&lt;TT&gt;<span class="counter"></span></a>
+                    <div class="brief">
+                        <p>The a function.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h1 id="A"><span><span class="keyword">Class</span><span>A&lt;T&gt;</span></span></h1>
+        <div class="description">
+            <div class="doc">
+                <p>A longer description of A.</p>
+            </div>
+        </div>
+        <h2 data-cldoc-dynamic="1" id="template parameters">Template Parameters</h2>
+        <table class="template_parameters">
+            <tbody>
+                <tr id="A::T">
+                    <td>T</td>
+                    <td>
+                        <div class="brief">
+                            <p>the template parameter T.</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 data-cldoc-dynamic="1" id="member functions">Member Functions</h2>
+        <div class="member_functions">
+            <div class="function">
+                <div class="declaration" id="A::a">
+                    <div class="return_type"><span class="type"><span class="name builtin">int</span></span>
+                    </div>
+                    <table class="declaration">
+                        <tbody>
+                            <tr>
+                                <td class="identifier">a&lt;TT&gt;</td>
+                                <td class="open_paren">(</td>
+                                <td class="argument_type"><span class="type"><span class="name ">TT</span></span>
+                                </td>
+                                <td class="argument_name">tt</td>
+                                <td class="close_paren">)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="doc">
+                    <p>The long description of a.</p>
+                </div>
+                <table class="function-template-parameters">
+                    <tbody>
+                        <tr>
+                            <td>TT</td>
+                            <td>
+                                <div class="brief">
+                                    <p>the TT template.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="arguments">
+                    <tbody>
+                        <tr id="A::a::tt">
+                            <td>tt</td>
+                            <td></td>
+                        </tr>
+                        <tr class="return">
+                            <td class="keyword">return</td>
+                            <td>
+                                <div class="doc">
+                                    <p>the value.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<!-- vi:ts=2:et -->

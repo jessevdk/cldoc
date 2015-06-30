@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-	headers=*.{hh,h}
+	headers="*.hh *h"
 else
 	headers="$@"
 fi
@@ -16,6 +16,8 @@ for i in $headers; do
 
 	files="$i"
 
+	echo "$name"
+
 	if [ -f "$name.cc" ]; then
 		files="$files $name.cc"
 	fi
@@ -24,11 +26,21 @@ for i in $headers; do
 		files="$files $name.c"
 	fi
 
-	$(dirname "$0")/../../scripts/cldoc-dev generate -- --output html $files
+	$(dirname "$0")/../../scripts/cldoc-dev generate -- --quiet --output html $files
 
 	for x in html/xml/*.xml; do
 		cp $x ../output/$name-${x#html/xml/}
 	done
 
 	rm -rf html
+
+	echo "$name (static)"
+
+	$(dirname "$0")/../../scripts/cldoc-dev generate -- --quiet --output static --static $files
+
+	for x in static/*.html; do
+		cp $x ../output/$name-${x#static/}.static
+	done
+
+	rm -rf static
 done

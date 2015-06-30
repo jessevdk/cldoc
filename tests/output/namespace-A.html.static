@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>A</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div class="back">
+                <div class="name"><span><span class="keyword">Namespace</span><span>A</span></span>
+                </div><a href="index.html"><span class="arrow">↵</span> <span>Index</span></a></div>
+            <div id="cldoc_sidebar_pagenav"></div>
+            <div class="subtitle">Classes</div>
+            <ul>
+                <li><a href="A.B.html#A.B">B<span class="counter"></span></a>
+                    <div class="brief">
+                        <p>Class B.</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="subtitle">Enumerations</div>
+            <ul>
+                <li><a href="#A.E">E<span class="counter"></span></a>
+                    <div class="brief">
+                        <p>Enum E.</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="subtitle">Functions</div>
+            <ul>
+                <li><a href="#A.b">b<span class="counter"></span></a>
+                    <div class="brief">
+                        <p>Function b.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h1 id="A"><span><span class="keyword">Namespace</span><span>A</span></span></h1>
+        <div class="description">
+            <div class="doc">
+                <p>Longer description of namespace A.</p>
+            </div>
+        </div>
+        <h2 data-cldoc-dynamic="1" id="classes">Classes</h2>
+        <table class="classes">
+            <tbody>
+                <tr class="short">
+                    <td><a href="A.B.html#A.B">B</a></td>
+                    <td>
+                        <div class="brief">
+                            <p>Class B.</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 data-cldoc-dynamic="1" id="enumerations">Enumerations</h2>
+        <div class="enumerations">
+            <div id="A::E"><span class="keyword">enum</span> <span class="identifier">E</span></div>
+            <div class="doc">
+                <p>Enum E in namespace A.</p>
+            </div>
+            <table>
+                <tbody>
+                    <tr id="A::E_1">
+                        <td class="name identifier">E_1</td>
+                        <td class="value">0</td>
+                        <td class="doc">
+                            <div class="brief">
+                                <p>E_1 value.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="A::E_2">
+                        <td class="name identifier">E_2</td>
+                        <td class="value">1</td>
+                        <td class="doc">
+                            <div class="brief">
+                                <p>E_2 value.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h2 data-cldoc-dynamic="1" id="functions">Functions</h2>
+        <div class="functions">
+            <div class="function">
+                <div class="declaration" id="A::b">
+                    <div class="return_type"><span class="type"><span class="name builtin">void</span></span>
+                    </div>
+                    <table class="declaration">
+                        <tbody>
+                            <tr>
+                                <td class="identifier">b</td>
+                                <td class="open_paren">(</td>
+                                <td colspan="2"></td>
+                                <td class="close_paren">)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="doc">
+                    <p>Function b in namespace A.</p>
+                </div>
+                <table class="arguments"></table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<!-- vi:ts=2:et -->

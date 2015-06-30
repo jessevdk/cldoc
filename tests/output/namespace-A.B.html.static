@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>B</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div class="back">
+                <div class="name"><span><span class="keyword">Class</span><span>A::B</span></span>
+                </div><a href="A.html"><span class="arrow">↵</span> <span>A</span></a></div>
+            <div id="cldoc_sidebar_pagenav"></div>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h1 id="A::B"><span><span class="keyword">Class</span><span>A::B</span></span></h1>
+        <div class="description">
+            <div class="doc">
+                <p>Class B in namespace A.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<!-- vi:ts=2:et -->
