@@ -1,0 +1,7 @@
+language: python
+
+install:
+  - (cd cldoc-static && npm install)
+
+script:
+  - make tests
