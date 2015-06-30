@@ -46,6 +46,12 @@ class Virtual:
         def close(self):
             self.seek(0)
 
+        def __exit__(self, type, value, traceback):
+            self.close()
+
+        def __enter__(self):
+            return self
+
         @property
         def value(self):
             data = self.getvalue()
