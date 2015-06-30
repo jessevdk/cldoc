@@ -3,6 +3,10 @@ language: python
 python:
   - "2.7"
 
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libclang1
+
 install:
   - (cd cldoc-static && npm install)
   - pip install .
