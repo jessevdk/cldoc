@@ -5,7 +5,7 @@ python:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y libclang1
+  - sudo apt-get install -y libclang1-3.4
 
 install:
   - (cd cldoc-static && npm install)
