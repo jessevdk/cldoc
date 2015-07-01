@@ -12,7 +12,8 @@ installed on your system. Most recent distributions ship packages of recent
 enough `libclang-dev` (or clang-devel). For Ubuntu precise, you might want to
 install libclang-dev from the
 [dr-graef ppa](https://launchpad.net/~dr-graef/+archive/llvm-3.1.precise). For
-fedora, you can install `clang-devel`.
+fedora, you can install `clang-devel`. For latest versions of cldoc (>= 1.7) you
+should also be able to install only the non-dev package of libclang.
 
 # 1. Installing using pip
 cldoc is avaible at the [Python Package Index](http://pypi.python.org/pypi/cldoc/).
@@ -33,6 +34,10 @@ not yet been tested with python3, any problems can be
 The only additional runtime dependency besides libclang is the **pyparsing**
 python library. You can get it from your distribution, or use
 `pip install pyparsing`.
+
+cldoc by default generates a dynamic site, but can also optionally generate a
+static site instead. To generate a static site, you need to install the cldoc-static
+npm module (npm install -g cldoc-static).
 
 ## Build dependencies ##
 * coffeescript compiler (1.9.2)

@@ -25,7 +25,7 @@ The following are the main options used for generating documentation. See
 * \-\-basedir: the project base directory. This is only used currently to determine
   relative paths for display in the report.
 * \-\-merge: the directory in which to find .md files to merge
-* \-\-static: generate files which can be served statically
+* \-\-static: generate files which can be served statically (requires installing cldoc-static globally using npm -g)
 * \-\-report: add a documentation coverage report to the website. Use this to
   include a coverage report section in the generated website.
 
