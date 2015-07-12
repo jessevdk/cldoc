@@ -440,6 +440,18 @@ class Tree(documentmerger.DocumentMerger):
         filename = str(cursor.location.file)
         return filename in self.headers or self.is_header(filename)
 
+    def is_unique_anon_struct(self, node, parent):
+        if not node:
+            return False
+
+        if not isinstance(node, nodes.Struct):
+            return False
+
+        if not (node.is_anonymous or not node.name):
+            return False
+
+        return not isinstance(parent, nodes.Typedef)
+
     def visit(self, citer, parent=None):
         """
         visit iterates over the provided cursor iterator and creates nodes
@@ -484,7 +496,7 @@ class Tree(documentmerger.DocumentMerger):
                 # see if we already have a node for this thing
                 node = self.usr_to_node[item.get_usr()]
 
-                if not node or node.cursor != item:
+                if not node or self.is_unique_anon_struct(node, parent):
                     # Only register new nodes if they are exposed.
                     if self.cursor_is_exposed(item):
                         node = cls(item, None)
