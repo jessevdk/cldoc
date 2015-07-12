@@ -1,6 +1,6 @@
 {
   "name": "cldoc-static",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "cldoc static site generator",
   "bin": {
     "cldoc-static": "./lib/cldoc-static-run.js"
