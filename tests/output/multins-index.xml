@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <namespace name="foo" ref="foo#foo">
+    <class name="A" ref="foo::A#foo::A" />
+    <class name="B" ref="foo::B#foo::B" />
+  </namespace>
+</index>

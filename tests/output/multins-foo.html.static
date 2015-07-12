@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>foo</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div class="back">
+                <div class="name"><span><span class="keyword">Namespace</span><span>foo</span></span>
+                </div><a href="index.html"><span class="arrow">↵</span> <span>Index</span></a></div>
+            <div id="cldoc_sidebar_pagenav"></div>
+            <div class="subtitle">Classes</div>
+            <ul>
+                <li><a href="foo.A.html#foo.A">A<span class="counter"></span></a></li>
+                <li><a href="foo.B.html#foo.B">B<span class="counter"></span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h1 id="foo"><span><span class="keyword">Namespace</span><span>foo</span></span></h1>
+        <h2 data-cldoc-dynamic="1" id="classes">Classes</h2>
+        <table class="classes">
+            <tbody>
+                <tr class="short">
+                    <td><a href="foo.A.html#foo.A">A</a></td>
+                    <td></td>
+                </tr>
+                <tr class="short">
+                    <td><a href="foo.B.html#foo.B">B</a></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
+<!-- vi:ts=2:et -->
