@@ -43,9 +43,10 @@ namespace transport
 }
 {% endhighlight %}
 
-A documentation section begins with an ordinary comment (so not /** or ///), and
+A documentation section begins with an ordinary comment (so not `/**` or `///`), and
 continues over the next lines. Multiple comments following eachother are automatically
-concatenated together. Both multiline and single line comments can be used.
+concatenated together. Both multiline and single line comments can be used. To write
+comments that are not part of the public documentation, use `//-`.
 
 The actual comment consists of several parts. Documentation for all symbols
 always has a `brief` section and a `body` section. The `brief` section consists
