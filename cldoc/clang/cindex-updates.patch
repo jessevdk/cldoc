@@ -1,5 +1,5 @@
 diff --git b/cldoc/clang/cindex.py a/cldoc/clang/cindex.py
-index aeb34f8..5e539a7 100644
+index aeb34f8..721575a 100644
 --- b/cldoc/clang/cindex.py
 +++ a/cldoc/clang/cindex.py
 @@ -1,3 +1,15 @@
@@ -41,7 +41,16 @@ index aeb34f8..5e539a7 100644
      def disable_option(self):
          """The command-line option that disables this diagnostic."""
          disable = _CXString()
-@@ -1445,6 +1464,9 @@ class Cursor(Structure):
+@@ -1136,6 +1155,8 @@ CursorKind.INCLUSION_DIRECTIVE = CursorKind(503)
+ CursorKind.MODULE_IMPORT_DECL = CursorKind(600)
+ # A type alias template declaration
+ CursorKind.TYPE_ALIAS_TEMPLATE_DECL = CursorKind(601)
++# A static_assert or _Static_assert node
++CursorKind.STATIC_ASSERT = CursorKind(602)
+ 
+ # A code completion overload candidate.
+ CursorKind.OVERLOAD_CANDIDATE = CursorKind(700)
+@@ -1445,6 +1466,9 @@ class Cursor(Structure):
  
          return self._hash
  
@@ -51,7 +60,7 @@ index aeb34f8..5e539a7 100644
      @property
      def semantic_parent(self):
          """Return the semantic parent for this cursor."""
-@@ -1576,6 +1598,20 @@ class Cursor(Structure):
+@@ -1576,6 +1600,20 @@ class Cursor(Structure):
          """
          return conf.lib.clang_getFieldDeclBitWidth(self)
  
@@ -72,7 +81,7 @@ index aeb34f8..5e539a7 100644
      @staticmethod
      def from_result(res, fn, args):
          assert isinstance(res, Cursor)
-@@ -3025,6 +3061,15 @@ functionList = [
+@@ -3025,6 +3063,15 @@ functionList = [
    ("clang_disposeDiagnostic",
     [Diagnostic]),
  
@@ -88,7 +97,7 @@ index aeb34f8..5e539a7 100644
    ("clang_disposeIndex",
     [Index]),
  
-@@ -3717,7 +3762,7 @@ class Config:
+@@ -3717,7 +3764,7 @@ class Config:
          return True
  
  def register_enumerations():

@@ -1155,6 +1155,8 @@ CursorKind.INCLUSION_DIRECTIVE = CursorKind(503)
 CursorKind.MODULE_IMPORT_DECL = CursorKind(600)
 # A type alias template declaration
 CursorKind.TYPE_ALIAS_TEMPLATE_DECL = CursorKind(601)
+# A static_assert or _Static_assert node
+CursorKind.STATIC_ASSERT = CursorKind(602)
 
 # A code completion overload candidate.
 CursorKind.OVERLOAD_CANDIDATE = CursorKind(700)
