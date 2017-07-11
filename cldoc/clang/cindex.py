@@ -2330,33 +2330,6 @@ class Index(ClangObject):
         return TranslationUnit.from_source(path, args, unsaved_files, options,
                                            self)
 
-class CXXAccessSpecifier:
-    INVALID_ACCESS = 0
-    PUBLIC = 1
-    PROTECTED = 2
-    PRIVATE = 3
-
-    def __init__(self, value, name):
-        self.value = value
-        self.name = name
-
-    def __str__(self):
-        return 'CXXAccessSpecifier.' + self.name
-
-    @staticmethod
-    def from_value(val):
-        for item in dir(CXXAccessSpecifier):
-           if item.isupper() and getattr(CXXAccessSpecifier, item) == val:
-               return CXXAccessSpecifier(val, item)
-
-        return None
-
-    def __cmp__(self, other):
-        return cmp(int(self), int(other))
-
-    def __int__(self):
-        return self.value
-
 class TranslationUnit(ClangObject):
     """Represents a source code translation unit.
 

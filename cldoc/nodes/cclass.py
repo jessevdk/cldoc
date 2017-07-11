@@ -20,7 +20,7 @@ class Class(Node):
     kind = cindex.CursorKind.CLASS_DECL
 
     class Base:
-        def __init__(self, cursor, access=cindex.CXXAccessSpecifier.PUBLIC):
+        def __init__(self, cursor, access=cindex.AccessSpecifier.PUBLIC):
             self.cursor = cursor
             self.access = access
             self.type = Type(cursor.type, cursor=cursor)
@@ -30,7 +30,7 @@ class Class(Node):
         super(Class, self).__init__(cursor, comment)
 
         self.process_children = True
-        self.current_access = cindex.CXXAccessSpecifier.PRIVATE
+        self.current_access = cindex.AccessSpecifier.PRIVATE
         self.bases = []
         self.implements = []
         self.implemented_by = []
@@ -65,7 +65,7 @@ class Class(Node):
             yield child
 
         for base in self._all_bases():
-            if base.node and base.access != cindex.CXXAccessSpecifier.PRIVATE:
+            if base.node and base.access != cindex.AccessSpecifier.PRIVATE:
                 yield base.node
 
                 for child in base.node.resolve_nodes:
