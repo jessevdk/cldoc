@@ -38,7 +38,7 @@ class TemplateTypeParameter(Node):
 
     @property
     def access(self):
-        return cindex.CXXAccessSpecifier.PUBLIC
+        return cindex.AccessSpecifier.PUBLIC
 
     @access.setter
     def access(self, val):
@@ -69,7 +69,7 @@ class TemplateNonTypeParameter(Node):
 
     @property
     def access(self):
-        return cindex.CXXAccessSpecifier.PUBLIC
+        return cindex.AccessSpecifier.PUBLIC
 
     @access.setter
     def access(self, val):

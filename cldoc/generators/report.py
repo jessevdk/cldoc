@@ -69,7 +69,7 @@ class Report:
             if not isinstance(node, nodes.Function):
                 continue
 
-            if node.access == cindex.CXXAccessSpecifier.PRIVATE:
+            if node.access == cindex.AccessSpecifier.PRIVATE:
                 continue
 
             if node.comment is None:
@@ -138,7 +138,7 @@ class Report:
         for node in self.tree.all_nodes:
             cname = node.__class__.__name__
 
-            if node.access == cindex.CXXAccessSpecifier.PRIVATE:
+            if node.access == cindex.AccessSpecifier.PRIVATE:
                 continue
 
             if not cname in pertype:

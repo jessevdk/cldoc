@@ -38,7 +38,7 @@ class Node(object):
         self._comment = comment
         self.children = []
         self.parent = None
-        self.access = cindex.CXXAccessSpecifier.PUBLIC
+        self.access = cindex.AccessSpecifier.PUBLIC
         self._comment_locations = []
         self._refs = []
         self.sort_index = 0
@@ -260,9 +260,9 @@ class Node(object):
         if self.is_anonymous:
             ret['anonymous'] = 'yes'
 
-        if self.access == cindex.CXXAccessSpecifier.PROTECTED:
+        if self.access == cindex.AccessSpecifier.PROTECTED:
             ret['access'] = 'protected'
-        elif self.access == cindex.CXXAccessSpecifier.PRIVATE:
+        elif self.access == cindex.AccessSpecifier.PRIVATE:
             ret['access'] = 'private'
 
         return ret

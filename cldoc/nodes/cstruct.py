@@ -21,7 +21,7 @@ class Struct(Class):
         Class.__init__(self, cursor, comment)
 
         self.typedef = None
-        self.current_access = cindex.CXXAccessSpecifier.PUBLIC
+        self.current_access = cindex.AccessSpecifier.PUBLIC
 
     @property
     def is_anonymous(self):
