@@ -50,7 +50,7 @@ if platform.system() == 'Darwin':
         if not lname is None:
             cindex.Config.set_library_file(lname)
 else:
-    versions = [None, '3.5', '3.4', '3.3', '3.2']
+    versions = [None, '7.0', '6.0', '5.0', '4.0', '3.9', '3.8', '3.7', '3.6', '3.5', '3.4', '3.3', '3.2']
 
     for v in versions:
         name = 'clang'
