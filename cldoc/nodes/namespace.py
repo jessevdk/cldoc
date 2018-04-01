@@ -13,7 +13,7 @@
 from .node import Node
 from .root import Root
 
-from cldoc.clang import cindex
+from ..clang import cindex
 
 class Namespace(Node):
     kind = cindex.CursorKind.NAMESPACE

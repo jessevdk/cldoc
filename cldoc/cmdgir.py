@@ -19,7 +19,7 @@ try:
 except:
     from xml.etree import ElementTree
 
-from cldoc.clang import cindex
+from .clang import cindex
 
 from . import defdict
 

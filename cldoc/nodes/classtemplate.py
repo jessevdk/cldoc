@@ -15,7 +15,7 @@ from .cclass import Class
 from .cstruct import Struct
 from .templated import Templated
 
-from cldoc.clang import cindex
+from ..clang import cindex
 
 class StructTemplate(Struct, Templated):
     kind = None

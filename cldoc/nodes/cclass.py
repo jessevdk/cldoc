@@ -14,7 +14,7 @@ from .node import Node
 from .method import Method
 from .ctype import Type
 
-from cldoc.clang import cindex
+from ..clang import cindex
 
 class Class(Node):
     kind = cindex.CursorKind.CLASS_DECL

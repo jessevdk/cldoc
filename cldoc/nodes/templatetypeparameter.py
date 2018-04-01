@@ -13,7 +13,8 @@
 from .node import Node
 from .ctype import Type
 
-from cldoc.clang import cindex
+from ..clang import cindex
+from ..cmp import cmp
 
 class TemplateTypeParameter(Node):
     kind = cindex.CursorKind.TEMPLATE_TYPE_PARAMETER

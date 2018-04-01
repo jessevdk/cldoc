@@ -13,7 +13,7 @@
 from .node import Node
 from .ctype import Type
 
-from cldoc.clang import cindex
+from ..clang import cindex
 
 class Field(Node):
     kind = cindex.CursorKind.FIELD_DECL

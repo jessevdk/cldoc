@@ -12,7 +12,8 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from .node import Node
 
-from cldoc.clang import cindex
+from ..clang import cindex
+from ..cmp import cmp
 
 class EnumValue(Node):
     kind = cindex.CursorKind.ENUM_CONSTANT_DECL

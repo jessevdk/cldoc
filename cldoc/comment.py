@@ -10,11 +10,11 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from clang import cindex
-from defdict import Defdict
+from .clang import cindex
+from .defdict import Defdict
 
-from cldoc.struct import Struct
-from cldoc import utf8
+from .struct import Struct
+from . import utf8
 
 import os, re, sys, bisect
 
@@ -398,11 +398,11 @@ class CommentsDatabase(object):
         self.comments.insert(comment)
 
     def extract_loop(self, iter):
-        token = iter.next()
+        token = next(iter)
 
         # Skip until comment found
         while token.kind != cindex.TokenKind.COMMENT:
-            token = iter.next()
+            token = next(iter)
 
         comments = []
         prev = None
@@ -426,7 +426,7 @@ class CommentsDatabase(object):
                 comments.append(cleaned)
 
             prev = token
-            token = iter.next()
+            token = next(iter)
 
         if len(comments) > 0:
             self.extract_one(token, "\n".join(comments))

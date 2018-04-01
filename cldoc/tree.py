@@ -12,21 +12,24 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -*- coding: utf-8 -*-
 
-from clang import cindex
+from .clang import cindex
 import tempfile
+import functools
 
-from defdict import Defdict
+from .defdict import Defdict
 
-import comment
-import nodes
-import includepaths
-import documentmerger
+from . import comment
+from . import nodes
+from . import includepaths
+from . import documentmerger
 
 from . import example
 from . import utf8
 from . import log
 
-import os, sys, sets, re, glob, platform
+from .cmp import cmp
+
+import os, sys, re, glob, platform
 
 from ctypes.util import find_library
 
@@ -83,7 +86,7 @@ class Tree(documentmerger.DocumentMerger):
         self.flags = includepaths.flags(flags)
 
         # Sort files on sources, then headers
-        self.files.sort(lambda a, b: cmp(self.is_header(a), self.is_header(b)))
+        self.files.sort(key=functools.cmp_to_key(lambda a, b: cmp(self.is_header(a), self.is_header(b))))
 
         self.processing = {}
         self.kindmap = {}
@@ -462,7 +465,7 @@ class Tree(documentmerger.DocumentMerger):
 
         while True:
             try:
-                item = citer.next()
+                item = next(citer)
             except StopIteration:
                 return
 

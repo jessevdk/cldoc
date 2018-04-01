@@ -12,6 +12,8 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 import os, subprocess, sys
 
+from . import utf8
+
 def flags(f):
     devnull = open(os.devnull)
 
@@ -38,6 +40,8 @@ def flags(f):
     paths = []
 
     for line in lines:
+        line = utf8.utf8(line)
+
         if line.startswith('#include <...>'):
             init = True
         elif line.startswith('End of search list.'):

@@ -10,11 +10,14 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from cldoc.clang import cindex
-from cldoc.comment import Comment
-from cldoc.comment import Parser
+import functools
 
-from cldoc import utf8
+from ..clang import cindex
+from ..comment import Comment
+from ..comment import Parser
+
+from .. import utf8
+from ..cmp import cmp
 
 import re
 
@@ -174,7 +177,7 @@ class Node(object):
             return 0
 
     def compare_sort(self, other):
-        ret = cmp(self.access, other.access)
+        ret = cmp(self.access.value, other.access.value)
 
         if ret == 0:
             ret = cmp(self.sortid, other.sortid)
@@ -214,7 +217,7 @@ class Node(object):
 
     def sorted_children(self):
         ret = list(self.children)
-        ret.sort(lambda x, y: x.compare_sort(y))
+        ret.sort(key=functools.cmp_to_key(lambda x, y: x.compare_sort(y)))
 
         return ret
 

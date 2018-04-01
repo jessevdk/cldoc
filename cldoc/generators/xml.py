@@ -11,17 +11,17 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from __future__ import absolute_import
-from cldoc.clang import cindex
+from ..clang import cindex
 
 from .generator import Generator
-from cldoc import nodes
-from cldoc import example
-from cldoc import utf8
+from .. import nodes
+from .. import example
+from .. import utf8
 
 from xml.etree import ElementTree
 import sys, os
 
-from cldoc import fs
+from .. import fs
 
 class Xml(Generator):
     def generate(self, outdir):
@@ -110,7 +110,12 @@ class Xml(Generator):
         self.indent(tree.getroot())
 
         f = fs.fs.open(os.path.join(self.outdir, fname), 'w')
-        tree.write(f, encoding='utf-8', xml_declaration=True)
+
+        if sys.version_info[0] == 3:
+            tree.write(f, encoding='unicode', xml_declaration=True)
+        else:
+            tree.write(f, encoding='utf-8', xml_declaration=True)
+
         f.write('\n')
 
         f.close()

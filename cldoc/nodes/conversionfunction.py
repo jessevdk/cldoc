@@ -12,7 +12,7 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from .method import Method
 
-from cldoc.clang import cindex
+from ..clang import cindex
 
 class ConversionFunction(Method):
     kind = cindex.CursorKind.CONVERSION_FUNCTION

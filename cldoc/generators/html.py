@@ -17,7 +17,7 @@ import inspect, os, shutil, json
 from .generator import Generator
 from .search import Search
 
-from cldoc import fs
+from .. import fs
 
 class Html(Generator):
     def generate(self, output, isstatic, customjs=[], customcss=[]):

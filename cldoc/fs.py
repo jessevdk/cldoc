@@ -14,7 +14,10 @@ from __future__ import absolute_import
 
 import os, tempfile, shutil, random
 
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 class System:
     @staticmethod

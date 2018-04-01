@@ -12,7 +12,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from clang import cindex
+from .clang import cindex
 import os, sys
 
 def inspect_print_row(a, b, link=None):
@@ -23,7 +23,7 @@ def inspect_print_row(a, b, link=None):
     if link:
         b = "<a href='#" + escape(link) + "'>" + b + "</a>"
 
-    print "<tr><td>%s</td><td>%s</td></tr>" % (escape(str(a)), b)
+    print("<tr><td>%s</td><td>%s</td></tr>" % (escape(str(a)), b))
 
 def inspect_print_subtype(name, tp, subtype, indent=1):
     if not subtype or tp == subtype or subtype.kind == cindex.TypeKind.INVALID:
@@ -58,7 +58,7 @@ def inspect_cursor(tree, cursor, indent):
     if not str(cursor.location.file) in tree.files:
         return
 
-    print "<table id='" + escape(cursor.get_usr()) + "' class='cursor' style='margin-left: " + str(indent * 20) + "px;'>"
+    print("<table id='" + escape(cursor.get_usr()) + "' class='cursor' style='margin-left: " + str(indent * 20) + "px;'>")
 
     inspect_print_row('kind', cursor.kind)
     inspect_print_row('  → .is_declaration', cursor.kind.is_declaration())
@@ -93,7 +93,7 @@ def inspect_cursor(tree, cursor, indent):
         for t in cursor.type.argument_types():
             inspect_print_subtype('argument', None, t)
 
-    print "</table>"
+    print("</table>")
 
 def inspect_cursors(tree, cursors, indent=0):
     for cursor in cursors:
@@ -105,22 +105,22 @@ def inspect_cursors(tree, cursors, indent=0):
 def inspect_tokens(tree, filename, tu):
     it = tu.get_tokens(extent=tu.get_extent(filename, (0, os.stat(filename).st_size)))
 
-    print "<table class='tokens'>"
+    print("<table class='tokens'>")
 
     for token in it:
-        print "<tr>"
-        print "<td>%s</td>" % (token.kind,)
-        print "<td>" + token.spelling + "</td>"
-        print "<td>%s</td>" % (token.cursor.kind,)
-        print "<td>%d:%d</td>" % (token.extent.start.line, token.extent.start.column,)
-        print "</tr>"
+        print("<tr>")
+        print("<td>%s</td>" % (token.kind,))
+        print("<td>" + token.spelling + "</td>")
+        print("<td>%s</td>" % (token.cursor.kind,))
+        print("<td>%d:%d</td>" % (token.extent.start.line, token.extent.start.column,))
+        print("</tr>")
 
-    print "</table>"
+    print("</table>")
 
 def inspect(tree):
     index = cindex.Index.create()
 
-    print """<html>
+    print("""<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type='text/css'>
@@ -146,7 +146,7 @@ vertical-align: top;
 }
 </style>
 </head>
-<body>"""
+<body>""")
 
     for f in tree.files:
         tu = index.parse(f, tree.flags)
@@ -155,15 +155,15 @@ vertical-align: top;
             sys.stderr.write("Could not parse file %s...\n" % (f,))
             sys.exit(1)
 
-        print "<div class='file'><div class='filename'>" + f + "</div>"
+        print("<div class='file'><div class='filename'>" + f + "</div>")
 
         inspect_tokens(tree, f, tu)
 
         # Recursively inspect cursors
         inspect_cursors(tree, tu.cursor.get_children())
 
-        print "</div>"
+        print("</div>")
 
-    print "</body>\n</html>"
+    print("</body>\n</html>")
 
 # vi:ts=4:et

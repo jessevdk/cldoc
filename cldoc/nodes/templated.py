@@ -13,8 +13,8 @@
 from .node import Node
 from .templatetypeparameter import TemplateTypeParameter, TemplateNonTypeParameter
 
-from cldoc.comment import Comment
-from cldoc.comment import Parser
+from ..comment import Comment
+from ..comment import Parser
 
 import re
 

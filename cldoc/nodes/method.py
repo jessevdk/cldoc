@@ -13,8 +13,8 @@
 from .function import Function
 from .node import Node
 
-from cldoc.clang import cindex
-from cldoc.comment import Comment
+from ..clang import cindex
+from ..comment import Comment
 
 class Method(Function):
     kind = cindex.CursorKind.CXX_METHOD

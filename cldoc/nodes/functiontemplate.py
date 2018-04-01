@@ -16,7 +16,7 @@ from .function import Function
 from .ctype import Type
 from .templated import Templated
 
-from cldoc.clang import cindex
+from ..clang import cindex
 
 class FunctionTemplate(Templated, Function):
     kind = None

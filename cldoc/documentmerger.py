@@ -1,10 +1,11 @@
 import os, subprocess
 
-import comment
-import nodes
+from . import comment
+from . import nodes
 import sys, re
 
 from . import fs
+from . import utf8
 
 class DocumentMerger:
     reinclude = re.compile('#<cldoc:include[(]([^)]*)[)]>')
@@ -91,9 +92,9 @@ class DocumentMerger:
 
     def _read_merge_file(self, mfilter, filename):
         if not mfilter is None:
-            contents = unicode(subprocess.check_output([mfilter, filename]), 'utf-8')
+            contents = utf8.utf8(subprocess.check_output([mfilter, filename]))
         else:
-            contents = unicode(fs.fs.open(filename).read(), 'utf-8')
+            contents = utf8.utf8(fs.fs.open(filename).read())
 
         return self._process_includes(mfilter, filename, contents)
 

@@ -12,7 +12,7 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from .cclass import Class
 
-from cldoc.clang import cindex
+from ..clang import cindex
 
 class Struct(Class):
     kind = cindex.CursorKind.STRUCT_DECL
