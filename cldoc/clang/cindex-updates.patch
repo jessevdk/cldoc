@@ -1,7 +1,7 @@
-diff --git b/cldoc/clang/cindex.py a/cldoc/clang/cindex.py
-index aeb34f8..721575a 100644
---- b/cldoc/clang/cindex.py
-+++ a/cldoc/clang/cindex.py
+diff --git a/cldoc/clang/cindex.py b/cldoc/clang/cindex.py
+index b53661a..114d483 100644
+--- a/cldoc/clang/cindex.py
++++ b/cldoc/clang/cindex.py
 @@ -1,3 +1,15 @@
 +# This file is part of cldoc.  cldoc is free software: you can
 +# redistribute it and/or modify it under the terms of the GNU General Public
@@ -25,32 +25,36 @@ index aeb34f8..721575a 100644
 -import clang.enumerations
 +from . import enumerations
  
- # ctypes doesn't implicitly convert c_void_p to the appropriate wrapper
- # object. This is a problem, because it means that from_parameter will see an
-@@ -392,6 +404,13 @@ class Diagnostic(object):
+ import sys
+ if sys.version_info[0] == 3:
+@@ -457,6 +469,13 @@ class Diagnostic(object):
+         """The command-line option that enables this diagnostic."""
          return conf.lib.clang_getDiagnosticOption(self, None)
  
-     @property
++    @property
 +    def format(self, options=-1):
 +        if options == -1:
 +            options = conf.lib.clang_defaultDiagnosticDisplayOptions()
 +
 +        return conf.lib.clang_formatDiagnostic(self, options)
 +
-+    @property
+     @property
      def disable_option(self):
          """The command-line option that disables this diagnostic."""
-         disable = _CXString()
-@@ -1136,6 +1155,8 @@ CursorKind.INCLUSION_DIRECTIVE = CursorKind(503)
- CursorKind.MODULE_IMPORT_DECL = CursorKind(600)
- # A type alias template declaration
- CursorKind.TYPE_ALIAS_TEMPLATE_DECL = CursorKind(601)
-+# A static_assert or _Static_assert node
-+CursorKind.STATIC_ASSERT = CursorKind(602)
+@@ -1479,12 +1498,6 @@ class Cursor(Structure):
+         """
+         return conf.lib.clang_CXXMethod_isVirtual(self)
  
- # A code completion overload candidate.
- CursorKind.OVERLOAD_CANDIDATE = CursorKind(700)
-@@ -1445,6 +1466,9 @@ class Cursor(Structure):
+-    def is_abstract_record(self):
+-        """Returns True if the cursor refers to a C++ record declaration
+-        that has pure virtual member functions.
+-        """
+-        return conf.lib.clang_CXXRecord_isAbstract(self)
+-
+     def is_scoped_enum(self):
+         """Returns True if the cursor refers to a scoped enum declaration.
+         """
+@@ -1729,6 +1742,9 @@ class Cursor(Structure):
  
          return self._hash
  
@@ -60,7 +64,7 @@ index aeb34f8..721575a 100644
      @property
      def semantic_parent(self):
          """Return the semantic parent for this cursor."""
-@@ -1576,6 +1600,20 @@ class Cursor(Structure):
+@@ -1860,6 +1876,20 @@ class Cursor(Structure):
          """
          return conf.lib.clang_getFieldDeclBitWidth(self)
  
@@ -81,7 +85,18 @@ index aeb34f8..721575a 100644
      @staticmethod
      def from_result(res, fn, args):
          assert isinstance(res, Cursor)
-@@ -3025,6 +3063,15 @@ functionList = [
+@@ -3407,10 +3437,6 @@ functionList = [
+    [Cursor],
+    bool),
+ 
+-  ("clang_CXXRecord_isAbstract",
+-   [Cursor],
+-   bool),
+-
+   ("clang_EnumDecl_isScoped",
+    [Cursor],
+    bool),
+@@ -3432,6 +3458,15 @@ functionList = [
    ("clang_disposeDiagnostic",
     [Diagnostic]),
  
@@ -97,7 +112,7 @@ index aeb34f8..721575a 100644
    ("clang_disposeIndex",
     [Index]),
  
-@@ -3717,7 +3764,7 @@ class Config:
+@@ -4144,7 +4179,7 @@ class Config:
          return True
  
  def register_enumerations():
