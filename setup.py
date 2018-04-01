@@ -159,6 +159,6 @@ setup(name='cldoc',
       },
       package_data={'cldoc': datafiles},
       cmdclass=cmdclass,
-      install_requires=['pyparsing ==1.5.7'])
+      install_requires=['pyparsing == 2.2.0'])
 
 # vi:ts=4:et
