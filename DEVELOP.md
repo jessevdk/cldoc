@@ -13,7 +13,6 @@ do not have `make` available, then use:
 
 ```
 	npm install
-	gem install --user-install -b gems -n gems/.bin --no-ri --no-rdoc sass
 ```
 
 ## Generating the frontend
@@ -22,7 +21,7 @@ have been modified. To generate the frontend, use `make generate` to run `setup.
 the correct paths to the installed dependencies. Again, if you do not have `make` available, use:
 
 ```
-	python setup.py generate --coffee=node_modules/.bin/coffee --inline=scripts/inline --sass=gems/.bin/sass
+	python setup.py generate --coffee=node_modules/.bin/coffee --inline=scripts/inline --sass=node_modules/.bin/node-sass
 ```
 
 ## Developing without installing
