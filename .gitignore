@@ -1,1 +1,8 @@
 _site
+/build/
+*.pyc
+/dist/
+/node_modules/
+/cldoc.egg-info
+/example/
+/html/
