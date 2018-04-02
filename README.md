@@ -20,6 +20,10 @@ non-intrusive and robust approach.
 
 For more information, please visit http://jessevdk.github.com/cldoc.
 
+# Requirements
+
+cldoc requires clang 3.9 or later to be installed on the system.
+
 # Get started now!
 To get started using cldoc, please have a look at
 [Getting started](http://jessevdk.github.com/cldoc/gettingstarted.html) to install cldoc. Then explore how
