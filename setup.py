@@ -101,7 +101,7 @@ class cldoc_generate(Command):
             except:
                 pass
 
-        args = [self.sass, '--scss', '--line-numbers', '--no-cache', '--style', 'compressed']
+        args = [self.sass, '--output-style', 'compressed']
         files = ['html/sass/cldoc.scss', 'html/styles/cldoc.css']
 
         subprocess.call(args + files)

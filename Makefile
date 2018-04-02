@@ -2,7 +2,7 @@ PYTHON = python
 SETUP = $(PYTHON) setup.py
 COFFEE = node_modules/.bin/coffee
 INLINE_SOURCE = node_modules/inline-source
-SASS = gems/.bin/sass
+SASS = node_modules/.bin/node-sass
 UNAME = $(shell uname)
 
 ifeq ($(UNAME),Darwin)
