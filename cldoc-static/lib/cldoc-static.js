@@ -31,12 +31,14 @@ function run(htmldir, outdir) {
 
     var xmldoc = (new xmldom.DOMParser()).parseFromString(x);
 
-    var doc = jsdom.jsdom(indexhtml, {
-      features: {
-        FetchExternalResources: ['script'],
-        ProcessExternalResources: ["script"],
-      },
+    var virtualConsole = new jsdom.VirtualConsole();
+
+    var dom = new jsdom.JSDOM(indexhtml, {
+      runScripts: "dangerously",
+      virtualConsole: virtualConsole
     });
+
+    var doc = dom.window.document;
 
     if (doc.errors) {
       for (var e = 0; e < doc.errors.length; e++) {
@@ -47,7 +49,7 @@ function run(htmldir, outdir) {
       process.exit(1);
     }
 
-    var window = doc.defaultView;
+    var window = dom.window;
     var $ = window.jQuery;
 
     var cldoc = window.cldoc;
@@ -117,9 +119,12 @@ function run(htmldir, outdir) {
     $('head').append(link);
 
     // Write resulting html to <name>.html
-    fs.writeFileSync(path.join(outdir, name + '.html'), html(jsdom.serializeDocument(doc), {
-      max_preserve_newlines: 1
-    }));
+    var serialized = html(dom.serialize(), {
+      max_preserve_newlines: 1,
+      end_with_newline: true
+    });
+
+    fs.writeFileSync(path.join(outdir, name + '.html'), serialized);
   }
 
   // Write css to styles/cldoc.css
