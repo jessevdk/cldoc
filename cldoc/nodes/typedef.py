@@ -21,6 +21,13 @@ class Typedef(Node):
     def __init__(self, cursor, comment):
         Node.__init__(self, cursor, comment)
 
+        children = [child for child in cursor.get_children()]
+
+        if len(children) == 1 and children[0].kind == cindex.CursorKind.TYPE_REF:
+            cursor = children[0]
+        else:
+            self.process_children = True
+
         self.type = Type(cursor.underlying_typedef_type, cursor)
 
 # vi:ts=4:et
