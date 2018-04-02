@@ -26,7 +26,8 @@
         </div>
     </div>
     <div id="cldoc_content">
-        <h1 id="A"><span><span class="keyword">Class</span><span>A</span></span></h1>
+        <h1 id="A"><span><span class="keyword">Class</span><span>A</span></span>
+        </h1>
         <h2 data-cldoc-dynamic="1" id="member functions">Member Functions</h2>
         <div class="member_functions">
             <div class="function">
@@ -75,4 +76,3 @@
 </body>
 
 </html>
-<!-- vi:ts=2:et -->

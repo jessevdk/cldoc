@@ -18,7 +18,8 @@
         </div>
     </div>
     <div id="cldoc_content">
-        <h1 id="A"><span><span class="keyword">Class</span><span>A</span></span></h1>
+        <h1 id="A"><span><span class="keyword">Class</span><span>A</span></span>
+        </h1>
         <div class="description">
             <div class="brief">
                 <p>Copyright ©</p>
@@ -29,4 +30,3 @@
 </body>
 
 </html>
-<!-- vi:ts=2:et -->

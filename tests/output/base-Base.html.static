@@ -30,7 +30,8 @@
         </div>
     </div>
     <div id="cldoc_content">
-        <h1 id="Base"><span><span class="keyword">Class</span><span>Base</span></span></h1>
+        <h1 id="Base"><span><span class="keyword">Class</span><span>Base</span></span>
+        </h1>
         <h2 data-cldoc-dynamic="1" id="subclasses">Subclasses</h2>
         <table class="subclasses">
             <tbody>
@@ -73,4 +74,3 @@
 </body>
 
 </html>
-<!-- vi:ts=2:et -->

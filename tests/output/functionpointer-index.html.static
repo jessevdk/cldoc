@@ -33,7 +33,7 @@
                                 <td class="argument_type"><span class="type"><span class="function-type"><span class="sub-type"><span class="sub-type"><span class="name builtin">int</span></span>
                                     </span><span class="function-qualified"><span class="plain">(</span><span class="qualifier"> *</span><span class="plain">)</span></span><span class="function-arguments"><span class="plain">(</span><span class="sub-type"><span class="name builtin">int</span></span>
                                     <span
-                                    class="plain">, </span><span class="sub-type"><span class="name builtin">int</span></span><span class="plain">)</span></span>
+                                        class="plain">, </span><span class="sub-type"><span class="name builtin">int</span></span><span class="plain">)</span></span>
                                         </span>
                                         </span>
                                 </td>
@@ -58,4 +58,3 @@
 </body>
 
 </html>
-<!-- vi:ts=2:et -->

@@ -34,7 +34,8 @@
         </div>
     </div>
     <div id="cldoc_content">
-        <h1 id="A"><span><span class="keyword">Class</span><span>A&lt;T&gt;</span></span></h1>
+        <h1 id="A"><span><span class="keyword">Class</span><span>A&lt;T&gt;</span></span>
+        </h1>
         <div class="description">
             <div class="doc">
                 <p>A longer description of A.</p>
@@ -110,4 +111,3 @@
 </body>
 
 </html>
-<!-- vi:ts=2:et -->

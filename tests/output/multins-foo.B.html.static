@@ -18,9 +18,10 @@
         </div>
     </div>
     <div id="cldoc_content">
-        <h1 id="foo::B"><span><span class="keyword">Class</span><span>foo::B</span></span></h1></div>
+        <h1 id="foo::B"><span><span class="keyword">Class</span><span>foo::B</span></span>
+        </h1>
+    </div>
 
 </body>
 
 </html>
-<!-- vi:ts=2:et -->

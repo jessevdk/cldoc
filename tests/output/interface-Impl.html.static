@@ -30,7 +30,8 @@
         </div>
     </div>
     <div id="cldoc_content">
-        <h1 id="Impl"><span><span class="keyword">Class</span><span>Impl</span></span></h1>
+        <h1 id="Impl"><span><span class="keyword">Class</span><span>Impl</span></span>
+        </h1>
         <div class="description">
             <div class="doc">
                 <p>The Impl class.</p>
@@ -80,4 +81,3 @@
 </body>
 
 </html>
-<!-- vi:ts=2:et -->

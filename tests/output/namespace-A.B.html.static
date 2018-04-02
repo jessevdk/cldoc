@@ -18,7 +18,8 @@
         </div>
     </div>
     <div id="cldoc_content">
-        <h1 id="A::B"><span><span class="keyword">Class</span><span>A::B</span></span></h1>
+        <h1 id="A::B"><span><span class="keyword">Class</span><span>A::B</span></span>
+        </h1>
         <div class="description">
             <div class="doc">
                 <p>Class B in namespace A.</p>
@@ -29,4 +30,3 @@
 </body>
 
 </html>
-<!-- vi:ts=2:et -->

@@ -22,7 +22,8 @@
         </div>
     </div>
     <div id="cldoc_content">
-        <h1 id="N"><span><span class="keyword">Namespace</span><span>N</span></span></h1>
+        <h1 id="N"><span><span class="keyword">Namespace</span><span>N</span></span>
+        </h1>
         <h2 data-cldoc-dynamic="1" id="structures">Structures</h2>
         <table class="structures">
             <tbody>
@@ -37,4 +38,3 @@
 </body>
 
 </html>
-<!-- vi:ts=2:et -->
