@@ -1,5 +1,4 @@
 diff --git a/cldoc/clang/cindex.py b/cldoc/clang/cindex.py
-index b53661a..114d483 100644
 --- a/cldoc/clang/cindex.py
 +++ b/cldoc/clang/cindex.py
 @@ -1,3 +1,15 @@
@@ -41,7 +40,7 @@ index b53661a..114d483 100644
      @property
      def disable_option(self):
          """The command-line option that disables this diagnostic."""
-@@ -1479,12 +1498,6 @@ class Cursor(Structure):
+@@ -1479,17 +1498,6 @@ class Cursor(Structure):
          """
          return conf.lib.clang_CXXMethod_isVirtual(self)
  
@@ -51,10 +50,49 @@ index b53661a..114d483 100644
 -        """
 -        return conf.lib.clang_CXXRecord_isAbstract(self)
 -
-     def is_scoped_enum(self):
-         """Returns True if the cursor refers to a scoped enum declaration.
+-    def is_scoped_enum(self):
+-        """Returns True if the cursor refers to a scoped enum declaration.
+-        """
+-        return conf.lib.clang_EnumDecl_isScoped(self)
+-
+     def get_definition(self):
          """
-@@ -1729,6 +1742,9 @@ class Cursor(Structure):
+         If the cursor is a reference to a declaration or a declaration of
+@@ -1565,14 +1573,6 @@ class Cursor(Structure):
+ 
+         return LinkageKind.from_id(self._linkage)
+ 
+-    @property
+-    def tls_kind(self):
+-        """Return the thread-local storage (TLS) kind of this cursor."""
+-        if not hasattr(self, '_tls_kind'):
+-            self._tls_kind = conf.lib.clang_getCursorTLSKind(self)
+-
+-        return TLSKind.from_id(self._tls_kind)
+-
+     @property
+     def extent(self):
+         """
+@@ -1648,18 +1648,6 @@ class Cursor(Structure):
+ 
+         return self._result_type
+ 
+-    @property
+-    def exception_specification_kind(self):
+-        '''
+-        Retrieve the exception specification kind, which is one of the values
+-        from the ExceptionSpecificationKind enumeration.
+-        '''
+-        if not hasattr(self, '_exception_specification_kind'):
+-            exc_kind = conf.lib.clang_getCursorExceptionSpecificationType(self)
+-            self._exception_specification_kind = ExceptionSpecificationKind.from_id(exc_kind)
+-
+-        return self._exception_specification_kind
+-
+     @property
+     def underlying_typedef_type(self):
+         """Return the underlying type of a typedef declaration.
+@@ -1729,6 +1717,9 @@ class Cursor(Structure):
  
          return self._hash
  
@@ -64,7 +102,7 @@ index b53661a..114d483 100644
      @property
      def semantic_parent(self):
          """Return the semantic parent for this cursor."""
-@@ -1860,6 +1876,20 @@ class Cursor(Structure):
+@@ -1860,6 +1851,20 @@ class Cursor(Structure):
          """
          return conf.lib.clang_getFieldDeclBitWidth(self)
  
@@ -85,7 +123,34 @@ index b53661a..114d483 100644
      @staticmethod
      def from_result(res, fn, args):
          assert isinstance(res, Cursor)
-@@ -3407,10 +3437,6 @@ functionList = [
+@@ -2161,6 +2166,13 @@ class Type(Structure):
+         """Return the kind of this type."""
+         return TypeKind.from_id(self._kind_id)
+ 
++    def get_num_template_arguments(self):
++        return conf.lib.clang_Type_getNumTemplateArguments(self)
++
++    def get_template_argument_type(self, num):
++        """Returns the CXType for the indicated template argument."""
++        return conf.lib.clang_Type_getTemplateArgumentAsType(self, num)
++
+     def argument_types(self):
+         """Retrieve a container for the non-variadic arguments for this type.
+ 
+@@ -2290,12 +2302,6 @@ class Type(Structure):
+ 
+         return conf.lib.clang_isFunctionTypeVariadic(self)
+ 
+-    def get_address_space(self):
+-        return conf.lib.clang_getAddressSpace(self)
+-
+-    def get_typedef_name(self):
+-        return conf.lib.clang_getTypedefName(self)
+-
+     def is_pod(self):
+         """Determine whether this Type represents plain old data (POD)."""
+         return conf.lib.clang_isPODType(self)
+@@ -3407,14 +3413,6 @@ functionList = [
     [Cursor],
     bool),
  
@@ -93,10 +158,14 @@ index b53661a..114d483 100644
 -   [Cursor],
 -   bool),
 -
-   ("clang_EnumDecl_isScoped",
-    [Cursor],
-    bool),
-@@ -3432,6 +3458,15 @@ functionList = [
+-  ("clang_EnumDecl_isScoped",
+-   [Cursor],
+-   bool),
+-
+   ("clang_defaultDiagnosticDisplayOptions",
+    [],
+    c_uint),
+@@ -3432,6 +3430,15 @@ functionList = [
    ("clang_disposeDiagnostic",
     [Diagnostic]),
  
@@ -112,7 +181,35 @@ index b53661a..114d483 100644
    ("clang_disposeIndex",
     [Index]),
  
-@@ -4144,7 +4179,7 @@ class Config:
+@@ -3820,11 +3827,6 @@ functionList = [
+    Type,
+    Type.from_result),
+ 
+-  ("clang_getTypedefName",
+-   [Type],
+-   _CXString,
+-   _CXString.from_result),
+-
+   ("clang_getTypeKindSpelling",
+    [c_uint],
+    _CXString,
+@@ -3978,6 +3980,15 @@ functionList = [
+    [Cursor],
+    c_longlong),
+ 
++  ("clang_Type_getNumTemplateArguments",
++   [Type],
++   c_int),
++
++  ("clang_Type_getTemplateArgumentAsType",
++   [Type, c_uint],
++   Type,
++   Type.from_result),
++
+   ("clang_Type_getAlignOf",
+    [Type],
+    c_longlong),
+@@ -4144,7 +4155,7 @@ class Config:
          return True
  
  def register_enumerations():

@@ -1498,11 +1498,6 @@ class Cursor(Structure):
         """
         return conf.lib.clang_CXXMethod_isVirtual(self)
 
-    def is_scoped_enum(self):
-        """Returns True if the cursor refers to a scoped enum declaration.
-        """
-        return conf.lib.clang_EnumDecl_isScoped(self)
-
     def get_definition(self):
         """
         If the cursor is a reference to a declaration or a declaration of
@@ -1579,14 +1574,6 @@ class Cursor(Structure):
         return LinkageKind.from_id(self._linkage)
 
     @property
-    def tls_kind(self):
-        """Return the thread-local storage (TLS) kind of this cursor."""
-        if not hasattr(self, '_tls_kind'):
-            self._tls_kind = conf.lib.clang_getCursorTLSKind(self)
-
-        return TLSKind.from_id(self._tls_kind)
-
-    @property
     def extent(self):
         """
         Return the source range (the range of text) occupied by the entity
@@ -1660,18 +1647,6 @@ class Cursor(Structure):
             self._result_type = conf.lib.clang_getResultType(self.type)
 
         return self._result_type
-
-    @property
-    def exception_specification_kind(self):
-        '''
-        Retrieve the exception specification kind, which is one of the values
-        from the ExceptionSpecificationKind enumeration.
-        '''
-        if not hasattr(self, '_exception_specification_kind'):
-            exc_kind = conf.lib.clang_getCursorExceptionSpecificationType(self)
-            self._exception_specification_kind = ExceptionSpecificationKind.from_id(exc_kind)
-
-        return self._exception_specification_kind
 
     @property
     def underlying_typedef_type(self):
@@ -2319,12 +2294,6 @@ class Type(Structure):
         assert self.kind == TypeKind.FUNCTIONPROTO
 
         return conf.lib.clang_isFunctionTypeVariadic(self)
-
-    def get_address_space(self):
-        return conf.lib.clang_getAddressSpace(self)
-
-    def get_typedef_name(self):
-        return conf.lib.clang_getTypedefName(self)
 
     def is_pod(self):
         """Determine whether this Type represents plain old data (POD)."""
@@ -3437,10 +3406,6 @@ functionList = [
    [Cursor],
    bool),
 
-  ("clang_EnumDecl_isScoped",
-   [Cursor],
-   bool),
-
   ("clang_defaultDiagnosticDisplayOptions",
    [],
    c_uint),
@@ -3854,11 +3819,6 @@ functionList = [
    [Cursor],
    Type,
    Type.from_result),
-
-  ("clang_getTypedefName",
-   [Type],
-   _CXString,
-   _CXString.from_result),
 
   ("clang_getTypeKindSpelling",
    [c_uint],
