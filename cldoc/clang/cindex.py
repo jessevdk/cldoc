@@ -2191,6 +2191,13 @@ class Type(Structure):
         """Return the kind of this type."""
         return TypeKind.from_id(self._kind_id)
 
+    def get_num_template_arguments(self):
+        return conf.lib.clang_Type_getNumTemplateArguments(self)
+
+    def get_template_argument_type(self, num):
+        """Returns the CXType for the indicated template argument."""
+        return conf.lib.clang_Type_getTemplateArgumentAsType(self, num)
+
     def argument_types(self):
         """Retrieve a container for the non-variadic arguments for this type.
 
@@ -4012,6 +4019,15 @@ functionList = [
   ("clang_Cursor_getOffsetOfField",
    [Cursor],
    c_longlong),
+
+  ("clang_Type_getNumTemplateArguments",
+   [Type],
+   c_int),
+
+  ("clang_Type_getTemplateArgumentAsType",
+   [Type, c_uint],
+   Type,
+   Type.from_result),
 
   ("clang_Type_getAlignOf",
    [Type],
