@@ -212,7 +212,7 @@ class Tree(documentmerger.DocumentMerger):
                 fatal = False
 
                 for d in tu.diagnostics:
-                    sys.stderr.write(d.format)
+                    sys.stderr.write(d.format())
                     sys.stderr.write("\n")
 
                     if d.severity == cindex.Diagnostic.Fatal or \
