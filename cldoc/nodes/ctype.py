@@ -56,6 +56,7 @@ class Type(Node):
         self._builtin = False
         self._cursor = cursor
         self._kind = tp.kind
+        self._is_template = False
 
         self.extract(tp)
 
@@ -70,6 +71,14 @@ class Type(Node):
     @property
     def function_result(self):
         return self._result
+
+    @property
+    def is_template(self):
+        return self._is_template
+
+    @property
+    def template_arguments(self):
+        return self._template_arguments
 
     @property
     def is_constant_array(self):
@@ -104,9 +113,24 @@ class Type(Node):
     def constant_array_size(self):
         return self._array_size
 
+    def _declaration_full_name(self, decl):
+        cursor_template = decl.specialized_cursor_template
+
+        if cursor_template is None or not self._is_template:
+            return decl.displayname
+        else:
+            return cursor_template.spelling
+
+
     def _full_typename(self, decl):
         parent = decl.semantic_parent
-        meid = decl.displayname
+
+        if decl.kind == cindex.CursorKind.NAMESPACE and decl.displayname == '__1' and parent and parent.displayname == 'std':
+            # Skip over special inline namespace. Ideally we can skip over inline namespaces
+            # in general, but I can't find a way to determine whether a namespace is inline
+            return self._full_typename(parent)
+
+        meid = self._declaration_full_name(decl)
 
         if not parent or parent.kind == cindex.CursorKind.TRANSLATION_UNIT:
             return meid
@@ -121,7 +145,61 @@ class Type(Node):
         else:
             return meid
 
+    def _extract_constant_array_type(self, tp):
+        if tp.kind != cindex.TypeKind.CONSTANTARRAY:
+            return
+
+        self._element_type = Type(tp.get_array_element_type())
+        self._array_size = tp.get_array_size()
+
+    def _extract_default_template_types(self, tp):
+        decl = tp.get_declaration()
+
+        while decl and decl.kind != cindex.CursorKind.CLASS_TEMPLATE:
+            decl = decl.specialized_cursor_template
+
+        if decl is None:
+            return None
+
+        default_template_types = []
+
+        for child in decl.get_children():
+            if child.kind != cindex.CursorKind.TEMPLATE_TYPE_PARAMETER:
+                continue
+
+            default_type = None
+
+            for cursor in child.get_children():
+                if cursor.kind == cindex.CursorKind.TYPE_REF:
+                    default_type = cursor.type
+                    break
+
+            default_template_types.append(default_type)
+
+        return default_template_types
+
+    def _extract_template_argument_types(self, tp):
+        num_template_arguments = tp.get_num_template_arguments()
+
+        if num_template_arguments <= 0:
+            return
+
+        self._is_template = True
+        self._template_arguments = []
+
+        for i in range(0, num_template_arguments):
+            template_argument_type = tp.get_template_argument_type(i)
+
+            is_default = False
+
+            self._template_arguments.append(TemplateArgumentType(template_argument_type, is_default))
+
+    def _extract_subtypes(self, tp):
+        self._extract_constant_array_type(tp)
+        self._extract_template_argument_types(tp)
+
     def extract(self, tp):
+
         if tp.is_const_qualified():
             self._qualifier.append('const')
 
@@ -131,13 +209,10 @@ class Type(Node):
         if tp.kind in Type.kindmap:
             self.extract(tp.get_pointee())
             self._qualifier.append(Type.kindmap[tp.kind])
-
             return
-        elif tp.kind == cindex.TypeKind.CONSTANTARRAY:
-            self._element_type = Type(tp.get_array_element_type())
-            self._array_size = tp.get_array_size()
 
         self._decl = tp.get_declaration()
+        self._extract_subtypes(tp)
 
         if self._decl and self._decl.displayname:
             self._typename = self._full_typename(self._decl)
@@ -197,5 +272,14 @@ class Type(Node):
             ret += x
 
         return ret
+
+class TemplateArgumentType(Type):
+    def __init__(self, type, is_default=False):
+        Type.__init__(self, type)
+        self._is_default = is_default
+
+    @property
+    def is_default(self):
+        return self._is_default
 
 # vi:ts=4:et

@@ -184,17 +184,10 @@ class Xml(Generator):
             elem.set('ref', r)
 
     def add_ref_id(self, cursor, elem):
-        if not cursor:
-            return
+        node = self.tree.lookup_node_from_cursor(cursor)
 
-        if cursor in self.tree.cursor_to_node:
-            node = self.tree.cursor_to_node[cursor]
-        elif cursor.get_usr() in self.tree.usr_to_node:
-            node = self.tree.usr_to_node[cursor.get_usr()]
-        else:
-            return
-
-        self.add_ref_node_id(node, elem)
+        if not node is None:
+            self.add_ref_node_id(node, elem)
 
     def type_to_xml(self, tp, parent=None):
         elem = ElementTree.Element('type')
@@ -215,6 +208,16 @@ class Xml(Generator):
 
             for arg in tp.function_arguments:
                 args.append(self.type_to_xml(arg, parent))
+        elif tp.is_template:
+            elem.set('name', tp.typename_for(parent))
+            elem.set('class', 'template')
+
+            args = ElementTree.Element('template-arguments')
+
+            for template_argument in tp.template_arguments:
+                args.append(self.type_to_xml(template_argument, parent))
+
+            elem.append(args)
         else:
             elem.set('name', tp.typename_for(parent))
 

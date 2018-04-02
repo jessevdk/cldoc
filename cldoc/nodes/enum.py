@@ -27,9 +27,9 @@ class Enum(Node):
         if hasattr(self.cursor, 'get_tokens'):
             try:
                 tokens = self.cursor.get_tokens()
-                tokens.next()
+                next(tokens)
 
-                tt = tokens.next()
+                tt = next(tokens)
 
                 if tt.kind == cindex.TokenKind.KEYWORD and tt.spelling == 'class':
                     self.isclass = True

@@ -116,6 +116,40 @@ class Tree(documentmerger.DocumentMerger):
         self.qid_to_node[None] = self.root
         self.usr_to_node[None] = self.root
 
+    def _lookup_node_from_cursor_despecialized(self, cursor):
+        template = cursor.specialized_cursor_template
+
+        if template is None:
+            parent = self.lookup_node_from_cursor(cursor.semantic_parent)
+        else:
+            return self.lookup_node_from_cursor(template)
+
+        if parent is None:
+            return None
+
+        for child in parent.children:
+            if child.name == cursor.spelling:
+                return child
+
+        return None
+
+    def lookup_node_from_cursor(self, cursor):
+        if cursor is None:
+            return None
+
+        # Try lookup by direct cursor reference
+        node = self.cursor_to_node[cursor]
+
+        if not node is None:
+            return node
+
+        node = self.usr_to_node[cursor.get_usr()]
+
+        if not node is None:
+            return node
+
+        return self._lookup_node_from_cursor_despecialized(cursor)
+
     def filter_source(self, path):
         return path.endswith('.c') or path.endswith('.cpp') or path.endswith('.h') or path.endswith('.cc') or path.endswith('.hh') or path.endswith('.hpp')
 

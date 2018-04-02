@@ -48,6 +48,38 @@ class cldoc.Type extends cldoc.Node
 
             @typeparts.push('</span></span>')
             @typeparts_text.push('')
+        else if @node.attr('class') == 'template'
+            @typeparts.push('<span class="template-type">')
+            @typeparts_text.push('')
+
+            if @ref
+                a = cldoc.Page.make_link(@ref, @name)
+
+                name = '<span class="name">' + a + '</span>'
+            else
+                name = '<span class="name">' + e(@name) + '</span>'
+
+            @typeparts.push(name)
+            @typeparts_text.push(@name)
+
+            @typeparts.push('<span class="template-arguments">')
+            @typeparts_text.push('')
+
+            @append_plain_part('<')
+
+            args = @node.children('template-arguments').first().children('type')
+            @args = []
+
+            for arg, i in args
+                if i != 0
+                    @append_plain_part(', ')
+
+                @args.push(@append_type($(arg)))
+
+            @append_plain_part('>')
+
+            @typeparts.push('</span></span>')
+            @typeparts_text.push('')
         else
             if @name
                 if @node.attr('builtin')
