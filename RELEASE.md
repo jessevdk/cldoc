@@ -18,6 +18,7 @@ python setup.py sdist upload
 
 ## Release static site generator to npm
 ```bash
+cd cldoc-static
 npm publish
 ```
 
