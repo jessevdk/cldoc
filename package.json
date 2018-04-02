@@ -4,6 +4,7 @@
   "repository": "https://github.com/jessevdk/cldoc",
   "dependencies": {
     "coffee-script": "^1.9.2",
-    "inline-source": "^4.0.1"
+    "inline-source": "^4.0.1",
+    "node-sass": "^4.8.3"
   }
 }
