@@ -1,6 +1,6 @@
 {
   "description": "cldoc generate dependencies",
-  "version": "1.0.0",
+  "version": "1.11.2",
   "repository": "https://github.com/jessevdk/cldoc",
   "dependencies": {
     "coffee-script": "^1.9.2",
