@@ -24,10 +24,11 @@ class Typedef(Node):
         children = [child for child in cursor.get_children()]
 
         if len(children) == 1 and children[0].kind == cindex.CursorKind.TYPE_REF:
-            cursor = children[0]
+            typecursor = children[0]
         else:
             self.process_children = True
+            typecursor = cursor
 
-        self.type = Type(cursor.underlying_typedef_type, cursor)
+        self.type = Type(cursor.underlying_typedef_type, typecursor)
 
 # vi:ts=4:et
