@@ -92,10 +92,10 @@ def generate_tests():
         t = create_test(hname, files, ofiles)
         setattr(Regression, t.__name__, t)
 
-        ofiles = glob.glob(os.path.join(dname, 'output', hname + '-*.html.static'))
+        # ofiles = glob.glob(os.path.join(dname, 'output', hname + '-*.html.static'))
 
-        t = create_test_static(hname, files, ofiles)
-        setattr(Regression, t.__name__, t)
+        # t = create_test_static(hname, files, ofiles)
+        # setattr(Regression, t.__name__, t)
 
 os.environ['CLDOC_DEV'] = '1'
 

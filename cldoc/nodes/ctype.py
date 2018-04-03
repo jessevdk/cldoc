@@ -167,9 +167,6 @@ class Type(Node):
 
         for i in range(0, num_template_arguments):
             template_argument_type = tp.get_template_argument_type(i)
-
-            is_default = False
-
             self._template_arguments.append(Type(template_argument_type))
 
     def _extract_subtypes(self, tp):
