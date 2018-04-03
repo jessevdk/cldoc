@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Documentation</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/cldoc.css">
+</head>
+
+<body id="cldoc">
+    <div id="cldoc_sidebar">
+        <div id="cldoc_sidebar_items">
+            <div id="cldoc_sidebar_pagenav"></div>
+            <div class="subtitle">Typedefs</div>
+            <ul>
+                <li><a href="#WithInnerIntType">WithInnerIntType<span class="counter"></span></a></li>
+            </ul>
+            <div class="subtitle">Structures</div>
+            <ul>
+                <li><a href="WithInner.html#WithInner">WithInner&lt;T&gt;<span class="counter"></span></a></li>
+            </ul>
+            <div class="subtitle">Functions</div>
+            <ul>
+                <li><a href="#foo">foo<span class="counter"></span></a>
+                    <div class="brief">
+                        <p>*</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="cldoc_content">
+        <h2 data-cldoc-dynamic="1" id="typedefs">Typedefs</h2>
+        <table class="typedefs">
+            <tbody>
+                <tr class="typedef" id="WithInnerIntType">
+                    <td class="typedef_name identifier">WithInnerIntType</td>
+                    <td class="typedef_decl keyword">type</td>
+                    <td class="typedef_type"><span class="type"><span class="template-type"><span class="name">std::list</span><span class="template-arguments"><span class="plain">&lt;</span><span class="sub-type"><span class="name "><a href="WithInner.html#WithInner.Type">WithInner&lt;int&gt;::Type</a></span></span>
+                        <span
+                            class="plain">&gt;</span>
+                            </span>
+                            </span>
+                            </span>
+                    </td>
+                </tr>
+                <tr class="doc">
+                    <td colspan="3"></td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 data-cldoc-dynamic="1" id="structures">Structures</h2>
+        <table class="structures">
+            <tbody>
+                <tr class="short">
+                    <td><a href="WithInner.html#WithInner">WithInner&lt;T&gt;</a></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 data-cldoc-dynamic="1" id="functions">Functions</h2>
+        <div class="functions">
+            <div class="function">
+                <div class="declaration" id="foo">
+                    <div class="return_type"><span class="type"><span class="template-type"><span class="name">std::list</span><span class="template-arguments"><span class="plain">&lt;</span><span class="sub-type"><span class="name ">std::string</span></span><span class="plain">&gt;</span></span>
+                        </span>
+                        </span>
+                    </div>
+                    <table class="declaration">
+                        <tbody>
+                            <tr>
+                                <td class="identifier">foo</td>
+                                <td class="open_paren">(</td>
+                                <td colspan="2"></td>
+                                <td class="close_paren">)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="doc">
+                    <p>Foo method.</p>
+                </div>
+                <table class="arguments">
+                    <tbody>
+                        <tr class="return">
+                            <td class="keyword">return</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

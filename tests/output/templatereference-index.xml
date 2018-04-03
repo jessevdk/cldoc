@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<index xmlns="http://jessevdk.github.com/cldoc/1.0">
+  <structtemplate name="WithInner" ref="WithInner#WithInner">
+    <templatetypeparameter id="WithInner::T" name="T" />
+  </structtemplate>
+  <typedef id="WithInnerIntType" name="WithInnerIntType">
+    <type class="template" name="std::list">
+      <template-arguments>
+        <type name="WithInner&lt;int&gt;::Type" ref="WithInner#WithInner::Type" />
+      </template-arguments>
+    </type>
+  </typedef>
+  <function id="foo" name="foo">
+    <brief>*</brief>
+    <doc>Foo method.
+</doc>
+    <return>
+      <type class="template" name="std::list">
+        <template-arguments>
+          <type name="std::string" />
+        </template-arguments>
+      </type>
+    </return>
+  </function>
+</index>
