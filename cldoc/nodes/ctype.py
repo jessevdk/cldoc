@@ -152,33 +152,11 @@ class Type(Node):
         self._element_type = Type(tp.get_array_element_type())
         self._array_size = tp.get_array_size()
 
-    def _extract_default_template_types(self, tp):
-        decl = tp.get_declaration()
-
-        while decl and decl.kind != cindex.CursorKind.CLASS_TEMPLATE:
-            decl = decl.specialized_cursor_template
-
-        if decl is None:
-            return None
-
-        default_template_types = []
-
-        for child in decl.get_children():
-            if child.kind != cindex.CursorKind.TEMPLATE_TYPE_PARAMETER:
-                continue
-
-            default_type = None
-
-            for cursor in child.get_children():
-                if cursor.kind == cindex.CursorKind.TYPE_REF:
-                    default_type = cursor.type
-                    break
-
-            default_template_types.append(default_type)
-
-        return default_template_types
-
     def _extract_template_argument_types(self, tp):
+        # Ignore typedefs, we don't want to get any template arguments
+        if tp.get_declaration().kind == cindex.CursorKind.TYPEDEF_DECL:
+            return
+
         num_template_arguments = tp.get_num_template_arguments()
 
         if num_template_arguments <= 0:
@@ -192,7 +170,7 @@ class Type(Node):
 
             is_default = False
 
-            self._template_arguments.append(TemplateArgumentType(template_argument_type, is_default))
+            self._template_arguments.append(Type(template_argument_type))
 
     def _extract_subtypes(self, tp):
         self._extract_constant_array_type(tp)
@@ -272,14 +250,5 @@ class Type(Node):
             ret += x
 
         return ret
-
-class TemplateArgumentType(Type):
-    def __init__(self, type, is_default=False):
-        Type.__init__(self, type)
-        self._is_default = is_default
-
-    @property
-    def is_default(self):
-        return self._is_default
 
 # vi:ts=4:et
