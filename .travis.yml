@@ -4,8 +4,10 @@ python:
   - "2.7"
 
 before_install:
+  - curl https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+  - echo "deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-4.0 main" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq
-  - sudo apt-get install -y libclang1-3.9
+  - sudo apt-get install -y libclang1-4.0
 
 install:
   - (cd cldoc-static && npm install)
